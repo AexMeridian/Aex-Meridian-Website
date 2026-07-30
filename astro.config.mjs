@@ -7,7 +7,7 @@ export default defineConfig({
   // URLs — without this Astro.site is undefined and those all silently
   // fall back to relative paths, which several social-preview crawlers
   // don't resolve correctly.
-  site: 'https://aexmeridian.com',
+  site: 'https://aexmeridian.co',
   // Every internal link and the hand-rolled sitemap already omit the
   // trailing slash — making that authoritative instead of Astro's default
   // 'ignore' closes off a duplicate-content path (/pricing vs /pricing/)

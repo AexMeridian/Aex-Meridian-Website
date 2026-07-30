@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
 import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
+import { contactEmail } from '../data/site';
 
 const lastUpdated = 'July 8, 2026';
 ---
@@ -81,7 +82,7 @@ const lastUpdated = 'July 8, 2026';
         <h2>Your rights</h2>
         <p>
           You can request that we delete any information you've submitted to us at any
-          time by emailing <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.
+          time by emailing <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
         </p>
 
         <h2>Changes to this policy</h2>
@@ -92,7 +93,7 @@ const lastUpdated = 'July 8, 2026';
 
         <h2>Contact</h2>
         <p>
-          Questions about this policy can be sent to <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.
+          Questions about this policy can be sent to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
         </p>
       </div>
     </section>

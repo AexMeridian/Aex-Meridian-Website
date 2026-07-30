@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
 import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
 import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+import { contactEmail } from '../data/site';
 
 const lastUpdated = 'July 8, 2026';
 ---
@@ -73,7 +74,7 @@ const lastUpdated = 'July 8, 2026';
         <h2>Cancellation</h2>
         <p>
           Monthly hosting and maintenance services, and monthly content retainers, may
-          each be canceled at any time with 30 days' written notice to <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>. One-time
+          each be canceled at any time with 30 days' written notice to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. One-time
           engagements, such as an individual video project, are billed upon delivery
           and are not subject to a cancellation notice period once completed.
         </p>
@@ -110,7 +111,7 @@ const lastUpdated = 'July 8, 2026';
 
         <h2>Contact</h2>
         <p>
-          Questions about these Terms can be sent to <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.
+          Questions about these Terms can be sent to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
         </p>
       </div>
     </section>
