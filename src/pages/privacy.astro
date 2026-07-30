@@ -1,0 +1,156 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
+
+const lastUpdated = 'July 8, 2026';
+---
+
+<Layout
+  title="Privacy Policy — Aex Meridian"
+  description="How Aex Meridian, LLC collects, uses, and protects information submitted through this website."
+>
+  <Header />
+  <main id="main-content">
+    <PageHero
+      video="/videos/pricing-bg.mp4"
+      videoId="privacy-hero-loop"
+      eyebrow="Legal"
+      title="Privacy Policy"
+      subhead="How we handle the information you share with us — no fine print you need a lawyer to parse."
+      objectPosition="center 65%"
+      videoFilter={PRICING_VIDEO_FILTER}
+    />
+
+    <section class="section legal-body">
+      <div class="container legal-container">
+        <p class="legal-updated">Last updated: {lastUpdated}</p>
+
+        <h2>Information we collect</h2>
+        <p>
+          When you submit the contact form on this site, we collect the
+          information you provide: business name, your name, email address, phone
+          number (optional), current website URL (optional), and any message you
+          include. We don't collect information through any other means, and we don't
+          use tracking pixels, ad networks, or behavioral advertising cookies.
+        </p>
+
+        <h2>How we use your information</h2>
+        <p>
+          We use the information you submit solely to respond to your inquiry,
+          evaluate whether we're a good fit for your business, and follow up about our
+          services. We don't sell, rent, or share your information with third parties
+          for marketing purposes.
+        </p>
+
+        <h2>Third-party services</h2>
+        <p>This site relies on a small number of third-party services to function:</p>
+        <ul>
+          <li>
+            <strong>Resend (resend.com)</strong> delivers the contact form's
+            submission to us by email on our behalf. Resend does not run in your
+            browser — the form submits directly to our own server, which relays it
+            to Resend. Resend's own privacy policy governs how they handle that
+            transmission.
+          </li>
+          <li>
+            <strong>Google Fonts</strong> are loaded from Google's servers to display
+            the site's typography. Loading a font may share your IP address and
+            browser information with Google, per Google's privacy practices.
+          </li>
+        </ul>
+
+        <h2>Cookies</h2>
+        <p>
+          This site does not set first-party tracking cookies. Google Fonts (above)
+          may set its own cookies or use local browser storage as part of its normal
+          operation — we don't control this directly, and Google's own privacy
+          policy applies. We don't use any cookie-based advertising or analytics on
+          this site.
+        </p>
+
+        <h2>Data retention</h2>
+        <p>
+          We retain information submitted through the contact form for as long as
+          reasonably necessary to respond to your inquiry and maintain business
+          records, after which it may be deleted.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          You can request that we delete any information you've submitted to us at any
+          time by emailing <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.
+        </p>
+
+        <h2>Changes to this policy</h2>
+        <p>
+          We may update this policy from time to time. The "Last updated" date at the
+          top reflects the most recent revision.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions about this policy can be sent to <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal-body {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .legal-container {
+    max-width: 720px;
+  }
+
+  .legal-updated {
+    font-size: 14px;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .legal-container :global(h2) {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-container :global(h2:first-of-type) {
+    margin-top: 0;
+  }
+
+  .legal-container :global(p),
+  .legal-container :global(li) {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-ink-muted);
+  }
+
+  .legal-container :global(ul) {
+    padding-left: 20px;
+    margin: var(--space-2) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .legal-container :global(strong) {
+    color: var(--color-ink);
+  }
+
+  .legal-container :global(a) {
+    color: var(--color-steel);
+    text-decoration: underline;
+  }
+</style>

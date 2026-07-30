@@ -1,0 +1,375 @@
+---
+// Native form, styled to match the rest of the site, posting to a
+// Cloudflare Pages Function (/functions/api/contact.js) that emails
+// CEO@AexMeridian.com directly. Replaces a third-party Tally iframe: that
+// embed didn't match the site's design (its own fonts/colors/branding),
+// and — being a cross-origin iframe — was one ad blocker or privacy
+// extension away from silently failing with no way to know. This form has
+// no third-party dependency and reports success/failure inline.
+import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHref } from '../data/site';
+---
+
+<section class="section contact seam" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-intro" data-reveal>
+      <p class="eyebrow">Get in Touch</p>
+      <h2 class="section-title">Let's talk about your business.</h2>
+      <p class="contact-copy">
+        Reach out directly, or send a few details below and we'll get back to you within
+        one business day.
+      </p>
+
+      <div class="contact-direct">
+        <a href={`mailto:${contactEmail}`} class="contact-link">
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-value">{contactEmail}</span>
+        </a>
+        <a href={contactPhoneHref} class="contact-link">
+          <span class="contact-link-label">Phone</span>
+          <span class="contact-link-value">{contactPhoneDisplay}</span>
+        </a>
+        <a href={contactPhoneSmsHref} class="contact-link">
+          <span class="contact-link-label">Text</span>
+          <span class="contact-link-value">{contactPhoneDisplay}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap" data-reveal>
+      <form id="contact-form" class="contact-form" novalidate>
+        <!-- Honeypot — hidden from real visitors (off-screen, not display:none
+             so basic bots that skip hidden fields still fill it), checked
+             server-side in functions/api/contact.js. -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form-row">
+          <label for="businessName">Business name <span aria-hidden="true">*</span></label>
+          <input type="text" id="businessName" name="businessName" required autocomplete="organization" />
+          <p class="field-error" data-error-for="businessName"></p>
+        </div>
+
+        <div class="form-row">
+          <label for="name">Your name <span aria-hidden="true">*</span></label>
+          <input type="text" id="name" name="name" required autocomplete="name" />
+          <p class="field-error" data-error-for="name"></p>
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email <span aria-hidden="true">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" />
+          <p class="field-error" data-error-for="email"></p>
+        </div>
+
+        <div class="form-row-split">
+          <div class="form-row">
+            <label for="phone">Phone <span class="optional">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" />
+          </div>
+
+          <div class="form-row">
+            <label for="website">Current website <span class="optional">(optional)</span></label>
+            <input type="url" id="website" name="website" autocomplete="url" placeholder="Leave blank if you don't have one" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="message">What would you like us to know?</label>
+          <textarea id="message" name="message" rows="4" placeholder="Tell us a bit about your business and what you're hoping for"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-shimmer form-submit" data-magnetic>
+          <span class="form-submit-label">Send message</span>
+          <span class="btn-arrow">&rarr;</span>
+        </button>
+
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    background: var(--color-navy);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-6);
+  }
+
+  .contact-intro .eyebrow {
+    margin-bottom: var(--space-2);
+    /* Over navy, the original --color-steel already clears AA (~5.2:1) —
+       .eyebrow's global default is a darker variant tuned for light
+       section backgrounds, so this opts back into the lighter one. */
+    color: var(--color-steel);
+  }
+
+  .section-title {
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-copy {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-muted);
+    max-width: 420px;
+  }
+
+  .contact-direct {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .contact-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .contact-link:hover,
+  .contact-link:focus-visible {
+    border-color: var(--color-steel);
+  }
+
+  .contact-link-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  .contact-link-value {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-ivory);
+  }
+
+  .contact-form-wrap {
+    position: relative;
+    background: var(--color-navy-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* Off-screen, not display:none/visibility:hidden — some simple bots skip
+     fields that are invisible via those properties, but still fill a field
+     that's merely positioned off-canvas. Never focusable (tabindex="-1"). */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-row-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .form-row label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-ivory);
+  }
+
+  .form-row label span[aria-hidden] {
+    color: var(--color-steel);
+  }
+
+  .form-row .optional {
+    font-weight: 400;
+    color: var(--color-muted);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--color-ivory);
+    background: rgba(247, 245, 240, 0.05);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 96px;
+  }
+
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder {
+    color: var(--color-muted);
+  }
+
+  .contact-form input:hover,
+  .contact-form textarea:hover {
+    border-color: rgba(247, 245, 240, 0.24);
+  }
+
+  .contact-form input:focus-visible,
+  .contact-form textarea:focus-visible {
+    outline: 2px solid var(--color-steel);
+    outline-offset: 1px;
+    border-color: var(--color-steel);
+  }
+
+  .contact-form input[aria-invalid='true'],
+  .contact-form textarea[aria-invalid='true'] {
+    border-color: #d97757;
+  }
+
+  .field-error {
+    min-height: 16px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #e29b7d;
+  }
+
+  .form-submit {
+    margin-top: var(--space-2);
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .form-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  .form-status {
+    min-height: 20px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .form-status[data-state='success'] {
+    color: #7fb88a;
+  }
+
+  .form-status[data-state='error'] {
+    color: #e29b7d;
+  }
+
+  .form-status a {
+    color: var(--color-steel);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 960px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .form-row-split {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+
+  if (form instanceof HTMLFormElement && status instanceof HTMLElement) {
+    const submitBtn = form.querySelector('.form-submit');
+    const submitLabel = form.querySelector('.form-submit-label');
+
+    const setFieldError = (name, message) => {
+      const field = form.querySelector(`[data-error-for="${name}"]`);
+      const input = form.elements.namedItem(name);
+      if (field) field.textContent = message;
+      if (input instanceof HTMLElement) input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    };
+
+    const clearErrors = () => {
+      form.querySelectorAll('.field-error').forEach((el) => {
+        el.textContent = '';
+      });
+      form.querySelectorAll('[aria-invalid]').forEach((el) => el.setAttribute('aria-invalid', 'false'));
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearErrors();
+      status.textContent = '';
+      status.removeAttribute('data-state');
+
+      const data = new FormData(form);
+      const payload = Object.fromEntries(data.entries());
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitLabel) submitLabel.textContent = 'Sending…';
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json().catch(() => ({ ok: false }));
+
+        if (response.ok && result.ok) {
+          form.reset();
+          status.textContent = "Thanks — we'll get back to you within one business day.";
+          status.setAttribute('data-state', 'success');
+        } else if (response.status === 422 && result.fields) {
+          Object.entries(result.fields).forEach(([field, message]) => {
+            setFieldError(field, message);
+          });
+          status.textContent = result.error ?? 'Please fix the highlighted fields.';
+          status.setAttribute('data-state', 'error');
+        } else {
+          status.innerHTML = `${result.error ?? 'Something went wrong.'} Email us directly at <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.`;
+          status.setAttribute('data-state', 'error');
+        }
+      } catch {
+        status.innerHTML = `Something went wrong. Email us directly at <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.`;
+        status.setAttribute('data-state', 'error');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitLabel) submitLabel.textContent = 'Send message';
+      }
+    });
+  }
+</script>

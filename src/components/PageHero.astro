@@ -1,0 +1,238 @@
+---
+// Single source of truth for every sub-page hero (everything except the
+// homepage, which keeps its own distinct full-viewport Hero.astro with the
+// click-to-shift-light interaction). Height, vertical anchor, eyebrow
+// treatment, headline type, and scrim recipe all live here exactly once —
+// a future change to "how a sub-page hero looks" is an edit to this file,
+// not six.
+//
+// Page-specific extras (How It Works' constellation nav, Pricing's numeric
+// teaser row) render via the `extra` slot, positioned inside the same
+// bottom-anchored text column so they inherit the shared max-width instead
+// of reintroducing a bespoke layout per page.
+interface Props {
+  video: string;
+  videoId: string;
+  eyebrow: string;
+  title: string;
+  subhead?: string;
+  objectPosition?: string;
+  /** CSS filter() value — used to color-grade a video toward the site's
+   *  cool navy/teal family (see Pricing's dawn-seascape clip, the one
+   *  visually warm outlier among the four hero videos). */
+  videoFilter?: string;
+}
+
+const {
+  video,
+  videoId,
+  eyebrow,
+  title,
+  subhead,
+  objectPosition = 'center center',
+  videoFilter = 'none',
+} = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="page-hero-video-container" aria-hidden="true">
+    <video
+      id={videoId}
+      class="page-hero-video"
+      src={video}
+      style={`object-position: ${objectPosition}; filter: ${videoFilter};`}
+      muted
+      autoplay
+      playsinline
+      loop
+      preload="auto"
+    ></video>
+  </div>
+  <div class="page-hero-scrim" aria-hidden="true"></div>
+
+  <slot name="overlay" />
+
+  <div class="container">
+    <div class="page-hero-inner" data-reveal>
+      <p class="eyebrow page-hero-eyebrow">{eyebrow}</p>
+      <h1 class="page-hero-title">{title}</h1>
+      {subhead && <p class="page-hero-subhead">{subhead}</p>}
+
+      <slot name="actions" />
+      <slot name="extra" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: var(--color-navy);
+    padding: calc(var(--header-height) + var(--space-5)) 0 var(--space-6);
+  }
+
+  .page-hero-video-container {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--color-navy);
+  }
+
+  .page-hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Masks the loop's restart cut — the video dips toward the navy
+     background (already sitting behind it) right before the seam instead
+     of visibly jumping, then fades back in once playback has restarted. */
+  .page-hero-video.is-looping {
+    opacity: 0;
+  }
+
+  /* One shared scrim recipe for every sub-page hero: clear enough over the
+     footage to let it read, protective at the bottom where text always
+     sits (bottom-anchored, matching the homepage's own convention) and on
+     the left where the text column lives. */
+  .page-hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(10, 14, 20, 0.45) 0%,
+        rgba(10, 14, 20, 0.1) 25%,
+        rgba(10, 14, 20, 0.2) 50%,
+        rgba(10, 14, 20, 0.55) 78%,
+        rgba(10, 14, 20, 0.82) 100%
+      ),
+      linear-gradient(
+        to right,
+        rgba(10, 14, 20, 0.4) 0%,
+        rgba(10, 14, 20, 0.12) 42%,
+        rgba(10, 14, 20, 0) 70%
+      );
+  }
+
+  .page-hero .container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .page-hero-inner {
+    max-width: 620px;
+  }
+
+  .page-hero-eyebrow {
+    margin-bottom: var(--space-2);
+    color: var(--color-steel);
+  }
+
+  .page-hero-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 4.4vw, 3.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .page-hero-subhead {
+    margin-top: var(--space-3);
+    max-width: 560px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(247, 245, 240, 0.9);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+  }
+
+  .page-hero-inner :global(.page-hero-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .page-hero-inner :global(.btn-ghost) {
+    border-color: rgba(247, 245, 240, 0.45);
+  }
+
+  .page-hero-inner :global(.btn-ghost:hover),
+  .page-hero-inner :global(.btn-ghost:focus-visible) {
+    border-color: var(--color-ivory);
+    background: rgba(247, 245, 240, 0.08);
+  }
+
+  @media (max-width: 640px) {
+    .page-hero {
+      min-height: 64vh;
+      padding-bottom: var(--space-5);
+    }
+
+    .page-hero-inner {
+      max-width: 100%;
+    }
+
+    .page-hero-inner :global(.page-hero-actions) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .page-hero-inner :global(.page-hero-actions .btn) {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Fade window before the loop point — long enough to mask a hard cut
+  // between last frame and first frame, short enough to stay unnoticed as
+  // an edit of its own.
+  const LOOP_FADE_SECONDS = 0.5;
+
+  document.querySelectorAll('.page-hero-video').forEach((el) => {
+    if (!(el instanceof HTMLVideoElement)) return;
+    if (prefersReducedMotion) {
+      el.removeAttribute('autoplay');
+      el.pause();
+      return;
+    }
+
+    el.play().catch(() => {
+      // Autoplay blocked — first frame stays visible as a static fallback.
+    });
+
+    let lastTime = 0;
+    el.addEventListener('timeupdate', () => {
+      const { currentTime, duration } = el;
+      if (!duration || Number.isNaN(duration)) return;
+
+      if (duration - currentTime <= LOOP_FADE_SECONDS) {
+        el.classList.add('is-looping');
+      } else if (currentTime < lastTime) {
+        // currentTime just dropped — the native `loop` attribute restarted
+        // playback from 0.
+        el.classList.remove('is-looping');
+      }
+      lastTime = currentTime;
+    });
+  });
+</script>

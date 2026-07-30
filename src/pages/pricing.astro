@@ -1,0 +1,817 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MeridianRule from '../components/MeridianRule.astro';
+import PageHero from '../components/PageHero.astro';
+import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
+import {
+  websitePlan,
+  overflowRate,
+  videoTiers,
+  socialRetainer,
+  startingWebsiteSetup,
+  startingVideoPrice,
+  startingSocialPrice,
+} from '../data/pricing';
+
+const faqs = [
+  {
+    question: 'What does the $35 a month actually cover?',
+    answer:
+      "Hosting, your domain's SSL and security, uptime monitoring, and small routine edits — swapping a photo, updating hours, fixing a typo. It's the same plan for every site; nothing upsells later.",
+  },
+  {
+    question: 'Do I own my website?',
+    answer:
+      'Yes. Once the one-time setup fee is paid in full, ownership of the site design and its content transfers to you.',
+  },
+  {
+    question: 'Is there a contract I get locked into?',
+    answer:
+      "No. The monthly plan and any content retainer are both month-to-month, cancelable with 30 days' written notice — no multi-year terms, no financing agreement tied to the build.",
+  },
+  {
+    question: "What if I need a change that's more than a quick edit?",
+    answer:
+      'Just ask — anything beyond routine edits is billed at $60/hour and quoted before any work starts, so you\'re never guessing what a request will cost.',
+  },
+  {
+    question: 'Are video and social content billed with hosting?',
+    answer:
+      'No — content services are always billed separately, whether one-time or monthly, so the monthly plan never comes with a surprise attached.',
+  },
+  {
+    question: "What if I don't like the site before it launches?",
+    answer:
+      "Most projects start speculatively: we build a working site first and show it to you. You decide if it's worth launching before any setup fee is due.",
+  },
+];
+
+// Mirrors the visible FAQ below exactly (Google requires FAQPage content to
+// match what a visitor actually sees) — eligible for a rich-result FAQ
+// snippet in search.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+---
+
+<Layout
+  title="Pricing — Aex Meridian"
+  description="Straightforward pricing for websites, video tours, and social content retainers — no hidden fees, no long-term contracts."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+  <Header />
+  <main id="main-content">
+    <PageHero
+      video="/videos/pricing-bg.mp4"
+      videoId="pricing-hero-loop"
+      eyebrow="Pricing"
+      title="Straightforward pricing, every time"
+      objectPosition="center 65%"
+      videoFilter={PRICING_VIDEO_FILTER}
+    >
+      <div slot="extra" class="page-hero-teasers">
+        <div class="teaser">
+          <p class="teaser-value">{startingWebsiteSetup.split('–')[0]}<span>+</span></p>
+          <p class="teaser-label">Website</p>
+        </div>
+        <div class="teaser">
+          <p class="teaser-value">{startingVideoPrice}<span>+</span></p>
+          <p class="teaser-label">Video</p>
+        </div>
+        <div class="teaser">
+          <p class="teaser-value">{startingSocialPrice.replace('/mo', '')}</p>
+          <p class="teaser-label">Social</p>
+        </div>
+      </div>
+    </PageHero>
+
+    <section class="section pricing-cards seam">
+      <div class="pricing-glow" aria-hidden="true"></div>
+
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Website</p>
+          <h2 class="section-title">One plan, not a ladder to climb</h2>
+        </div>
+
+        <div class="plan-card" data-reveal>
+          <div class="plan-card-main">
+            <p class="plan-tagline">{websitePlan.tagline}</p>
+
+            <div class="plan-price-block">
+              <p class="plan-price">
+                <span class="plan-price-value">{websitePlan.setup}</span>
+                <span class="plan-price-unit">one-time setup</span>
+              </p>
+              <p class="plan-price-secondary">
+                {websitePlan.monthly} <span>ongoing hosting &amp; care</span>
+              </p>
+            </div>
+
+            <a href="/#contact" class="btn btn-primary btn-shimmer plan-cta" data-magnetic>
+              <span>Book a free consultation</span>
+            </a>
+          </div>
+
+          <ul class="plan-features">
+            {websitePlan.scope.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section care-plans seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">What's covered</p>
+          <h2 class="section-title">Every site gets the same care</h2>
+        </div>
+
+        <div class="care-card" data-reveal>
+          <ul class="care-features">
+            {websitePlan.careFeatures.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="care-overflow">{overflowRate}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section video-social seam mode-dark-bleed">
+      <div class="video-social-texture" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Video</p>
+          <h2 class="section-title">Listing walkthrough videos</h2>
+        </div>
+
+        <div class="tier-grid" data-reveal>
+          {videoTiers.map((tier) => (
+            <div class="tier-card">
+              <h3 class="tier-name">{tier.name}</h3>
+              <p class="tier-price">{tier.price}</p>
+              <p class="tier-detail">{tier.deliverable}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="section-head section-head-social" data-reveal>
+          <p class="eyebrow">Social content</p>
+          <h2 class="section-title">A retainer, handled for you</h2>
+        </div>
+
+        <div class="tier-grid tier-grid-single" data-reveal>
+          <div class="tier-card">
+            <p class="tier-price">{socialRetainer.price}</p>
+            <ul class="tier-included">
+              {socialRetainer.included.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+
+        <p class="pricing-note">
+          Content services are always billed separately from hosting — never bundled
+          into a monthly care line, so a video or retainer never comes with a surprise.
+        </p>
+      </div>
+    </section>
+
+    <section class="section pricing-faq seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Common questions</p>
+          <h2 class="section-title">Before you reach out</h2>
+          <p class="pricing-faq-subtext">
+            For the reasoning behind these numbers, see our <a href="/how-much-does-a-website-cost">website cost guide</a>.
+          </p>
+        </div>
+
+        <div class="faq-list" data-reveal>
+          {faqs.map((faq, i) => (
+            <>
+              <details class="faq-item" name="faq" open={i === 0}>
+                <summary class="faq-question">
+                  <span>{faq.question}</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="faq-answer" data-faq-answer>
+                  <div class="faq-answer-inner">
+                    <p>{faq.answer}</p>
+                  </div>
+                </div>
+              </details>
+              {i < faqs.length - 1 && <MeridianRule dot="none" align="full" class="faq-divider" />}
+            </>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section pricing-cta cta-band">
+      <div class="container pricing-cta-inner cta-band-inner" data-reveal>
+        <MeridianRule dot="none" align="left" class="cta-rule" />
+        <h2 class="cta-heading">Not sure which fits?</h2>
+        <p class="cta-sub">Tell us about your business — we'll tell you honestly what makes sense.</p>
+        <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* Numeral-led teaser row — the structural difference from the other
+     pages' prose subheads: numbers first, previewing the three cards
+     below, no paragraph of copy. Keeps this hero shorter/terser than
+     What We Do's or Our Work's, matching "straightforward pricing." */
+  .page-hero-teasers {
+    display: flex;
+    gap: var(--space-5);
+    margin-top: var(--space-4);
+  }
+
+  .teaser-value {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .teaser-value span {
+    color: var(--color-steel);
+  }
+
+  .teaser-label {
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(247, 245, 240, 0.6);
+  }
+
+  /* Pricing cards */
+  .pricing-cards {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .section-head {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  /* One static ambient glow behind the single plan card — no more
+     hover-driven color-shifting between tiers, since there's only one
+     plan to light up now. */
+  .pricing-glow {
+    position: absolute;
+    inset: -15% -10%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(60px);
+    background: radial-gradient(circle at 50% 30%, rgba(61, 107, 107, 0.28), transparent 65%);
+  }
+
+  .pricing-cards .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* One plan, presented as a single wide card: the price block anchors the
+     left, the scope list fills the right — reads as a considered answer,
+     not a lonely leftover grid cell. */
+  .plan-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 280px) 1fr;
+    gap: var(--space-6);
+    background: var(--color-white);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+    opacity: 0.32;
+    filter: brightness(0.6);
+    transition: opacity 0.7s var(--ease-out), filter 0.7s var(--ease-out), box-shadow 0.3s ease;
+  }
+
+  .plan-card::before {
+    content: '';
+    position: absolute;
+    inset: -24px;
+    z-index: -1;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(circle at 50% 25%, rgba(61, 107, 107, 0.22), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+
+  .plan-card.in-view {
+    opacity: 1;
+    filter: brightness(1);
+  }
+
+  .plan-card.in-view::before {
+    opacity: 1;
+  }
+
+  .plan-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .plan-card-main {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--color-line-on-light);
+    padding-right: var(--space-6);
+  }
+
+  .plan-tagline {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .plan-price-block {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line-on-light);
+  }
+
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+  }
+
+  .plan-price-value {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .plan-price-unit {
+    font-size: 13px;
+    color: var(--color-ink-muted);
+  }
+
+  .plan-price-secondary {
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-teal);
+  }
+
+  .plan-price-secondary span {
+    font-weight: 400;
+    color: var(--color-ink-muted);
+  }
+
+  .plan-cta {
+    margin-top: var(--space-5);
+    justify-content: center;
+  }
+
+  .plan-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .plan-features li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .plan-features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-steel);
+  }
+
+  .pricing-note {
+    margin-top: var(--space-6);
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-ink-muted);
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Monthly care comparison */
+  .care-plans {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  /* Statement-adjacent intro — more weight and air than a standard
+     section-head, since this heading introduces the single care card
+     below it. */
+  .care-plans .section-head {
+    max-width: 640px;
+    margin-bottom: var(--space-6);
+  }
+
+  .care-plans .section-title {
+    font-size: clamp(2.5rem, 4.6vw, 3.75rem);
+  }
+
+  .care-card {
+    max-width: 640px;
+    background: var(--color-white);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+
+  .care-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .care-features li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .care-features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-steel);
+  }
+
+  .care-overflow {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line-on-light);
+    font-size: 14px;
+    color: var(--color-ink-muted);
+  }
+
+  /* Video & social tiers — converted to dark-bleed for this pass: navy
+     ground, ivory text, the aurora texture (cropped from this page's own
+     hero video) as a low-opacity ambient layer, tying the section back to
+     the page's opening moment. Card style follows the site's existing
+     dark-card convention (see what-we-do.astro's .content-offer). */
+  .video-social {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Local overrides win the light-section defaults set earlier in this
+     same stylesheet (same specificity, later source order) — .mode-dark-bleed
+     sets these in global.css, but this page's own .section-title { color:
+     var(--color-ink); } rule above (page-wide, same selector) would
+     otherwise win by source order and make the heading nearly invisible
+     on navy. */
+  .video-social .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .video-social .section-title {
+    color: var(--color-ivory);
+  }
+
+  .video-social-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('/images/textures/horizon.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.13;
+    pointer-events: none;
+  }
+
+  .video-social .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-head-social {
+    margin-top: var(--space-7);
+  }
+
+  .video-social .pricing-note {
+    color: var(--color-muted);
+  }
+
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  /* The social retainer is a single card, not a tier to compare against
+     siblings — constrained width instead of stretching a 3-column track. */
+  .tier-grid-single {
+    grid-template-columns: minmax(0, 420px);
+  }
+
+  .tier-card {
+    background: var(--color-navy-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .tier-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-steel);
+    box-shadow: var(--shadow-tinted-dark);
+  }
+
+  .tier-name {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .tier-price {
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-steel);
+  }
+
+  .tier-detail {
+    margin-top: var(--space-2);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .tier-included {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tier-included li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .tier-included li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-steel);
+  }
+
+  /* FAQ — the objections a prospect actually has right before they'd book
+     (ownership, contracts, billing separation, what happens if they don't
+     like it) answered in place, so the closing CTA isn't the first moment
+     any of that comes up. Native <details>/<summary>, grouped by a shared
+     name so opening one closes the others — no JS required. */
+  .pricing-faq {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .pricing-faq-subtext {
+    margin-top: var(--space-2);
+    font-size: 15px;
+    color: var(--color-ink-muted);
+  }
+
+  .pricing-faq-subtext a {
+    color: var(--color-teal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .faq-list {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* Rows are unboxed — no per-row border/background. The divider between
+     rows is a MeridianRule (rendered between items, not after the last),
+     so the same signature gradient line that underlines every eyebrow and
+     heading also separates these rows, instead of a generic rectangle. */
+  .faq-item {
+    padding: 0;
+  }
+
+  .faq-divider {
+    margin: 0;
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--transition-fast);
+  }
+
+  .faq-item[open] .faq-question {
+    color: var(--color-teal);
+  }
+
+  .faq-question:focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--color-teal);
+    transform: translate(-50%, -50%);
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-icon::before {
+    width: 12px;
+    height: 2px;
+  }
+
+  .faq-icon::after {
+    width: 2px;
+    height: 12px;
+  }
+
+  .faq-item[open] .faq-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  /* Real height animation for native <details> — a CSS-grid 0fr/1fr
+     wrapper rather than JS scrollHeight measuring. Declaring display:grid
+     directly on .faq-answer overrides the UA stylesheet's default
+     `details:not([open]) > *:not(summary) { display: none }`, so the
+     element stays rendered (and animatable) at every state; the .is-open
+     class (toggled in sync with the <details> `open` state via the
+     `toggle` event, see the page script) drives the actual open/close. */
+  .faq-answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s var(--ease-out);
+  }
+
+  .faq-answer.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-answer-inner {
+    overflow: hidden;
+  }
+
+  .faq-answer-inner p {
+    padding: 0 0 var(--space-4);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+  }
+
+  /* Closing CTA */
+  .pricing-cta {
+    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+  }
+
+  .pricing-cta .btn {
+    margin-top: var(--space-4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .plan-card {
+      opacity: 1 !important;
+      filter: brightness(1) !important;
+      transition: none !important;
+    }
+
+    .plan-card::before {
+      opacity: 1 !important;
+      transition: none !important;
+    }
+
+    .faq-answer {
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .plan-card {
+      grid-template-columns: 1fr;
+    }
+
+    .plan-card-main {
+      border-right: none;
+      border-bottom: 1px solid var(--color-line-on-light);
+      padding-right: 0;
+      padding-bottom: var(--space-4);
+    }
+
+    .plan-features {
+      grid-template-columns: 1fr;
+    }
+
+    .tier-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // FAQ height animation — <details>/<summary> stays fully functional
+  // (and works with JS disabled, just without the smooth motion); this
+  // just syncs a .is-open class on the CSS-grid answer wrapper to each
+  // <details> element's native `open` state via the `toggle` event, which
+  // fires both when an item opens and when the shared `name` group closes
+  // it in favor of another.
+  document.querySelectorAll('.faq-item').forEach((item) => {
+    const answer = item.querySelector('.faq-answer');
+    if (!(answer instanceof HTMLElement) || !(item instanceof HTMLDetailsElement)) return;
+
+    const syncOpenState = () => {
+      answer.classList.toggle('is-open', item.open);
+    };
+
+    syncOpenState();
+    item.addEventListener('toggle', syncOpenState);
+  });
+</script>

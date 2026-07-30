@@ -1,0 +1,71 @@
+---
+// The site's signature line — a thin horizontal gradient, matching the
+// horizon-glow in every hero and the brand's own namesake. Used as a
+// section divider, a card top-accent, a footer hairline, or any other
+// single-use case that doesn't already have its own established gradient
+// (the eyebrow underline and the process timeline rail define their own
+// locally, since they're pinned to existing scroll-reveal mechanics).
+interface Props {
+  // Percent from the left where the dot/diamond mark sits, if any.
+  dotPosition?: number;
+  dot?: 'none' | 'dot' | 'diamond';
+  // 'full' spans edge-to-edge (section dividers, footer hairline).
+  // 'left' is a short 64px tick, left-offset (under a section heading).
+  align?: 'full' | 'left';
+  class?: string;
+}
+
+const { dotPosition = 20, dot = 'dot', align = 'full', class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['meridian-rule', `meridian-rule--${align}`, className]}
+  style={`--dot-position: ${dotPosition}%`}
+  aria-hidden="true"
+>
+  {
+    dot !== 'none' && (
+      <span class:list={['meridian-rule-mark', `meridian-rule-mark--${dot}`]} />
+    )
+  }
+</div>
+
+<style>
+  .meridian-rule {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-teal) 35%,
+      var(--color-steel) 50%,
+      var(--color-teal) 65%,
+      transparent
+    );
+  }
+
+  .meridian-rule--left {
+    max-width: 64px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-steel), transparent);
+  }
+
+  .meridian-rule-mark {
+    position: absolute;
+    top: 50%;
+    left: var(--dot-position);
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: var(--color-steel);
+    box-shadow: 0 0 8px rgba(107, 135, 168, 0.6);
+  }
+
+  .meridian-rule-mark--dot {
+    border-radius: 50%;
+  }
+
+  .meridian-rule-mark--diamond {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+</style>

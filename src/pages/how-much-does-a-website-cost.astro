@@ -1,0 +1,532 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MeridianRule from '../components/MeridianRule.astro';
+import PageHero from '../components/PageHero.astro';
+import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
+import { websitePlan } from '../data/pricing';
+
+const reasons = [
+  {
+    title: "The quote depends on how the call goes",
+    body: "Without a published number, price often tracks how the sales conversation goes rather than the actual scope of the work — the same site can quote very differently to two different callers.",
+  },
+  {
+    title: 'A "custom quote" hides the comparison',
+    body: "If you can't see the price until after a call, you can't easily compare it to anyone else's, which is the point — it keeps you from shopping around.",
+  },
+  {
+    title: "It sets up a longer sales process",
+    body: "A quote-only model usually means a discovery call, a proposal document, and a follow-up before you even know if it's in your budget — days added before either side knows if it's a fit.",
+  },
+];
+
+const costFaqs = [
+  {
+    question: 'Why is this so much less than a typical agency quote?',
+    answer:
+      "Mainly stack and process: a modern static-first build with no CMS licensing, no plugin overhead, and no large agency team markup. The scope is real, not a bait-and-switch — see exactly what's included above.",
+  },
+  {
+    question: 'Why is the setup fee a range instead of one number?',
+    answer:
+      "$500–750 covers the same core build for almost every small business site — the low end fits a straightforward site, the high end fits one with more content to organize. The free consultation tells you which side you land on before any fee is due.",
+  },
+  {
+    question: 'Does the price go up once I sign?',
+    answer:
+      "No. The number you're quoted before the build starts is the number you pay — no add-on fees once work is underway, no retroactive increase on the monthly plan either.",
+  },
+  {
+    question: "What if my business needs something outside the standard scope?",
+    answer:
+      'Say so on the consultation call and we\'ll tell you honestly whether it fits the standard build or needs a custom quote — either way, you\'ll know the number before you commit to anything.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: costFaqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+---
+
+<Layout
+  title="Website Cost for a Small Business — Aex Meridian"
+  description="Real setup and monthly hosting prices for a small business website — no quote-request runaround. See exactly what a professional site costs."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+  <Header />
+  <main id="main-content">
+    <PageHero
+      video="/videos/pricing-bg.mp4"
+      videoId="cost-hero-loop"
+      eyebrow="Pricing, explained"
+      title="How much does a website actually cost?"
+      subhead="Most agencies won't tell you until after a sales call. Here's our real number, and why it doesn't need to climb into the thousands to get you a professional site."
+      objectPosition="center 65%"
+      videoFilter={PRICING_VIDEO_FILTER}
+    >
+      <div slot="actions" class="page-hero-actions">
+        <a href="/pricing" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>See full pricing</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+        <a href="/#contact" class="btn btn-ghost btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+        </a>
+      </div>
+    </PageHero>
+
+    <section class="section cost-why seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Why this is rare</p>
+          <h2 class="section-title">Why most web agencies won't just tell you the price</h2>
+          <p class="section-subtext">
+            Search "how much does a website cost" and almost every result says "it depends"
+            and asks you to book a call. It does depend a little — on scope — but that's exactly
+            what a published flat rate can account for without a sales call.
+          </p>
+        </div>
+
+        <div class="reasons-grid" data-reveal>
+          {reasons.map((reason) => (
+            <div class="reason-card">
+              <h3 class="reason-title">{reason.title}</h3>
+              <p class="reason-body">{reason.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section cost-tiers seam mode-dark-bleed">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">The real number</p>
+          <h2 class="section-title">One flat price, not a ladder to climb</h2>
+          <p class="section-subtext">
+            Most small business sites need the same core things — a handful of pages,
+            a working contact form, a design that holds up on a phone. So instead of
+            a tier system that escalates with every added feature, there's one setup
+            range and one monthly plan.
+          </p>
+        </div>
+
+        <div class="tiers-grid tiers-grid-single" data-reveal>
+          <div class="tier-card">
+            <h3 class="tier-name">Website</h3>
+            <p class="tier-tagline">{websitePlan.tagline}</p>
+            <p class="tier-price">{websitePlan.setup} <span>one-time setup</span></p>
+            <p class="tier-monthly">{websitePlan.monthly} <span>ongoing care</span></p>
+            <ul class="tier-scope">
+              {websitePlan.scope.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+
+        <div class="care-note" data-reveal>
+          <h3 class="care-note-title">What the monthly number actually covers</h3>
+          <p class="care-note-body">
+            The setup fee is a one-time build cost. The {websitePlan.monthly} figure is
+            hosting, uptime, security, and small routine edits, so there's no separate
+            hosting bill showing up later, and no charge for asking us to update a
+            phone number or swap a photo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cost-faq seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Common questions</p>
+          <h2 class="section-title">Before you reach out</h2>
+        </div>
+
+        <div class="faq-list" data-reveal>
+          {costFaqs.map((faq, i) => (
+            <>
+              <details class="faq-item" name="cost-faq" open={i === 0}>
+                <summary class="faq-question">
+                  <span>{faq.question}</span>
+                  <span class="faq-icon" aria-hidden="true"></span>
+                </summary>
+                <div class="faq-answer" data-faq-answer>
+                  <div class="faq-answer-inner">
+                    <p>{faq.answer}</p>
+                  </div>
+                </div>
+              </details>
+              {i < costFaqs.length - 1 && <MeridianRule dot="none" align="full" class="faq-divider" />}
+            </>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section cost-cta cta-band">
+      <div class="container cost-cta-inner cta-band-inner" data-reveal>
+        <MeridianRule dot="none" align="left" class="cta-rule" />
+        <h2 class="cta-heading">Want the number for your specific business?</h2>
+        <p class="cta-sub">Tell us what you need — we'll tell you honestly whether it's a standard build or something custom.</p>
+        <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+        <a href="/pricing" class="cost-cta-link">See the full pricing breakdown &rarr;</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .page-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .cost-why {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  .section-subtext {
+    margin-top: var(--space-2);
+    max-width: 720px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+  }
+
+  .reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  .reason-card {
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .reason-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .reason-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .reason-body {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-ink-muted);
+  }
+
+  .cost-tiers {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cost-tiers .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .cost-tiers .section-title {
+    color: var(--color-ivory);
+  }
+
+  .cost-tiers .section-subtext {
+    color: var(--color-muted);
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  /* One plan now — a single centered card, not a lopsided 3-track grid. */
+  .tiers-grid-single {
+    grid-template-columns: minmax(0, 480px);
+    justify-content: center;
+  }
+
+  .tier-card {
+    background: var(--color-navy-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .tier-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-steel);
+    box-shadow: var(--shadow-tinted-dark);
+  }
+
+  .tier-name {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .tier-tagline {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+
+  .tier-price {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-ivory);
+  }
+
+  .tier-price span,
+  .tier-monthly span {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-muted);
+    display: block;
+  }
+
+  .tier-monthly {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-steel);
+  }
+
+  .tier-scope {
+    list-style: none;
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tier-scope li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .tier-scope li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-steel);
+  }
+
+  .care-note {
+    margin-top: var(--space-5);
+    padding: var(--space-4);
+    background: rgba(247, 245, 240, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .care-note-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ivory);
+    margin-bottom: var(--space-2);
+  }
+
+  .care-note-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .cost-faq {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .faq-list {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .faq-item {
+    padding: 0;
+  }
+
+  .faq-divider {
+    margin: 0;
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--transition-fast);
+  }
+
+  .faq-item[open] .faq-question {
+    color: var(--color-teal);
+  }
+
+  .faq-question:focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--color-teal);
+    transform: translate(-50%, -50%);
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-icon::before {
+    width: 12px;
+    height: 2px;
+  }
+
+  .faq-icon::after {
+    width: 2px;
+    height: 12px;
+  }
+
+  .faq-item[open] .faq-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .faq-answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s var(--ease-out);
+  }
+
+  .faq-answer.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-answer-inner {
+    overflow: hidden;
+  }
+
+  .faq-answer-inner p {
+    padding: 0 0 var(--space-4);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+  }
+
+  .cost-cta {
+    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+  }
+
+  .cost-cta .btn {
+    margin-top: var(--space-4);
+  }
+
+  .cost-cta-link {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(247, 245, 240, 0.7);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+  }
+
+  .cost-cta-link:hover,
+  .cost-cta-link:focus-visible {
+    color: var(--color-ivory);
+  }
+
+  @media (max-width: 760px) {
+    .reasons-grid,
+    .tiers-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach((item) => {
+    const answer = item.querySelector('.faq-answer');
+    if (!(answer instanceof HTMLElement) || !(item instanceof HTMLDetailsElement)) return;
+
+    const syncOpenState = () => {
+      answer.classList.toggle('is-open', item.open);
+    };
+
+    syncOpenState();
+    item.addEventListener('toggle', syncOpenState);
+  });
+</script>

@@ -1,0 +1,812 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MeridianRule from '../components/MeridianRule.astro';
+import PageHero from '../components/PageHero.astro';
+import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+
+const costRows = [
+  {
+    name: 'Traditional agency',
+    items: ['$2,000–$9,000+ to build', 'Weeks to months to launch', 'Maintenance often billed separately'],
+    highlighted: false,
+  },
+  {
+    name: 'Aex Meridian',
+    items: ['A small fraction of that to launch', 'Live in days, not months', 'Hosting and upkeep included monthly'],
+    highlighted: true,
+  },
+];
+
+const handled = [
+  'Hosting, uptime, and security',
+  'Routine edits: hours, photos, promotions',
+  'No logins, dashboards, or tools to learn',
+];
+
+const offerings = [
+  {
+    title: 'Listing walkthrough videos',
+    body: 'A polished vertical video tour with voiceover, licensed music, and text overlays — built for realtors, property managers, and Airbnb/VRBO hosts who want their listings to stand out and move faster.',
+    list: [
+      `${videoTiers[0].name}: ${videoTiers[0].price} — ${videoTiers[0].deliverable}`,
+      `${videoTiers[2].name}: ${videoTiers[2].price} — ${videoTiers[2].deliverable}`,
+      'Delivered ready to post, in vertical and landscape formats',
+    ],
+    icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
+  },
+  {
+    title: 'Social content retainers',
+    body: 'Ongoing branded posts, graphics, and short video clips for local businesses that want a steady social presence without adding another job to their week.',
+    list: [
+      `${socialRetainer.price} — ${socialRetainer.included[0]}`,
+      socialRetainer.included[1],
+      'Billed separately from hosting — no bundling required',
+    ],
+    icon: '<path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />',
+  },
+];
+
+const workflow = [
+  { number: '01', title: 'Gather', description: 'You send photos, key details, and any branding — takes minutes, not a meeting.' },
+  { number: '02', title: 'Draft', description: 'We build a first pass around what you gave us — usually within a day or two.' },
+  { number: '03', title: 'Review', description: 'Every draft is checked for accuracy and brand fit before you ever see it.' },
+  { number: '04', title: 'Deliver', description: 'Ready-to-post files, branded to your business. Nothing publishes without your sign-off.' },
+];
+---
+
+<Layout
+  title="What We Do — Aex Meridian"
+  description="Agency-quality websites, video tours, and social content for small businesses — the process, the pricing, and what's included."
+>
+  <Header />
+  <main id="main-content">
+    <PageHero
+      video="/videos/what-we-do-bg.mp4"
+      videoId="page-hero-loop"
+      eyebrow="What we do"
+      title="A website that works, and content that keeps you visible"
+      subhead="Two services, handled by one studio: a site built to convert, and video and social content that keeps your business in front of people after it launches."
+    >
+      <div slot="actions" class="page-hero-actions">
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+        <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
+          <span>See who we work with</span>
+        </a>
+      </div>
+
+      <nav slot="extra" class="page-hero-index" aria-label="On this page">
+        <a href="#wwd-website" class="index-row">
+          <span class="index-number">01</span>
+          <span class="index-label">The website</span>
+          <span class="index-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="#wwd-content" class="index-row">
+          <span class="index-number">02</span>
+          <span class="index-label">Video &amp; content</span>
+          <span class="index-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="#workflow-section" class="index-row">
+          <span class="index-number">03</span>
+          <span class="index-label">The process</span>
+          <span class="index-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </nav>
+    </PageHero>
+
+    <section class="section wwd-website seam" id="wwd-website">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">The website</p>
+          <h2 class="section-title">Built fast, without cutting corners</h2>
+          <p class="section-subtext">
+            Every site is custom-built on a modern, static-first stack — no WordPress,
+            no plugins to break, no CMS to maintain. That's why a site that takes an
+            agency two months takes us days, and why it loads fast and stays secure.
+          </p>
+        </div>
+
+        <div class="cost-grid" data-reveal>
+          {costRows.map((row) => (
+            <div class:list={['cost-card', { highlighted: row.highlighted }]}>
+              <h3 class="cost-name">{row.name}</h3>
+              <ul class="cost-list">
+                {row.items.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div class="handled-row" data-reveal>
+          <div class="handled-card">
+            <p class="handled-heading">Handled for you</p>
+            <ul class="handled-list">
+              {handled.map((item) => (
+                <li>
+                  <span class="handled-icon" set:html={`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="price-card">
+            <p class="price-label">One plan, no tiers</p>
+            <p class="price-line">{websitePlan.setup} <span>one-time setup</span></p>
+            <p class="price-line">{websitePlan.monthly} <span>hosting, security &amp; edits</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wwd-content seam mode-dark-bleed" id="wwd-content">
+      <div class="wwd-content-texture" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Video &amp; content</p>
+          <h2 class="section-title">Stay visible after the site goes live</h2>
+          <p class="section-subtext">
+            A website gets you found. Video and social content keep you top of mind.
+            We produce both in-house with a fast, repeatable process, so premium
+            content doesn't require a production budget or a crew.
+          </p>
+        </div>
+
+        <div class="content-split" data-reveal>
+          {offerings.map((offer) => (
+            <div class="content-offer">
+              <span class="content-icon-badge">
+                <span class="content-icon" set:html={`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${offer.icon}</svg>`} />
+              </span>
+              <h3 class="content-title">{offer.title}</h3>
+              <p class="content-body">{offer.body}</p>
+              <ul class="content-list">
+                {offer.list.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <p class="content-support">
+          Content services are billed on top of any web engagement, one-time or as a
+          monthly add-on — website hosting stays its own monthly care line, always.
+        </p>
+      </div>
+    </section>
+
+    <section class="section wwd-workflow seam" id="workflow-section">
+      <div class="beam-sweep" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">The process</p>
+          <h2 class="section-title">From raw material to ready-to-post</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-track" data-reveal aria-hidden="true">
+            {workflow.map(() => <span class="track-node"></span>)}
+          </div>
+
+          <div class="timeline-grid">
+            {workflow.map((step, i) => (
+              <div class="timeline-step" data-reveal style={`transition-delay: ${i * 100}ms`}>
+                <span class="step-index" aria-hidden="true">{step.number}</span>
+                <h3 class="step-title">{step.title}</h3>
+                <p class="step-desc">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wwd-cta cta-band">
+      <div class="container wwd-cta-inner cta-band-inner" data-reveal>
+        <MeridianRule dot="none" align="left" class="cta-rule" />
+        <h2 class="cta-heading">Ready to talk about your project?</h2>
+        <p class="cta-sub">No pressure, no jargon — just a conversation about what you need.</p>
+        <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* On-page index — was a full-height side column beside the text
+     (a second hero "shape" unique to this page); now a compact chip row
+     stacked below the CTAs, so the hero's shell (height, alignment,
+     column width) matches every other sub-page while this page keeps its
+     one distinguishing feature: three functional jump-links. */
+  .page-hero-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .index-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid rgba(247, 245, 240, 0.2);
+    border-radius: var(--radius-full);
+    background: rgba(10, 14, 20, 0.35);
+    text-decoration: none;
+    transition: var(--transition-fast);
+  }
+
+  .index-row:hover,
+  .index-row:focus-visible {
+    border-color: var(--color-steel);
+    background: rgba(107, 135, 168, 0.16);
+  }
+
+  .index-number {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-steel);
+  }
+
+  .index-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ivory);
+  }
+
+  .index-arrow {
+    color: rgba(247, 245, 240, 0.5);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .index-row:hover .index-arrow,
+  .index-row:focus-visible .index-arrow {
+    transform: translateX(2px);
+    color: var(--color-steel);
+  }
+
+  /* The website */
+  .wwd-website {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  .section-subtext {
+    margin-top: var(--space-2);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+  }
+
+  .cost-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .cost-card {
+    position: relative;
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .cost-card.highlighted {
+    background: var(--color-white);
+    border: 2px solid var(--color-teal);
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  /* Meridian top-accent — only on the "us" card, so it reads as a
+     deliberate highlight rather than decorating both sides of a
+     comparison equally. */
+  .cost-card.highlighted::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-steel), var(--color-teal));
+  }
+
+  .cost-card.highlighted:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .cost-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: var(--space-3);
+  }
+
+  .cost-card.highlighted .cost-name {
+    color: var(--color-teal);
+  }
+
+  .cost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .cost-list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .cost-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-steel);
+  }
+
+  .handled-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .handled-card,
+  .price-card {
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .handled-card:hover {
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  .handled-heading {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+    margin-bottom: var(--space-3);
+  }
+
+  .handled-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .handled-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 15px;
+    color: var(--color-ink);
+  }
+
+  .handled-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--color-teal);
+  }
+
+  .price-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--color-navy);
+    border: none;
+    box-shadow: var(--shadow-tinted-dark);
+  }
+
+  .price-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+    margin-bottom: var(--space-2);
+  }
+
+  .price-line {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-ivory);
+    line-height: 1.5;
+  }
+
+  .price-line span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(247, 245, 240, 0.6);
+  }
+
+  /* Video & content — the pass's dark-bleed moment: navy ground, a faint
+     water-light crop (this page's own hero video family) drifting behind
+     the two offering cards. */
+  .wwd-content {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Local overrides win the light-section defaults set earlier in this
+     same stylesheet (same specificity, later source order) — this section
+     needs the dark-background variants of both. */
+  .wwd-content .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .wwd-content .section-title {
+    color: var(--color-ivory);
+  }
+
+  .wwd-content-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('/images/textures/water-light.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.13;
+    pointer-events: none;
+  }
+
+  .wwd-content .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .content-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  /* Dark-card convention (matches PastWork.astro's build-card): surface a
+     shade lighter than the navy ground, hairline border, tinted glow and
+     lift on hover instead of the light-section's flat divider line. */
+  .content-offer {
+    background: var(--color-navy-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .content-offer:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-steel);
+    box-shadow: var(--shadow-tinted-dark);
+  }
+
+  .content-icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: rgba(107, 135, 168, 0.16);
+    margin-bottom: var(--space-3);
+    transition: var(--transition);
+  }
+
+  .content-offer:hover .content-icon-badge {
+    background: var(--color-teal);
+  }
+
+  .content-icon {
+    display: inline-flex;
+    color: var(--color-steel);
+    transition: var(--transition);
+  }
+
+  .content-offer:hover .content-icon {
+    color: var(--color-ivory);
+  }
+
+  .content-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+    margin-bottom: var(--space-2);
+  }
+
+  .content-body {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .content-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .content-list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .content-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-steel);
+  }
+
+  .content-support {
+    margin-top: var(--space-5);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-muted);
+    max-width: 640px;
+  }
+
+  /* Workflow timeline */
+  .wwd-workflow {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  /* One-time light beam — sweeps top to bottom the first time this section
+     scrolls into view, "illuminating" the steps as it passes. Triggered
+     once via IntersectionObserver in the script below. */
+  .beam-sweep {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -25%;
+    height: 45%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(107, 135, 168, 0.32),
+      rgba(61, 107, 107, 0.22),
+      transparent
+    );
+  }
+
+  .beam-sweep.is-active {
+    animation: beam-sweep-down 1.5s ease-out forwards;
+  }
+
+  @keyframes beam-sweep-down {
+    0% {
+      transform: translateY(-20%);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(320%);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .beam-sweep,
+    .beam-sweep.is-active {
+      display: none;
+    }
+  }
+
+  .timeline-track {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 12px;
+    margin-bottom: var(--space-5);
+  }
+
+  .timeline-track::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-steel), var(--color-teal));
+    opacity: 0.5;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left;
+    transition: transform 0.9s var(--ease-out) 0.15s;
+  }
+
+  .timeline-track.in-view::before {
+    transform: translateY(-50%) scaleX(1);
+  }
+
+  .track-node {
+    position: relative;
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-teal);
+    box-shadow: 0 0 0 4px var(--color-white), 0 0 14px rgba(61, 107, 107, 0.45);
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+
+  .timeline-step {
+    opacity: 0;
+    transform: translateY(16px) scale(0.94);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  }
+
+  .timeline-step.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .step-index {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(20, 24, 31, 0.18);
+    margin-bottom: var(--space-2);
+    transition: -webkit-text-stroke-color 0.3s ease;
+  }
+
+  .timeline-step:hover .step-index {
+    -webkit-text-stroke-color: var(--color-teal);
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  /* Closing CTA */
+  .wwd-cta {
+    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+  }
+
+  .wwd-cta .btn {
+    margin-top: var(--space-4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-track::before {
+      transform: translateY(-50%) scaleX(1);
+    }
+
+    .timeline-step {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .timeline-track {
+      display: none;
+    }
+
+    .timeline-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cost-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .handled-row {
+      grid-template-columns: 1fr;
+    }
+
+    .content-split {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .timeline-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const workflowSection = document.getElementById('workflow-section');
+  const beam = workflowSection?.querySelector('.beam-sweep');
+
+  if (workflowSection instanceof HTMLElement && beam instanceof HTMLElement && !prefersReducedMotion) {
+    const beamObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            beam.classList.add('is-active');
+            beamObserver.unobserve(entry.target); // one-time only
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+    beamObserver.observe(workflowSection);
+  }
+</script>

@@ -1,0 +1,222 @@
+---
+import { websitePlan } from '../data/pricing';
+
+const columns = ['Build it yourself', 'Hire a web agency', 'Aex Meridian'];
+
+const rows = [
+  {
+    label: 'Cost to launch',
+    values: ['$0, but your time', '$2,000–$10,000+', `${websitePlan.setup}`],
+  },
+  {
+    label: 'Time to launch',
+    values: ['Weeks to months, if you finish', 'Weeks to months', 'Days'],
+  },
+  {
+    label: 'Who maintains it',
+    values: ['You', 'Often billed separately, if offered at all', 'Included in monthly care'],
+  },
+  {
+    label: 'Who you call when it breaks',
+    values: ['No one — you troubleshoot it', 'Depends on the contract', 'One person, same day'],
+  },
+  {
+    label: 'Best if',
+    values: [
+      'You have the time and want full control day to day',
+      "You need something highly custom and have the budget",
+      'You want it handled, fast, and accountable',
+    ],
+  },
+];
+---
+
+<section class="section why-not-just seam">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">The comparison</p>
+      <h2 class="section-title">Why not just&hellip;</h2>
+    </div>
+
+    <div class="compare-table" data-reveal>
+      <div class="compare-row compare-head">
+        <span class="compare-cell compare-label" aria-hidden="true"></span>
+        {columns.map((col, i) => (
+          <span class:list={['compare-cell', 'compare-col-head', { 'is-us': i === 2 }]}>{col}</span>
+        ))}
+      </div>
+
+      {rows.map((row) => (
+        <div class="compare-row">
+          <span class="compare-cell compare-label">{row.label}</span>
+          {row.values.map((value, i) => (
+            <span class:list={['compare-cell', { 'is-us': i === 2 }]}>{value}</span>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <!-- Below 760px this table becomes unreadable as a 4-column grid, so a
+         separate one-card-per-option layout takes over instead of trying
+         to reflow the same DOM (a real table→cards transform needs its own
+         markup, not a CSS trick on top of a row-major grid). -->
+    <div class="compare-cards" data-reveal>
+      {columns.map((col, i) => (
+        <div class:list={['compare-card', { 'is-us': i === 2 }]}>
+          <h3 class="compare-card-name">{col}</h3>
+          <dl class="compare-card-list">
+            {rows.map((row) => (
+              <div class="compare-card-row">
+                <dt>{row.label}</dt>
+                <dd>{row.values[i]}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-not-just {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  /* A real table, not three cards — a comparison only works if you can
+     scan across a row. The Aex Meridian column gets a quiet highlight for
+     orientation (it's the reader's own column), not a badge proclaiming
+     a winner — some rows above genuinely favor an alternative. */
+  .compare-table {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr 1fr;
+  }
+
+  .compare-row + .compare-row {
+    border-top: 1px solid var(--color-line-on-light);
+  }
+
+  .compare-cell {
+    padding: var(--space-3);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .compare-label {
+    font-weight: 600;
+    color: var(--color-ink);
+    background: var(--color-ivory);
+  }
+
+  .compare-cell.is-us {
+    background: rgba(61, 107, 107, 0.06);
+    color: var(--color-ink);
+    border-left: 1px solid rgba(61, 107, 107, 0.2);
+  }
+
+  .compare-head .compare-cell {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  .compare-head .compare-col-head.is-us {
+    color: var(--color-teal);
+  }
+
+  /* Card fallback — hidden on desktop, where the table reads fine. */
+  .compare-cards {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .compare-table {
+      display: none;
+    }
+
+    .compare-cards {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .compare-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-line-on-light);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      box-shadow: var(--shadow-tinted-light);
+    }
+
+    .compare-card.is-us {
+      border-color: var(--color-teal);
+      background: rgba(61, 107, 107, 0.05);
+    }
+
+    .compare-card-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+    }
+
+    .compare-card.is-us .compare-card-name {
+      color: var(--color-teal);
+    }
+
+    .compare-card-list {
+      margin: var(--space-3) 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .compare-card-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--color-line-on-light);
+    }
+
+    .compare-card-row:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .compare-card-row dt {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-steel-on-light);
+    }
+
+    .compare-card-row dd {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--color-ink-muted);
+    }
+  }
+</style>

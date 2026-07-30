@@ -1,0 +1,109 @@
+---
+// Scaffold for real portfolio pieces. work.json starts empty and this
+// renders nothing at all until it isn't — no "coming soon" placeholder,
+// no empty-state card. Each entry: { title, industry, image, summary, url }.
+import work from '../data/work.json';
+
+interface WorkItem {
+  title: string;
+  industry: string;
+  image: string;
+  summary: string;
+  url: string;
+}
+
+const items = work as WorkItem[];
+---
+
+{items.length > 0 && (
+  <section class="section work-grid-section seam">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Recent work</p>
+        <h2 class="section-title">A few examples</h2>
+      </div>
+
+      <div class="work-grid" data-reveal>
+        {items.map((item) => (
+          <a href={item.url} class="work-card">
+            <img src={item.image} alt={`Screenshot of the ${item.title} website`} loading="lazy" width="480" height="320" class="work-card-image" />
+            <div class="work-card-body">
+              <p class="work-card-industry">{item.industry}</p>
+              <h3 class="work-card-title">{item.title}</h3>
+              <p class="work-card-summary">{item.summary}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .work-grid-section {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .work-card {
+    display: block;
+    text-decoration: none;
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .work-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-amber);
+    box-shadow: var(--shadow-md);
+  }
+
+  .work-card-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .work-card-body {
+    padding: var(--space-4);
+  }
+
+  .work-card-industry {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+    margin-bottom: var(--space-1);
+  }
+
+  .work-card-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .work-card-summary {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+</style>

@@ -1,0 +1,161 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
+import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+
+const lastUpdated = 'July 8, 2026';
+---
+
+<Layout
+  title="Terms of Service — Aex Meridian"
+  description="The terms governing use of the Aex Meridian, LLC website and our web design, hosting, maintenance, and content creation services."
+>
+  <Header />
+  <main id="main-content">
+    <PageHero
+      video="/videos/pricing-bg.mp4"
+      videoId="terms-hero-loop"
+      eyebrow="Legal"
+      title="Terms of Service"
+      subhead="The terms governing our work together — straightforward, in plain English."
+      objectPosition="center 65%"
+      videoFilter={PRICING_VIDEO_FILTER}
+    />
+
+    <section class="section legal-body">
+      <div class="container legal-container">
+        <p class="legal-updated">Last updated: {lastUpdated}</p>
+
+        <h2>Overview</h2>
+        <p>
+          These Terms of Service ("Terms") govern your use of the Aex Meridian, LLC
+          website and the website design, hosting, and maintenance services, and the
+          video and social content services, we offer (collectively,
+          "Services"). By using this site or engaging our Services, you agree to
+          these Terms.
+        </p>
+
+        <h2>Services description</h2>
+        <p>
+          Aex Meridian builds custom websites for small businesses and provides
+          ongoing hosting and maintenance. We also produce video and
+          social media content, including listing walkthrough videos and ongoing
+          content retainers, as a separate service line. Specific scope,
+          deliverables, and timelines for any engagement — website or content — are
+          agreed upon directly with each client before work begins.
+        </p>
+
+        <h2>Pricing and payment</h2>
+        <p>
+          Current pricing for website engagements is a one-time setup fee due at
+          launch, {websitePlan.setup} depending on scope (full detail is published on
+          our <a href="/pricing">Pricing</a> page), followed by a {websitePlan.monthly} care
+          fee billed monthly thereafter. Content services are priced and billed
+          separately from website hosting: walkthrough videos range from {videoTiers[0].price}&ndash;{videoTiers[2].price},
+          due upon delivery, and ongoing social content retainers run {socialRetainer.price} depending
+          on volume, billed monthly. A client may engage either service independently or
+          both together; content pricing is never bundled into the monthly care fee.
+          Pricing is subject to change for future engagements; any change will be
+          communicated before it applies to an existing client relationship.
+        </p>
+
+        <h2>Intellectual property</h2>
+        <p>
+          Upon full payment of the setup fee, ownership of the custom website design
+          and content created specifically for your business transfers to you. Aex
+          Meridian retains the right to display completed work in its own portfolio
+          and marketing materials unless otherwise agreed in writing.
+        </p>
+
+        <h2>Cancellation</h2>
+        <p>
+          Monthly hosting and maintenance services, and monthly content retainers, may
+          each be canceled at any time with 30 days' written notice to <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>. One-time
+          engagements, such as an individual video project, are billed upon delivery
+          and are not subject to a cancellation notice period once completed.
+        </p>
+
+        <h2>No warranty</h2>
+        <p>
+          Services are provided "as is." While we make every effort to deliver a
+          reliable, professional website and polished video and content deliverables,
+          Aex Meridian does not guarantee uninterrupted uptime, specific business
+          outcomes, engagement, bookings, or search engine or social media rankings
+          resulting from our work.
+        </p>
+
+        <h2>Limitation of liability</h2>
+        <p>
+          To the maximum extent permitted by law, Aex Meridian, LLC is not liable for
+          any indirect, incidental, or consequential damages arising from your use of
+          this site or our Services.
+        </p>
+
+        <h2>Governing law</h2>
+        <p>
+          These Terms are governed by the laws of the State of Colorado, without
+          regard to its conflict-of-law principles, as that is where Aex Meridian,
+          LLC is formed. This applies to disputes over the contract itself and does
+          not limit who our Services are available to.
+        </p>
+
+        <h2>Changes to these Terms</h2>
+        <p>
+          We may update these Terms from time to time. Continued use of our Services
+          after a change constitutes acceptance of the revised Terms.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions about these Terms can be sent to <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal-body {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .legal-container {
+    max-width: 720px;
+  }
+
+  .legal-updated {
+    font-size: 14px;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .legal-container :global(h2) {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-container :global(h2:first-of-type) {
+    margin-top: 0;
+  }
+
+  .legal-container :global(p) {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-ink-muted);
+  }
+
+  .legal-container :global(a) {
+    color: var(--color-steel);
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,292 @@
+---
+import { contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHref } from '../data/site';
+
+const navLinks = [
+  { label: 'What We Do', href: '/what-we-do' },
+  { label: 'How It Works', href: '/how-it-works' },
+  { label: 'Pricing', href: '/pricing' },
+];
+---
+
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo" aria-label="Aex Meridian — home">
+      <img src="/images/aex-meridian-logo-boxed.png" alt="Aex Meridian" width="91" height="40" class="logo-mark" />
+    </a>
+
+    <nav class="nav-desktop" aria-label="Primary">
+      {navLinks.map((link) => (
+        <a href={link.href} class="nav-link">{link.label}</a>
+      ))}
+      <a href="/#contact" class="btn btn-primary header-cta">Book a free consultation</a>
+    </nav>
+
+    <!-- Persistent on mobile even with the drawer closed — for trades and
+         local retail especially, a phone call converts better than any
+         form, so it shouldn't be a tap-to-open-drawer away. -->
+    <a href={contactPhoneHref} class="mobile-call-btn" aria-label="Call Aex Meridian">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+      </svg>
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menu-toggle"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-drawer"
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="mobile-drawer" id="mobile-drawer">
+    <nav class="mobile-nav" aria-label="Mobile">
+      {navLinks.map((link) => (
+        <a href={link.href} class="mobile-nav-link">{link.label}</a>
+      ))}
+      <a href={contactPhoneHref} class="mobile-nav-link">{contactPhoneDisplay}</a>
+      <a href={contactPhoneSmsHref} class="mobile-nav-link">Text us</a>
+      <a href="/#contact" class="btn btn-primary mobile-cta">Book a free consultation</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: var(--transition);
+  }
+
+  .site-header.scrolled {
+    background: rgba(10, 14, 20, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom-color: transparent;
+  }
+
+  .site-header::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    width: min(360px, 70%);
+    height: 1px;
+    transform: translateX(-50%) scaleX(0);
+    background: linear-gradient(90deg, transparent, var(--color-teal), var(--color-steel), var(--color-teal), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .site-header.scrolled::after {
+    opacity: 0.6;
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .header-inner {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    height: 40px;
+    width: auto;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .nav-link {
+    position: relative;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-ivory);
+    padding: 6px 2px;
+    transition: color var(--transition-fast);
+  }
+
+  .header-cta {
+    padding: 10px 20px;
+    min-height: 40px;
+    margin-left: var(--space-1);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-steel);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.15s var(--ease-out);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--color-steel);
+  }
+
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .mobile-call-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-ivory);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+  }
+
+  .mobile-call-btn:hover,
+  .mobile-call-btn:focus-visible {
+    border-color: var(--color-steel);
+    color: var(--color-steel);
+  }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    display: block;
+    height: 1px;
+    width: 18px;
+    margin: 0 auto;
+    background: var(--color-ivory);
+    transition: var(--transition);
+  }
+
+  .menu-toggle[aria-expanded='true'] span:first-child {
+    transform: translateY(3px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded='true'] span:last-child {
+    transform: translateY(-3px) rotate(-45deg);
+  }
+
+  .mobile-drawer {
+    position: fixed;
+    inset: var(--header-height) 0 auto 0;
+    z-index: 99;
+    background: rgba(10, 14, 20, 0.98);
+    border-bottom: 1px solid var(--color-line);
+    backdrop-filter: blur(14px);
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), visibility 0.3s;
+  }
+
+  .mobile-drawer.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-3) clamp(24px, 5vw, 64px) var(--space-5);
+  }
+
+  .mobile-nav-link {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-ivory);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-line);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-cta {
+    margin-top: var(--space-4);
+    justify-content: center;
+  }
+
+  @media (max-width: 860px) {
+    .nav-desktop {
+      display: none;
+    }
+
+    .mobile-call-btn {
+      display: flex;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('menu-toggle');
+  const drawer = document.getElementById('mobile-drawer');
+
+  const onScroll = () => {
+    if (!header) return;
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+    drawer?.classList.toggle('open', !isOpen);
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  });
+
+  drawer?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.setAttribute('aria-label', 'Open menu');
+      drawer.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+</script>

@@ -1,0 +1,635 @@
+:root {
+  /* Brand */
+  --color-navy: #0A0E14;
+  --color-navy-surface: #10151D;
+  --color-steel: #6B87A8;
+  /* --color-steel is ~3.7:1 on white/ivory — fails WCAG AA for small text
+     (it's fine on the dark hero sections, ~5.2:1). This darker variant is
+     what .eyebrow uses by default, since most eyebrows sit on light
+     section backgrounds; the hero-specific eyebrow classes explicitly
+     opt back into --color-steel where the background is dark. */
+  --color-steel-on-light: #4A617A;
+  --color-teal: #3D6B6B;
+  --color-ivory: #F7F5F0;
+  --color-white: #FFFFFF;
+  --color-line: rgba(247, 245, 240, 0.1);
+  --color-muted: rgba(247, 245, 240, 0.62);
+
+  /* Third accent — used only for the pricing page's per-plan hover glow,
+     so each plan card has a genuinely distinct color to shift toward.
+     Keeps the site at three brand accents total (teal, steel, amber). */
+  --color-amber: #C9A46B;
+  --color-amber-rgb: 201, 164, 107;
+
+  /* Text/lines for light-background sections (ivory/white) */
+  --color-ink: #14181F;
+  --color-ink-muted: rgba(20, 24, 31, 0.64);
+  --color-line-on-light: rgba(20, 24, 31, 0.12);
+
+  /* Typography */
+  --font-display: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Type scale — the strict set every heading/body class should draw from,
+     rather than each component picking its own ad hoc clamp(). */
+  --text-section-title: clamp(2.25rem, 4vw, 3.5rem);
+  --text-statement: clamp(1.75rem, 3vw, 2.5rem);
+  --text-body: 17px;
+  --text-body-max: 68ch;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 96px;
+  --space-8: 128px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows — always layered: a tight contact shadow plus a soft ambient
+     falloff, never a single flat blur. */
+  --shadow-sm: 0 1px 2px rgba(10, 14, 20, 0.04), 0 2px 8px rgba(10, 14, 20, 0.06);
+  --shadow-md: 0 2px 4px rgba(10, 14, 20, 0.05), 0 8px 24px rgba(10, 14, 20, 0.08),
+    0 20px 40px rgba(10, 14, 20, 0.06);
+  --shadow-lg: 0 4px 8px rgba(10, 14, 20, 0.05), 0 16px 40px rgba(10, 14, 20, 0.1),
+    0 32px 64px rgba(10, 14, 20, 0.08);
+
+  /* Tinted variants — used deliberately in place of the neutral shadows
+     above where a card/element sits directly on brand-colored ground
+     (teal-tinted on light ivory sections, steel glow on dark-bleed
+     sections), not a blanket replacement. */
+  --shadow-tinted-light: 0 2px 4px rgba(61, 107, 107, 0.05), 0 8px 24px rgba(61, 107, 107, 0.1),
+    0 20px 40px rgba(61, 107, 107, 0.08);
+  --shadow-tinted-dark: 0 2px 4px rgba(107, 135, 168, 0.08), 0 8px 28px rgba(107, 135, 168, 0.16),
+    0 24px 48px rgba(107, 135, 168, 0.12);
+
+  /* Transitions */
+  --transition-fast: all 0.15s ease;
+  --transition: all 0.25s ease;
+  --transition-slow: all 0.4s ease;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --max-width: 1200px;
+  --header-height: 80px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-navy);
+  color: var(--color-ivory);
+}
+
+body {
+  position: relative;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* A near-subliminal grain, the difference between a flat digital gradient
+   and a surface that feels made. Fixed to the viewport so it reads as one
+   continuous material rather than repeating per-section. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    display: none;
+  }
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--color-teal);
+  color: var(--color-ivory);
+}
+
+/* Skip link — invisible until focused, then jumps above the sticky
+   header so keyboard users don't have to tab through nav on every page. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: var(--space-2);
+  z-index: 1000;
+  padding: 12px 20px;
+  background: var(--color-ivory);
+  color: var(--color-navy);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  top: var(--space-2);
+}
+
+/* Focus states — always visible, never removed */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-steel);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Dark-section scrollbar — matches the palette instead of the OS default
+   light/gray track, since large stretches of the page are now navy. */
+html {
+  scrollbar-color: var(--color-steel) var(--color-navy-surface);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-navy-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-steel);
+  border-radius: var(--radius-full);
+  border: 3px solid var(--color-navy-surface);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-teal);
+}
+
+/* Layout utilities */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(24px, 5vw, 64px);
+}
+
+.section {
+  position: relative;
+  padding: var(--space-7) 0;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: var(--space-6) 0;
+  }
+}
+
+/* Section-rhythm modes — applied alongside a section's own class so page
+   structure stays untouched; only the visual treatment changes. Five
+   modes, used deliberately in sequence per page so light/dark and
+   dense/open alternate instead of repeating. */
+
+/* dark-bleed — full-bleed navy, ivory text. "The mode that makes the site
+   feel expensive." Texture is added per-section via a background-image,
+   not here, since each one uses a different crop. */
+.mode-dark-bleed {
+  background-color: var(--color-navy);
+  color: var(--color-ivory);
+}
+
+.mode-dark-bleed .eyebrow {
+  color: var(--color-steel);
+}
+
+.mode-dark-bleed .section-title {
+  color: var(--color-ivory);
+}
+
+/* editorial — plain white, asymmetric split; the alternating side is set
+   per-usage with a modifier class (.mode-editorial--reverse) rather than
+   baked in here, so a row of these can flip left/right. */
+.mode-editorial {
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+/* statement — no cards, a single centered or left-offset line of large
+   serif type and generous padding. A palate cleanser between denser
+   sections. */
+.mode-statement {
+  padding: var(--space-8) 0;
+  background: var(--color-ivory);
+  text-align: center;
+}
+
+.mode-statement .statement-text {
+  max-width: 760px;
+  margin: 0 auto;
+  font-family: var(--font-display);
+  font-size: var(--text-statement);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+@media (max-width: 640px) {
+  .mode-statement {
+    padding: calc(var(--space-8) * 1.5 / 2) 0;
+  }
+}
+
+/* Scroll-progress meridian — a slim line tracking read position, fixed to
+   the viewport top. Purely decorative/orientational, so it's invisible
+   under reduced motion rather than jumping in increments. */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 1000;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--color-teal), var(--color-steel));
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+}
+
+/* Secondary-page hero wrapper — the video/scrim/eyebrow/actions plumbing
+   shared identically by How It Works, Pricing, and What We Do's page
+   heroes. Each page still supplies its own scrim gradient (tuned per
+   clip) and heading/subhead copy. */
+.page-hero-video-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--color-navy);
+}
+
+.page-hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page-hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 10;
+}
+
+.page-hero-eyebrow {
+  margin-bottom: var(--space-2);
+  /* Over the dark video, the original --color-steel already clears AA
+     (~5.2:1) — .eyebrow's global default is a darker variant tuned for
+     light section backgrounds, so this opts back into the lighter one. */
+  color: var(--color-steel);
+}
+
+.page-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.page-hero-actions .btn-ghost {
+  border-color: rgba(247, 245, 240, 0.35);
+}
+
+.page-hero-actions .btn-ghost:hover {
+  border-color: var(--color-ivory);
+}
+
+/* Closing CTA band — shared by every page's final call-to-action. Each
+   page still supplies its own background gradient (the accent color
+   varies deliberately per page) and whatever body copy it needs; this
+   covers the parts that were byte-identical across all four: the
+   padding rhythm, the meridian-rule spacing, the heading treatment, the
+   optional subline, and the guarantee pill. */
+.cta-band {
+  padding: 168px 0;
+}
+
+@media (max-width: 640px) {
+  .cta-band {
+    padding: var(--space-6) 0;
+  }
+}
+
+.cta-band-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-band-inner .cta-rule {
+  margin-bottom: var(--space-3);
+}
+
+.cta-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-ivory);
+}
+
+.cta-sub {
+  margin-top: var(--space-2);
+  font-size: 15px;
+  color: rgba(247, 245, 240, 0.7);
+}
+
+.cta-guarantee {
+  margin-top: var(--space-3);
+  display: inline-block;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ivory);
+  border: 1px solid var(--color-steel);
+  border-radius: var(--radius-full, 999px);
+  background: rgba(107, 135, 168, 0.12);
+}
+
+/* Section heading — one shared definition sized from the type scale
+   above (a wider range than components had been picking ad hoc). A
+   meridian rule sits underneath, left-offset rather than centered, same
+   gradient as the eyebrow underline it pairs with. */
+.section-head {
+  max-width: 640px;
+  margin-bottom: var(--space-6);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-section-title);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  margin-top: var(--space-2);
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-teal), var(--color-steel), transparent);
+}
+
+/* The meridian line — a short gradient rule under every eyebrow. The name
+   is the brand's namesake (a meridian is a line), and repeating this same
+   line as the one constant across every section is the site's signature. */
+.eyebrow {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 13px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-steel-on-light);
+}
+
+.eyebrow::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 40px;
+  background: linear-gradient(90deg, var(--color-teal), var(--color-steel), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease-out) 0.1s;
+}
+
+[data-reveal].in-view .eyebrow::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Section seams — a thin glowing meridian line at the boundary between
+   sections, standing in for a hard color cut or an <hr>. */
+.seam {
+  position: relative;
+}
+
+.seam::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(420px, 60%);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-teal) 25%,
+    var(--color-steel) 50%,
+    var(--color-teal) 75%,
+    transparent
+  );
+  opacity: 0.55;
+  filter: drop-shadow(0 0 6px rgba(61, 107, 107, 0.4));
+}
+
+/* Scroll-reveal — fade-up, driven by IntersectionObserver adding .in-view.
+   Consistent timing across every element — no per-item stagger. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+}
+
+[data-reveal].in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 28px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 48px;
+}
+
+.btn-primary {
+  background: var(--color-ivory);
+  color: var(--color-navy);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ivory);
+  border-color: var(--color-line);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-steel);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-arrow {
+  transition: transform var(--transition-fast);
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* Shimmer sweep — a light diagonal highlight that crosses the button on
+   hover. Triggered only on hover (not looping) to stay in line with the
+   site's restrained motion — an always-animating shimmer would compete
+   with the hero video for attention. */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.65s var(--ease-out);
+  pointer-events: none;
+}
+
+.btn-shimmer:hover::after,
+.btn-shimmer:focus-visible::after {
+  left: 130%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-shimmer::after {
+    display: none;
+  }
+}
+
+/* Magnetic pull — see src/scripts/magnetic.js. The JS sets an inline
+   transform; this transition just smooths it. */
+[data-magnetic] {
+  transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-magnetic] {
+    transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+}

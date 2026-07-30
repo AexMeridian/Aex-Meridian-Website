@@ -1,0 +1,256 @@
+---
+import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHref, socialLinks as socialUrls } from '../data/site';
+import MeridianRule from './MeridianRule.astro';
+
+const year = new Date().getFullYear();
+
+const quickLinks = [
+  { label: 'What We Do', href: '/what-we-do' },
+  { label: 'How It Works', href: '/how-it-works' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Website Cost Guide', href: '/how-much-does-a-website-cost' },
+  { label: 'Get in Touch', href: '/#contact' },
+];
+
+const legalLinks = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms' },
+];
+
+// The column always shows now (accounts are launching alongside the site) —
+// each icon goes live the moment its real URL lands in src/data/site.ts, no
+// markup change needed then. Until a URL exists, the icon renders as an
+// inert <span> rather than a link to nowhere — a dead link is worse than no
+// link, especially for a studio that sells social content.
+const socialLinks = [
+  {
+    label: 'LinkedIn',
+    href: socialUrls.linkedin,
+    path: '<path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3.5a1.96 1.96 0 1 0 0 3.92 1.96 1.96 0 0 0 0-3.92ZM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.97V20H9.68V8.5h3.24v1.57h.05c.45-.86 1.56-1.76 3.21-1.76 3.43 0 4.06 2.26 4.06 5.2V20Z" fill="currentColor"/>',
+  },
+  {
+    label: 'Instagram',
+    href: socialUrls.instagram,
+    path: '<rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/>',
+  },
+  {
+    label: 'Facebook',
+    href: socialUrls.facebook,
+    path: '<path d="M14.5 8.5h2V5.5h-2c-2.2 0-3.5 1.3-3.5 3.5v2H9v3h2v7h3v-7h2.2l.5-3H14v-1.5c0-.6.3-1 1-1Z" fill="currentColor"/>',
+  },
+];
+---
+
+<footer class="site-footer">
+  <MeridianRule dot="none" align="full" />
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="/images/aex-meridian-logo-stacked.png" alt="Aex Meridian" width="149" height="96" class="footer-logo" loading="lazy" />
+      <p class="footer-tagline">
+        Websites, video, and social content for small businesses — fast, affordable,
+        and handled from start to finish.
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Site</p>
+      <ul class="footer-links">
+        {quickLinks.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Contact</p>
+      <ul class="footer-links">
+        <li><a href={`mailto:${contactEmail}`}>{contactEmail}</a></li>
+        <li><a href={contactPhoneHref}>{contactPhoneDisplay}</a></li>
+        <li><a href={contactPhoneSmsHref}>Text us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Follow</p>
+      <ul class="footer-social">
+        {socialLinks.map((social) => (
+          <li>
+            {social.href ? (
+              <a href={social.href} aria-label={`Aex Meridian on ${social.label}`}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={social.path} />
+              </a>
+            ) : (
+              <span class="footer-social-pending" aria-label={`${social.label} — coming soon`} title="Coming soon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" set:html={social.path} />
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p class="footer-copy">&copy; {year} Aex Meridian, LLC. All rights reserved.</p>
+    <ul class="footer-legal">
+      {legalLinks.map((link) => (
+        <li><a href={link.href}>{link.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-navy-surface);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: var(--space-5);
+    padding: var(--space-7) 0 var(--space-5);
+  }
+
+  .footer-logo {
+    height: 64px;
+    width: auto;
+    margin-bottom: var(--space-2);
+  }
+
+  .footer-tagline {
+    margin-top: var(--space-2);
+    max-width: 280px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-muted);
+  }
+
+  .footer-heading {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+    margin-bottom: var(--space-2);
+  }
+
+  .footer-links,
+  .footer-legal {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .footer-links a,
+  .footer-legal a {
+    text-decoration: none;
+    color: var(--color-ivory);
+    font-size: 15px;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+
+  .footer-links a:hover,
+  .footer-links a:focus-visible,
+  .footer-legal a:hover,
+  .footer-legal a:focus-visible {
+    color: var(--color-steel);
+  }
+
+  .footer-social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .footer-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    color: var(--color-ivory);
+    transition: var(--transition);
+  }
+
+  .footer-social a:hover,
+  .footer-social a:focus-visible {
+    border-color: var(--color-steel);
+    color: var(--color-steel);
+    transform: translateY(-2px);
+  }
+
+  /* Coming-soon state — same shape as a live icon so the column doesn't
+     shift when accounts go live, just visibly inert until then. */
+  .footer-social-pending {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(247, 245, 240, 0.12);
+    border-radius: var(--radius-sm);
+    color: rgba(247, 245, 240, 0.3);
+    cursor: default;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-3) 0 var(--space-5);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+
+  .footer-legal {
+    flex-direction: row;
+    gap: var(--space-3);
+  }
+
+  .footer-legal a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  .footer-legal a:hover,
+  .footer-legal a:focus-visible {
+    color: var(--color-steel);
+  }
+
+  @media (max-width: 860px) {
+    .footer-inner {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

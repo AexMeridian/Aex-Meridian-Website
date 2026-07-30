@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Page Not Found — Aex Meridian"
+  description="This page doesn't exist. Find your way back to Aex Meridian's website, video, and social content services."
+>
+  <Header />
+  <main id="main-content">
+    <section class="section not-found">
+      <div class="container not-found-inner">
+        <p class="eyebrow">404</p>
+        <h1 class="not-found-title">This page didn't make it to launch.</h1>
+        <p class="not-found-body">
+          Whatever you were looking for either moved or never existed — happens sometimes.
+          Here's how to get back on track.
+        </p>
+        <div class="not-found-actions">
+          <a href="/" class="btn btn-primary btn-shimmer" data-magnetic>
+            <span>Back to home</span>
+          </a>
+          <a href="/#contact" class="btn btn-ghost btn-shimmer" data-magnetic>
+            <span>Book a free consultation</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .not-found {
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    align-items: center;
+    background: var(--color-navy);
+    padding-top: calc(var(--header-height) + var(--space-6));
+  }
+
+  .not-found-inner {
+    max-width: 560px;
+  }
+
+  .not-found .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .not-found-title {
+    margin-top: var(--space-2);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.4vw, 3rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .not-found-body {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(247, 245, 240, 0.75);
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  @media (max-width: 640px) {
+    .not-found-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .not-found-actions .btn {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>

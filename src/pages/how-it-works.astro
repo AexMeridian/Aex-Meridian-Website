@@ -1,0 +1,1209 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WorkGrid from '../components/WorkGrid.astro';
+import DeviceFrame from '../components/DeviceFrame.astro';
+import MeridianRule from '../components/MeridianRule.astro';
+import PageHero from '../components/PageHero.astro';
+import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHref } from '../data/site';
+
+const workflow = [
+  {
+    number: '01',
+    title: 'Gather',
+    day: 'Day 1',
+    description: 'You send photos, key details, and any branding — takes minutes, not a meeting.',
+  },
+  {
+    number: '02',
+    title: 'Draft',
+    day: 'Days 2–4',
+    description: 'We build a first pass around what you gave us.',
+  },
+  {
+    number: '03',
+    title: 'Review',
+    day: 'Day 5',
+    description: 'Every draft is checked for accuracy and brand fit before you ever see it.',
+  },
+  {
+    number: '04',
+    title: 'Deliver',
+    day: 'Within a week',
+    description: 'Ready-to-post files, branded to your business. Nothing publishes without your sign-off.',
+  },
+];
+
+const included = [
+  'Mobile-responsive on every screen size',
+  'Contact form that actually delivers',
+  'Basic on-page SEO',
+  'Fast load times',
+  'SSL and security',
+  'Accessible markup (WCAG 2.1 AA basics)',
+  'Hosting and DNS handled',
+  'Ongoing edits without logging into anything',
+];
+
+const profiles = [
+  {
+    slug: 'trades',
+    star: 'Trades',
+    title: 'Trades and home services',
+    body: 'Contractors, electricians, plumbers, and landscapers compete on trust before they compete on price. A site that shows real work, a clear service area, and an easy way to request a quote does some of the selling before the phone ever rings.',
+    benefits: [
+      'A gallery built to showcase past jobs',
+      'Service-area and quote-request pages that cut down back-and-forth',
+      'Social content available to keep recent jobs visible between projects',
+    ],
+    icon: '<path d="M11.414 10l-7.383 7.418a2.091 2.091 0 0 0 0 2.967a2.11 2.11 0 0 0 2.976 0l7.407 -7.385" /><path d="M18.121 15.293l2.586 -2.586a1 1 0 0 0 0 -1.414l-7.586 -7.586a1 1 0 0 0 -1.414 0l-2.586 2.586a1 1 0 0 0 0 1.414l7.586 7.586a1 1 0 0 0 1.414 0" />',
+  },
+  {
+    slug: 'realtors',
+    star: 'Realtors & hosts',
+    title: 'Realtors, property managers & short-term rental hosts',
+    body: "A listing lives or dies on how it looks online. We build the site that houses your listings and produce the walkthrough videos that make them stand out — a professional tour ready in days, not weeks, without hiring a videographer.",
+    benefits: [
+      'Listing tours with voiceover, music, and text overlays, delivered ready to post',
+      'Formats built for listing sites and Reels/Stories alike',
+      'Priced per video, so one listing doesn’t require a subscription',
+    ],
+    icon: '<path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />',
+  },
+  {
+    slug: 'consultants',
+    star: 'Consultants',
+    title: 'Consultants and professional services',
+    body: 'Coaches, agents, bookkeepers, and small practices sell expertise, and expertise needs to look credible online before a prospect ever picks up the phone. We build sites that lead with credentials and services, with a simple way to get in touch.',
+    benefits: [
+      'Clear service and credential pages, no clutter',
+      'A contact flow built for booking a first conversation',
+      'Social content available for firms that want to stay visible between referrals',
+    ],
+    icon: '<path d="M3 9a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2l0 -9" /><path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /><path d="M12 12l0 .01" /><path d="M3 13a20 20 0 0 0 18 0" />',
+  },
+  {
+    slug: 'wellness',
+    star: 'Wellness',
+    title: 'Personal care and wellness',
+    body: 'Trainers, therapists, and stylists need clients to find hours, services, and contact info fast, without an online booking system to manage or a monthly software fee to pay for. We keep it simple: a site that answers the questions people actually ask.',
+    benefits: [
+      'Hours, services, and contact info, always current',
+      'No booking-software subscription required',
+      'Routine edits included, so pricing and hours never go stale',
+    ],
+    icon: '<path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />',
+  },
+  {
+    slug: 'retail',
+    star: 'Retail',
+    title: 'Local shops and retail',
+    body: "Boutiques, bakeries, and florists live on foot traffic and word of mouth — a site's job is to get someone in the door. We build sites that lead with location, hours, and what makes the trip worth it, plus social content that keeps the shop visible between visits.",
+    benefits: [
+      'Hours and location front and center',
+      'A look that matches the in-store experience',
+      'Social content retainers available for a steady posting rhythm',
+    ],
+    icon: '<path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" />',
+  },
+];
+
+// Fixed sky positions (percent of the hero) for the constellation nodes —
+// spread through the open sky, away from the aurora's brightest band
+// and out of the text column on the left.
+const starPositions = [
+  { x: 60, y: 20 },
+  { x: 83, y: 40 },
+  { x: 70, y: 66 },
+  { x: 46, y: 80 },
+  { x: 24, y: 62 },
+];
+
+const videoStats = [
+  { value: '85', suffix: '%', label: 'of people say video has convinced them to buy a product or service' },
+  { value: '84', suffix: '%', label: 'want to see more video from the brands and businesses they follow' },
+  { value: '82', suffix: '%', label: 'of marketers say video delivers a strong return on investment' },
+];
+
+// One-file drop-in: swap in a real photo at public/images/founder.jpg and
+// this switches from the monogram automatically — no code change needed.
+const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images/founder.jpg'));
+---
+
+<Layout
+  title="How It Works — Aex Meridian"
+  description="How a project actually runs, what's included in every build, and who Aex Meridian builds for — real client profiles and the process behind them."
+>
+  <Header />
+  <main id="main-content">
+    <PageHero
+      video="/videos/our-work-bg.mp4"
+      videoId="ow-hero-loop"
+      eyebrow="How it works"
+      title="Built for real local businesses, not enterprise accounts"
+      subhead="Every project starts the same way, whether it's a site, a listing video, or a social retainer: I build the real thing first. You see exactly what you're getting before any money changes hands. Here's how that works, and who it works for."
+    >
+      <!-- The five client categories, plotted as a constellation over the
+           aurora sky instead of a plain chip row — each star links straight
+           to its profile below. -->
+      <nav slot="overlay" class="constellation" aria-label="Who we build for">
+        <svg
+          class="constellation-lines"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <polyline
+            points={starPositions.map((p) => `${p.x},${p.y}`).join(' ')}
+            fill="none"
+          />
+        </svg>
+        {profiles.map((profile, i) => (
+          <a
+            href={`#profile-${profile.slug}`}
+            class="star-node"
+            style={`--x:${starPositions[i].x}%; --y:${starPositions[i].y}%; --delay:${i * 0.4}s;`}
+          >
+            <span class="star-dot" aria-hidden="true"></span>
+            <span class="star-label">{profile.star}</span>
+          </a>
+        ))}
+      </nav>
+
+      <div slot="actions" class="page-hero-actions">
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+        <a href="/what-we-do" class="btn btn-ghost btn-shimmer" data-magnetic>
+          <span>See what we do</span>
+        </a>
+      </div>
+    </PageHero>
+
+    <section class="section process seam" id="process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">The process</p>
+          <h2 class="section-title">From first email to the finished thing</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-track" data-reveal aria-hidden="true">
+            {workflow.map(() => <span class="track-node"></span>)}
+          </div>
+
+          <div class="timeline-grid">
+            {workflow.map((step, i) => (
+              <div class="timeline-step" data-reveal style={`transition-delay: ${i * 100}ms`}>
+                <span class="step-index" aria-hidden="true">{step.number}</span>
+                <span class="step-day">{step.day}</span>
+                <h3 class="step-title">{step.title}</h3>
+                <p class="step-desc">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section included seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Every website</p>
+          <h2 class="section-title">What's included, no exceptions</h2>
+        </div>
+
+        <ul class="included-list">
+          {included.map((item, i) => (
+            <li data-reveal style={`transition-delay: ${i * 60}ms`}>
+              <span class="included-icon-badge">
+                <span class="included-icon" set:html={`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
+              </span>
+              <span class="included-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section profiles seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Who we build for</p>
+          <h2 class="section-title">Five kinds of businesses we know well</h2>
+        </div>
+
+        <div class="profile-list">
+          {profiles.map((profile, i) => (
+            <div
+              id={`profile-${profile.slug}`}
+              class:list={['profile-row', i % 2 === 1 && 'profile-row--reverse']}
+              data-reveal
+            >
+              <div class:list={['profile-visual', `profile-visual--${['teal', 'steel', 'amber'][i % 3]}`]}>
+                <span class="profile-icon-badge">
+                  <span class="profile-icon" set:html={`<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${profile.icon}</svg>`} />
+                </span>
+                <span class="profile-visual-tag">{profile.star}</span>
+                <span class="profile-visual-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <div class="profile-copy">
+                <span class="profile-tag">{profile.star}</span>
+                <h3 class="profile-title">{profile.title}</h3>
+                <p class="profile-body">{profile.body}</p>
+                <ul class="profile-benefits">
+                  {profile.benefits.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="profiles-fallback" data-reveal>
+          <p class="profiles-fallback-text">
+            Not one of these five? They're the businesses we see most, not the only ones
+            we take on — <a href="/#contact">get in touch</a> and we'll tell you honestly
+            if we're a fit.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section device-showcase mode-dark-bleed">
+      <div class="device-showcase-texture" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">See it for yourself</p>
+          <h2 class="section-title">The site you're looking at, on any screen</h2>
+        </div>
+
+        <div class="device-showcase-frames" data-reveal>
+          <DeviceFrame
+            device="laptop"
+            image="home-laptop.webp"
+            alt="The Aex Meridian homepage shown on a laptop screen"
+            class="device-showcase-laptop"
+          />
+          <DeviceFrame
+            device="phone"
+            image="pricing-phone.webp"
+            alt="The Aex Meridian pricing page shown on a phone screen"
+            class="device-showcase-phone"
+          />
+        </div>
+      </div>
+    </section>
+
+    <WorkGrid />
+
+    <section class="section video-stats seam">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Why video matters</p>
+          <h2 class="section-title">Video isn't optional anymore, even at your size</h2>
+        </div>
+
+        <div class="stats-rail" data-reveal>
+          {videoStats.map((stat) => (
+            <div class="stat-item">
+              <p class="stat-number">
+                <span data-count-target={stat.value} data-count-suffix={stat.suffix}>0{stat.suffix}</span>
+              </p>
+              <p class="stat-label">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <p class="stats-source">Source: Wyzowl, State of Video Marketing 2026.</p>
+      </div>
+    </section>
+
+    <section class="section founder seam" id="founder">
+      <div class="container founder-grid">
+        <div class="founder-portrait" data-reveal>
+          {founderPhotoExists ? (
+            <img src="/images/founder.jpg" alt="Caleb Aex, founder of Aex Meridian" class="founder-photo" width="480" height="480" loading="lazy" />
+          ) : (
+            <div class="founder-monogram" role="img" aria-label="Caleb Aex, founder of Aex Meridian">AM</div>
+          )}
+        </div>
+
+        <div class="founder-copy" data-reveal>
+          <p class="eyebrow">The founder</p>
+          <h2 class="founder-name">Caleb Aex, founder</h2>
+          <p class="founder-body">
+            Aex Meridian is intentionally small — just one person. No account managers,
+            no handoffs, no ticket queue. When you call, you get the person who
+            actually built your site.
+          </p>
+          <p class="founder-body">
+            That's the whole model. Small roster, direct line, work that gets done
+            because there's no one else to hand it to. First response within one
+            business day.
+          </p>
+          <p class="founder-contact">
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+            <span aria-hidden="true"> &middot; </span>
+            <a href={contactPhoneHref}>{contactPhoneDisplay}</a>
+            <span aria-hidden="true"> &middot; </span>
+            <a href={contactPhoneSmsHref}>Text</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ow-cta cta-band">
+      <div class="container ow-cta-inner cta-band-inner" data-reveal>
+        <MeridianRule dot="none" align="left" class="cta-rule" />
+        <h2 class="cta-heading">Think we're a fit?</h2>
+        <p class="cta-sub">Tell us about your business — we'll tell you honestly if we can help.</p>
+        <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* Constellation nav — the five client categories plotted over the sky.
+     Sits above the video/scrim but below the text column's own
+     z-index, and only the star links themselves capture pointer events. */
+  .constellation {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .constellation-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .constellation-lines polyline {
+    stroke: rgba(247, 245, 240, 0.25);
+    stroke-width: 0.15;
+    stroke-dasharray: 0.6 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .star-node {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+
+  .star-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-ivory);
+    box-shadow: 0 0 8px 2px rgba(247, 245, 240, 0.75), 0 0 20px 6px rgba(107, 135, 168, 0.5);
+    transition: var(--transition-fast);
+  }
+
+  .star-dot::after {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(247, 245, 240, 0.4), transparent 70%);
+    opacity: 0;
+    animation: star-pulse 3.6s ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  .star-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(247, 245, 240, 0.8);
+    white-space: nowrap;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: var(--transition-fast);
+  }
+
+  .star-node:hover .star-label,
+  .star-node:focus-visible .star-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .star-node:hover .star-dot,
+  .star-node:focus-visible .star-dot {
+    transform: scale(1.7);
+    box-shadow: 0 0 10px 3px rgba(247, 245, 240, 1), 0 0 28px 10px rgba(107, 135, 168, 0.85);
+  }
+
+  .star-node:focus-visible {
+    outline: none;
+  }
+
+  .star-node:focus-visible .star-dot {
+    outline: 2px solid var(--color-ivory);
+    outline-offset: 5px;
+  }
+
+  @keyframes star-pulse {
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.7);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star-dot::after {
+      animation: none;
+    }
+  }
+
+  /* Small screens: star labels can't meet a 44px touch target and the
+     scattered layout gets cramped, so the constellation steps aside —
+     the "Five kinds of businesses" section right below covers the same
+     ground linearly. */
+  @media (max-width: 760px) {
+    .constellation {
+      display: none;
+    }
+  }
+
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  /* The process — now this page's primary content, not a teaser. Concrete
+     day-ranges are the substitute for portfolio proof: specificity reads
+     as more credible than a vague "fast turnaround" claim. */
+  .process {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .timeline-track {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 12px;
+    margin-bottom: var(--space-5);
+  }
+
+  .timeline-track::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-amber), var(--color-steel), var(--color-amber));
+    opacity: 0.5;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left;
+    transition: transform 0.9s var(--ease-out) 0.15s;
+  }
+
+  .timeline-track.in-view::before {
+    transform: translateY(-50%) scaleX(1);
+  }
+
+  .track-node {
+    position: relative;
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-amber);
+    box-shadow: 0 0 0 4px var(--color-white), 0 0 14px rgba(var(--color-amber-rgb), 0.45);
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+
+  .timeline-step {
+    opacity: 0;
+    transform: translateY(16px) scale(0.94);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  }
+
+  .timeline-step.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .step-index {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(20, 24, 31, 0.18);
+    transition: -webkit-text-stroke-color 0.3s ease;
+  }
+
+  .timeline-step:hover .step-index {
+    -webkit-text-stroke-color: var(--color-amber);
+  }
+
+  .step-day {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: var(--space-1) 0 var(--space-2);
+  }
+
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-track::before {
+      transform: translateY(-50%) scaleX(1);
+    }
+
+    .timeline-step {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .timeline-track {
+      display: none;
+    }
+
+    .timeline-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .timeline-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* What's included */
+  .included {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  /* A single wide column of larger, more deliberate lines reads as a real
+     statement of scope rather than a compact spec-sheet grid — the same
+     eight items, just given room to breathe. Meridian hairlines between
+     rows stand in for the old checklist's implicit grid lines. */
+  .included-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 680px;
+  }
+
+  .included-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    position: relative;
+  }
+
+  .included-list li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-line-on-light) 45%, transparent);
+  }
+
+  .included-icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(61, 107, 107, 0.12);
+    color: var(--color-teal);
+  }
+
+  .included-text {
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 640px) {
+    .included-text {
+      font-size: 17px;
+    }
+  }
+
+  /* Client profiles */
+  .profiles {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  /* A real callout, not a muted afterthought — this list reads as
+     definitive ("five kinds of businesses") right up until this box says
+     otherwise, so it needs actual visual weight to correct that impression. */
+  .profiles-fallback {
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    text-align: center;
+    background: rgba(61, 107, 107, 0.06);
+    border: 1px solid rgba(61, 107, 107, 0.24);
+    border-radius: var(--radius-md);
+  }
+
+  .profiles-fallback-text {
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: var(--color-ink);
+    max-width: 56ch;
+    margin: 0 auto;
+  }
+
+  .profiles-fallback-text a {
+    color: var(--color-teal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+
+  .profiles-fallback-text a:hover,
+  .profiles-fallback-text a:focus-visible {
+    color: var(--color-steel-on-light);
+  }
+
+  /* Editorial, alternating rows — each of the five profiles gets a real
+     destination feel (the constellation up in the hero promises five
+     separate landings), but as a left/right layout rather than five
+     identical stacked cards. The icon side carries a large ghosted
+     numeral standing in for photography until real industry photos exist. */
+  .profile-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  .profile-row {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--space-6);
+    align-items: center;
+    scroll-margin-top: var(--header-height);
+    transition: transform 0.2s ease-out;
+    transform-style: preserve-3d;
+  }
+
+  .profile-row--reverse {
+    grid-template-columns: 1fr 240px;
+  }
+
+  .profile-row--reverse .profile-visual {
+    order: 2;
+  }
+
+  /* Was a flat ivory box holding only a near-invisible stroke-outline
+     numeral and a small icon — with no photography behind it, that read
+     as an empty/broken image slot exactly where a photo belongs, not a
+     deliberate design choice. Rebuilt as an unmistakable category tile: a
+     solid brand-color gradient, a large icon on a translucent badge, and
+     the profile's own tag repeated as bold type — cycling through the
+     site's three accents (teal/steel/amber) so the five rows don't read
+     as five copies of the same card. */
+  .profile-visual {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    height: 200px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  .profile-visual--teal {
+    background: linear-gradient(135deg, var(--color-teal) 0%, var(--color-navy) 130%);
+  }
+
+  .profile-visual--steel {
+    background: linear-gradient(135deg, var(--color-steel) 0%, var(--color-navy) 130%);
+  }
+
+  .profile-visual--amber {
+    background: linear-gradient(135deg, #C9A46B 0%, var(--color-navy) 130%);
+  }
+
+  .profile-icon-badge {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-md);
+    background: rgba(247, 245, 240, 0.16);
+    color: var(--color-ivory);
+  }
+
+  .profile-visual-tag {
+    position: relative;
+    z-index: 1;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ivory);
+  }
+
+  .profile-visual-number {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(247, 245, 240, 0.55);
+  }
+
+  /* Echoes the constellation star's own label back — confirmation that
+     clicking that star landed you in the right place. */
+  .profile-tag {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+  }
+
+  .profile-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .profile-body {
+    max-width: 68ch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .profile-benefits {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .profile-benefits li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .profile-benefits li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 1px;
+    background: var(--color-amber);
+  }
+
+  /* Device showcase — a real, self-referential proof: the site itself,
+     framed on the two screens a visitor is most likely using right now.
+     The aurora texture ties this dark-bleed section back to the same
+     clip the page hero uses, at low enough opacity to read as ambient
+     material rather than a second photo. */
+  .device-showcase {
+    position: relative;
+    z-index: 2;
+    overflow: visible;
+    padding-bottom: calc(var(--space-7) + 60px);
+  }
+
+  /* Local overrides win the light-section defaults set earlier in this
+     same stylesheet (same specificity, later source order) — this section
+     needs the dark-background variants of both. */
+  .device-showcase .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .device-showcase .section-title {
+    color: var(--color-ivory);
+  }
+
+  .device-showcase-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('/images/textures/aurora-mountains.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.14;
+    pointer-events: none;
+  }
+
+  .device-showcase .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .device-showcase-frames {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  /* Pulled down past this section's own bottom edge — the one deliberate
+     container break on this page, per the visual-pass brief. */
+  .device-showcase-phone {
+    margin-bottom: -60px;
+  }
+
+  @media (max-width: 760px) {
+    /* The -60px overlap is a desktop-only signature (device breaking past
+       the section edge) — once it's neutralized below, the padding that
+       existed to make room for it is dead weight too. */
+    .device-showcase {
+      padding-bottom: var(--space-7);
+    }
+
+    .device-showcase-frames {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Phone leads on mobile — it's the screen whoever's reading this is
+       actually holding, so it makes the point before the laptop does. */
+    .device-showcase-phone {
+      order: -1;
+      margin-bottom: 0;
+    }
+
+    .device-showcase-laptop {
+      max-width: 360px;
+    }
+  }
+
+  /* Video stats */
+  .video-stats {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  .stats-rail {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stat-item {
+    position: relative;
+    padding: 0 var(--space-4);
+  }
+
+  .stat-item:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--color-teal), transparent);
+  }
+
+  .stat-item:first-child {
+    padding-left: 0;
+  }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-amber);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+  }
+
+  .stat-label {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--color-ink-muted);
+    max-width: 230px;
+  }
+
+  .stats-source {
+    margin-top: var(--space-5);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+    opacity: 0.8;
+  }
+
+  /* Founder */
+  .founder {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  .founder-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .founder-portrait {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .founder-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Source is a tall portrait with the face in the upper third — a
+       centered crop into this square slot would cut the head off and
+       center on the torso instead. Biasing toward the top keeps the face
+       properly framed. */
+    object-position: center 20%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line-on-light);
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  .founder-monogram {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-amber);
+    background: var(--color-white);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  .founder-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: var(--space-2) 0 var(--space-3);
+  }
+
+  .founder-body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+    max-width: 60ch;
+  }
+
+  .founder-body + .founder-body {
+    margin-top: var(--space-2);
+  }
+
+  .founder-contact {
+    margin-top: var(--space-3);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .founder-contact a {
+    color: var(--color-amber);
+    text-decoration: none;
+  }
+
+  .founder-contact a:hover,
+  .founder-contact a:focus-visible {
+    color: var(--color-steel);
+  }
+
+  @media (max-width: 640px) {
+    .founder-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .founder-portrait {
+      max-width: 200px;
+      margin: 0 auto;
+    }
+  }
+
+  /* Closing CTA — amber into navy, carrying that same warm accent color
+     through to the page's last moment, rather than the site's default
+     teal-to-navy gradient used on the other pages' closing sections. */
+  .ow-cta {
+    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+  }
+
+  .ow-cta .btn {
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 640px) {
+    .profile-row,
+    .profile-row--reverse {
+      grid-template-columns: 1fr;
+    }
+
+    .profile-row--reverse .profile-visual {
+      order: 0;
+    }
+
+    .profile-visual {
+      height: 160px;
+    }
+
+    .stats-rail {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .stat-item {
+      padding: var(--space-4) 0 0;
+    }
+
+    .stat-item:not(:first-child)::before {
+      left: 8px;
+      right: 8px;
+      top: 0;
+      bottom: auto;
+      width: auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-teal), transparent);
+    }
+
+    .stat-item:first-child {
+      padding-top: 0;
+    }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+
+  // Timeline track draw-in, same pattern used on What We Do's workflow
+  // section.
+  const track = document.querySelector('.timeline-track');
+  const steps = document.querySelectorAll('.timeline-step');
+
+  if (prefersReducedMotion) {
+    track?.classList.add('in-view');
+    steps.forEach((step) => step.classList.add('in-view'));
+  } else {
+    const timelineObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            timelineObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    if (track) timelineObserver.observe(track);
+    steps.forEach((step) => timelineObserver.observe(step));
+  }
+
+  // Cursor-reactive 3D tilt on each profile row — skipped on touch devices
+  // and when reduced motion is requested.
+  if (!prefersReducedMotion && !isCoarsePointer) {
+    document.querySelectorAll('.profile-row').forEach((row) => {
+      if (!(row instanceof HTMLElement)) return;
+
+      const TILT_MAX = 4; // degrees — subtle, not a gimmick
+
+      row.addEventListener('mousemove', (event) => {
+        const rect = row.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width - 0.5;
+        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        row.style.transform = `perspective(900px) rotateX(${(-py * TILT_MAX).toFixed(2)}deg) rotateY(${(px * TILT_MAX).toFixed(2)}deg)`;
+      });
+
+      row.addEventListener('mouseleave', () => {
+        row.style.transform = '';
+      });
+    });
+  }
+</script>

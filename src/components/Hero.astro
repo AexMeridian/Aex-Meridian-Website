@@ -1,0 +1,332 @@
+---
+---
+
+<section class="hero">
+  <div class="hero-video-container" aria-hidden="true">
+    <video
+      id="hero-loop"
+      class="hero-video"
+      src="/videos/hero-flow.mp4"
+      muted
+      autoplay
+      playsinline
+      loop
+      preload="auto"
+    ></video>
+  </div>
+
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <div class="hero-hint" id="hero-hint" aria-hidden="true">
+    <span class="hero-hint-dot"></span>
+    <span class="hero-hint-text">Click anywhere to shift the light</span>
+  </div>
+
+  <div class="container hero-content">
+    <div class="hero-inner" data-reveal>
+      <p class="eyebrow hero-eyebrow">One studio. Websites, video, social.</p>
+      <h1 class="hero-headline">
+        A professional online presence, without the agency price tag.
+      </h1>
+      <p class="hero-subhead">
+        Websites, video, and social content — built fast and handled for you, start to finish.
+      </p>
+      <div class="hero-actions">
+        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+          <span>Book a free consultation</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+        <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
+          <span>See how it works</span>
+        </a>
+      </div>
+      <p class="hero-guarantee">You see the finished site before you pay a dollar.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: var(--color-navy);
+  }
+
+  .hero-video-container {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--color-navy);
+  }
+
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: hue-rotate(var(--wave-hue, 0deg)) saturate(var(--wave-saturate, 1));
+    transition: filter 0.8s ease;
+  }
+
+  /* Tuned for the horizon-glow footage: the brightest moment sits as a
+     horizontal band roughly mid-frame, with a naturally darker cloud floor
+     below it (where the text sits) and dark sky above. The scrim leans
+     vertical rather than horizontal now — clear over the light itself,
+     protective at top (header) and bottom (text) — plus a light horizontal
+     assist on the left where the text column actually lives. */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(10, 14, 20, 0.55) 0%,
+        rgba(10, 14, 20, 0.18) 22%,
+        rgba(10, 14, 20, 0.24) 42%,
+        rgba(10, 14, 20, 0.35) 64%,
+        rgba(10, 14, 20, 0.82) 88%,
+        rgba(10, 14, 20, 0.92) 100%
+      ),
+      linear-gradient(
+        to right,
+        rgba(10, 14, 20, 0.32) 0%,
+        rgba(10, 14, 20, 0.1) 45%,
+        rgba(10, 14, 20, 0) 75%
+      );
+  }
+
+  /* Tells first-time visitors the background is interactive — fades in
+     shortly after load, fades out the moment they click (see script below)
+     or on its own after a few seconds if they never do. Positioned clear
+     of the text column so it never competes with the actual content. */
+  .hero-hint {
+    position: absolute;
+    top: calc(var(--header-height) + var(--space-3));
+    /* Matches the header's own responsive side inset (see .header-inner's
+       container padding) so the hint lines up with the header content
+       above it — logo/nav/menu-button — at every viewport width, instead
+       of a fixed offset that drifts out of alignment on narrow screens. */
+    right: clamp(24px, 5vw, 64px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: var(--radius-full, 999px);
+    background: rgba(10, 14, 20, 0.45);
+    border: 1px solid rgba(247, 245, 240, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .hero-hint.is-visible {
+    opacity: 1;
+  }
+
+  .hero-hint-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-steel);
+    animation: hero-hint-pulse 2.2s ease-out infinite;
+  }
+
+  .hero-hint-text {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(247, 245, 240, 0.85);
+    white-space: nowrap;
+  }
+
+  @keyframes hero-hint-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(107, 135, 168, 0.5);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(107, 135, 168, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(107, 135, 168, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-hint-dot {
+      animation: none;
+    }
+  }
+
+  /* Below 480px the label hides and only the dot remains — without this,
+     the pill keeps its full text-sized padding around a 6px dot and reads
+     as a stray misshapen blob near the header rather than a clean marker. */
+  @media (max-width: 480px) {
+    .hero-hint {
+      padding: 10px;
+    }
+
+    .hero-hint-text {
+      display: none;
+    }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-bottom: var(--space-8);
+  }
+
+  .hero-inner {
+    max-width: 620px;
+  }
+
+  .hero-eyebrow {
+    margin-bottom: var(--space-2);
+    /* Over the dark video, the original --color-steel already clears AA
+       (~5.2:1) — .eyebrow's global default is a darker variant tuned for
+       light section backgrounds, so this opts back into the lighter one. */
+    color: var(--color-steel);
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-subhead {
+    margin: var(--space-3) 0 0;
+    max-width: 560px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(247, 245, 240, 0.9);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .hero-actions .btn-ghost {
+    border-color: rgba(247, 245, 240, 0.45);
+  }
+
+  .hero-actions .btn-ghost:hover,
+  .hero-actions .btn-ghost:focus-visible {
+    border-color: var(--color-ivory);
+    background: rgba(247, 245, 240, 0.08);
+  }
+
+  /* The strongest thing about this business — see it before you pay —
+     belongs here, not buried in a card two pages down. A bordered pill,
+     not another paragraph, so it reads as a distinct claim. */
+  .hero-guarantee {
+    display: inline-block;
+    margin-top: var(--space-4);
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ivory);
+    border: 1px solid var(--color-steel);
+    border-radius: var(--radius-full, 999px);
+    background: rgba(107, 135, 168, 0.12);
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      align-items: flex-end;
+      padding-bottom: var(--space-4);
+    }
+
+    .hero-content {
+      padding-bottom: var(--space-6);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .hero-actions .btn {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const loop = document.getElementById('hero-loop');
+
+  if (loop instanceof HTMLVideoElement) {
+    if (prefersReducedMotion) {
+      // No motion at all — show the first frame, never start playback.
+      loop.removeAttribute('autoplay');
+      loop.pause();
+    } else {
+      loop.play().catch(() => {
+        // Autoplay blocked — the first frame stays visible as a static
+        // fallback rather than an empty video area.
+      });
+    }
+  }
+
+  const hero = document.querySelector('.hero');
+  const hint = document.getElementById('hero-hint');
+
+  const HINT_DISMISS_AFTER_CLICKS = 3;
+  let recolorClicks = 0;
+
+  if (hint instanceof HTMLElement) {
+    // Reduced motion skips the delay/pulse choreography but still shows
+    // the hint immediately — it's information, not decoration, so it
+    // shouldn't be hidden outright the way purely decorative motion is.
+    const showDelay = prefersReducedMotion ? 0 : 1200;
+    window.setTimeout(() => hint.classList.add('is-visible'), showDelay);
+    // No auto-dismiss timer — this stays up until the visitor has actually
+    // tried the effect a few times, not just seen the hint once.
+  }
+
+  if (hero instanceof HTMLElement) {
+    hero.addEventListener('click', (event) => {
+      const target = event.target;
+      // Let CTA buttons behave normally — only recolor on clicks to empty hero space.
+      if (target instanceof Element && target.closest('a, button')) {
+        return;
+      }
+
+      const hue = Math.floor(Math.random() * 360);
+      const saturate = 1.2 + Math.random() * 0.6;
+      hero.style.setProperty('--wave-hue', `${hue}deg`);
+      hero.style.setProperty('--wave-saturate', saturate.toFixed(2));
+
+      recolorClicks += 1;
+      if (recolorClicks >= HINT_DISMISS_AFTER_CLICKS) {
+        hint?.classList.remove('is-visible');
+      }
+    });
+  }
+</script>

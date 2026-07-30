@@ -1,0 +1,219 @@
+---
+const offerings = [
+  {
+    title: 'Listing walkthrough videos',
+    summary: 'Polished, voiced-over tours built for realtors, property managers, and Airbnb/VRBO hosts — ready to post.',
+    icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
+  },
+  {
+    title: 'Social content retainers',
+    summary: 'A steady rhythm of branded posts and short clips for local businesses that want a presence without adding another job to their week.',
+    icon: '<path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />',
+  },
+];
+---
+
+<section class="section content-services seam mode-editorial" id="content-services">
+  <div class="container content-split">
+    <div class="content-copy">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Beyond the website</p>
+        <h2 class="section-title">Video and social content, without hiring a crew</h2>
+        <p class="section-subtext">
+          Realtors, hosts, and local businesses also come to us for video and social
+          content — built the same fast, affordable way as our sites, and billed
+          separately from hosting.
+        </p>
+      </div>
+
+      <ul class="content-summary" data-reveal>
+        {offerings.map((offer) => (
+          <li class="content-offer">
+            <span class="content-icon-badge">
+              <span class="content-icon" set:html={`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${offer.icon}</svg>`} />
+            </span>
+            <span class="content-offer-copy">
+              <span class="content-title">{offer.title}</span>
+              <span class="content-body">{offer.summary}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <p class="content-closing">
+        <a href="/pricing">See full pricing &rarr;</a>
+      </p>
+    </div>
+
+    <!-- No real photography of finished video/social work exists yet. A
+         decorative shape stack used to sit here communicating nothing —
+         replaced with the same sourced stat this pitch actually rests on
+         (also cited on How It Works), so the space next to the offer
+         copy argues for the offer instead of just filling it. -->
+    <div class="content-proof" data-reveal>
+      <p class="content-proof-number">85<span>%</span></p>
+      <p class="content-proof-body">
+        of people say video has convinced them to buy a product or service.
+      </p>
+      <p class="content-proof-source">Source: Wyzowl, State of Video Marketing 2026.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* .mode-editorial supplies the white background/ink text; this section
+     just builds the asymmetric split on top — copy on the left, a
+     lightweight CSS visual on the right. */
+  .content-split {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .section-head {
+    margin-bottom: var(--space-5);
+  }
+
+  .section-head .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  .section-subtext {
+    margin-top: var(--space-2);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+  }
+
+  /* Condensed to a short, price-free summary — full tiers and numbers
+     live on Pricing, this is just enough to know the service exists and
+     to prompt the click through. */
+  .content-summary {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .content-offer {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .content-icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: rgba(61, 107, 107, 0.1);
+    color: var(--color-teal);
+  }
+
+  .content-offer-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .content-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .content-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .content-closing {
+    margin-top: var(--space-5);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .content-closing a {
+    color: var(--color-teal);
+    text-decoration: none;
+    transition: var(--transition-fast);
+  }
+
+  .content-closing a:hover,
+  .content-closing a:focus-visible {
+    color: var(--color-steel);
+  }
+
+  /* Proof card — a real, sourced stat standing in for the missing
+     portfolio photography, styled as a dark tinted card (this site's
+     existing dark-card convention) rather than a decorative shape. */
+  .content-proof {
+    position: relative;
+    padding: var(--space-6) var(--space-5);
+    background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-teal) 130%);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-tinted-light);
+    text-align: center;
+  }
+
+  .content-proof-number {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 7vw, 5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .content-proof-number span {
+    font-size: 0.5em;
+    color: var(--color-steel);
+  }
+
+  .content-proof-body {
+    margin-top: var(--space-2);
+    font-size: 17px;
+    line-height: 1.6;
+    max-width: 32ch;
+    margin-inline: auto;
+    color: rgba(247, 245, 240, 0.85);
+  }
+
+  .content-proof-source {
+    margin-top: var(--space-4);
+    font-size: 12px;
+    color: rgba(247, 245, 240, 0.5);
+  }
+
+  @media (max-width: 860px) {
+    .content-split {
+      grid-template-columns: 1fr;
+    }
+
+    .content-proof {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .content-summary {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

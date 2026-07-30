@@ -1,0 +1,83 @@
+---
+import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+import MeridianRule from './MeridianRule.astro';
+---
+
+<section class="section final-cta seam cta-band" id="pricing">
+  <div class="container cta-inner cta-band-inner" data-reveal>
+    <MeridianRule dot="none" align="left" class="cta-rule" />
+    <h2 class="cta-heading">Ready to see what we'd build for you?</h2>
+    <p class="cta-price-label">One flat plan, no tiers</p>
+    <p class="cta-price-line">{websitePlan.setup} website setup, {websitePlan.monthly} after</p>
+    <p class="cta-price-line cta-price-line-secondary">
+      Video tours from {videoTiers[0].price} &middot; content retainers from {socialRetainer.price}
+    </p>
+    <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+    <a href="/#contact" class="btn btn-primary cta-btn btn-shimmer" data-magnetic>
+      <span>Book a free consultation</span>
+      <span class="btn-arrow">&rarr;</span>
+    </a>
+    <a href="/pricing" class="cta-pricing-link">See full pricing &rarr;</a>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+  }
+
+  /* Wider than the shared .cta-band-inner default (560px) — this is the
+     site's only closing CTA carrying extra price-line copy, so it needs
+     the room. */
+  .cta-inner {
+    max-width: 640px;
+  }
+
+  /* Slightly larger than the shared .cta-heading default — this is the
+     one CTA on the homepage, the site's ultimate closing statement. */
+  .cta-heading {
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  }
+
+  .cta-price-label {
+    margin-top: var(--space-3);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  .cta-price-line {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(247, 245, 240, 0.75);
+  }
+
+  .cta-price-line-secondary {
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(247, 245, 240, 0.55);
+  }
+
+  .cta-btn {
+    margin-top: var(--space-4);
+  }
+
+  .cta-pricing-link {
+    margin-top: var(--space-3);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(247, 245, 240, 0.7);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+  }
+
+  .cta-pricing-link:hover,
+  .cta-pricing-link:focus-visible {
+    color: var(--color-ivory);
+  }
+</style>

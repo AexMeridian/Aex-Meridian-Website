@@ -1,0 +1,218 @@
+---
+import { websitePlan } from '../data/pricing';
+
+const steps = [
+  {
+    number: '01',
+    title: 'We build it first',
+    description: 'A real, working site for your business, no meeting required to start.',
+  },
+  {
+    number: '02',
+    title: 'You take a look',
+    description: 'Like it, and we launch it on your domain. Setup fee due at launch.',
+  },
+  {
+    number: '03',
+    title: 'We keep it running',
+    description: `Hosting, uptime, and security, plus routine edits — ${websitePlan.monthly}, flat. No logins, no tools to learn.`,
+  },
+];
+
+const STAGGER_MS = 120;
+---
+
+<section class="section how-it-works seam" id="what-we-do">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">The process</p>
+      <h2 class="section-title">How it actually works</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-track" data-reveal aria-hidden="true">
+        {steps.map(() => (
+          <span class="track-node"></span>
+        ))}
+      </div>
+
+      <div class="timeline-grid">
+        {steps.map((step, i) => (
+          <div class="timeline-step" data-reveal style={`transition-delay: ${i * STAGGER_MS}ms`}>
+            <span class="step-index" aria-hidden="true">{step.number}</span>
+            <h3 class="step-title">{step.title}</h3>
+            <p class="step-desc">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <p class="how-it-works-closing">
+      <a href="/what-we-do">See the full pricing &amp; process &rarr;</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .how-it-works {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+
+  .section-title {
+    color: var(--color-ink);
+  }
+
+  /* Timeline rail — a meridian line joining the three steps, drawing in
+     left to right on scroll. */
+  .timeline-track {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 12px;
+    margin-bottom: var(--space-5);
+  }
+
+  .timeline-track::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-steel), var(--color-teal));
+    opacity: 0.5;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left;
+    transition: transform 0.9s var(--ease-out) 0.15s;
+  }
+
+  .timeline-track.in-view::before {
+    transform: translateY(-50%) scaleX(1);
+  }
+
+  .track-node {
+    position: relative;
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-teal);
+    box-shadow: 0 0 0 4px var(--color-white), 0 0 14px rgba(61, 107, 107, 0.45);
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  .timeline-step {
+    /* Scroll-entrance start state (overrides the global [data-reveal] 20px
+       default to match the rest of the page's card-entrance rhythm). */
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  }
+
+  .timeline-step.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .step-index {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 4.25rem);
+    font-weight: 600;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(20, 24, 31, 0.18);
+    margin-bottom: var(--space-2);
+    transition: -webkit-text-stroke-color 0.3s ease;
+  }
+
+  .timeline-step:hover .step-index {
+    -webkit-text-stroke-color: var(--color-teal);
+  }
+
+  .step-title {
+    position: relative;
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .step-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 1px;
+    background: var(--color-steel);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .timeline-step:hover .step-title::after {
+    transform: scaleX(1);
+  }
+
+  .step-desc {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-ink-muted);
+    max-width: 30ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-track::before {
+      transform: translateY(-50%) scaleX(1);
+    }
+
+    .timeline-step {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .timeline-track {
+      display: none;
+    }
+
+    .timeline-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+
+  .how-it-works-closing {
+    margin-top: var(--space-6);
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .how-it-works-closing a {
+    color: var(--color-teal);
+    text-decoration: none;
+    transition: var(--transition-fast);
+  }
+
+  .how-it-works-closing a:hover,
+  .how-it-works-closing a:focus-visible {
+    color: var(--color-steel);
+  }
+</style>

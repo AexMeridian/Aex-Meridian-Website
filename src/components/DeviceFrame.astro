@@ -1,0 +1,142 @@
+---
+// Pure-CSS device bezel with a screenshot slot. Falls back to a navy→steel
+// gradient placeholder when the named file doesn't exist yet at
+// /public/images/mockups/, so this never renders a broken image.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  device: 'laptop' | 'phone';
+  image: string;
+  alt: string;
+  class?: string;
+}
+
+const { device, image, alt, class: className = '' } = Astro.props;
+const imageExists = fs.existsSync(path.join(process.cwd(), 'public/images/mockups', image));
+const src = imageExists ? `/images/mockups/${image}` : null;
+---
+
+<div class:list={['device-frame', `device-frame--${device}`, className]}>
+  {device === 'laptop' ? (
+    <div class="device-laptop">
+      <div class="device-laptop-screen">
+        {src ? (
+          <img src={src} alt={alt} loading="lazy" width="1280" height="800" />
+        ) : (
+          <div class="device-placeholder" aria-hidden="true" />
+        )}
+      </div>
+      <div class="device-laptop-base"></div>
+    </div>
+  ) : (
+    <div class="device-phone">
+      <div class="device-phone-notch" aria-hidden="true"></div>
+      <div class="device-phone-screen">
+        {src ? (
+          <img src={src} alt={alt} loading="lazy" width="390" height="844" />
+        ) : (
+          <div class="device-placeholder" aria-hidden="true" />
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .device-frame {
+    position: relative;
+  }
+
+  /* Laptop */
+  .device-frame--laptop {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .device-laptop-screen {
+    position: relative;
+    aspect-ratio: 1280 / 800;
+    background: var(--color-navy);
+    border-radius: 10px 10px 2px 2px;
+    border: 1px solid rgba(247, 245, 240, 0.14);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), 0 10px 24px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    padding: 14px 14px 0;
+  }
+
+  .device-laptop-screen img,
+  .device-laptop-screen .device-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 4px 4px 0 0;
+    display: block;
+  }
+
+  .device-laptop-base {
+    height: 14px;
+    margin: 0 -6%;
+    background: linear-gradient(180deg, #1b222c, #10151d);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  .device-laptop-base::after {
+    content: '';
+    display: block;
+    width: 14%;
+    height: 4px;
+    margin: 0 auto;
+    background: rgba(247, 245, 240, 0.12);
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* Phone */
+  .device-frame--phone {
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .device-phone {
+    position: relative;
+    aspect-ratio: 390 / 844;
+    background: #0d1219;
+    border-radius: 34px;
+    border: 6px solid #1b222c;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+
+  .device-phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 22px;
+    background: #1b222c;
+    border-radius: 0 0 14px 14px;
+    z-index: 2;
+  }
+
+  .device-phone-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .device-phone-screen img,
+  .device-phone-screen .device-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .device-placeholder {
+    background: linear-gradient(160deg, var(--color-navy) 0%, var(--color-steel) 140%);
+  }
+</style>
