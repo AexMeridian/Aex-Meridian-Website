@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
 import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
-import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+import { websitePlan, videoTiers, agentTiers } from '../data/pricing';
 import { contactEmail } from '../data/site';
 
 const lastUpdated = 'July 8, 2026';
@@ -12,7 +12,7 @@ const lastUpdated = 'July 8, 2026';
 
 <Layout
   title="Terms of Service — Aex Meridian"
-  description="The terms governing use of the Aex Meridian, LLC website and our web design, hosting, maintenance, and content creation services."
+  description="The terms governing use of the Aex Meridian, LLC website and our web design, hosting, AI agent, and content services."
 >
   <Header />
   <main id="main-content">
@@ -33,34 +33,55 @@ const lastUpdated = 'July 8, 2026';
         <h2>Overview</h2>
         <p>
           These Terms of Service ("Terms") govern your use of the Aex Meridian, LLC
-          website and the website design, hosting, and maintenance services, and the
-          video and social content services, we offer (collectively,
-          "Services"). By using this site or engaging our Services, you agree to
-          these Terms.
+          website and the website design and hosting, AI agent, and digital content
+          services we offer (collectively, "Services"). By using this site or
+          engaging our Services, you agree to these Terms.
         </p>
 
         <h2>Services description</h2>
         <p>
           Aex Meridian builds custom websites for small businesses and provides
-          ongoing hosting and maintenance. We also produce video and
-          social media content, including listing walkthrough videos and ongoing
-          content retainers, as a separate service line. Specific scope,
-          deliverables, and timelines for any engagement — website or content — are
-          agreed upon directly with each client before work begins.
+          ongoing hosting and maintenance. We also build and maintain AI agents —
+          chat, voice, and workflow automation configured for a client's own
+          business — and produce digital content, including listing walkthrough
+          videos and social graphics, as separate service lines. Specific scope,
+          deliverables, and timelines for any engagement are agreed upon directly
+          with each client before work begins.
         </p>
 
         <h2>Pricing and payment</h2>
         <p>
-          Current pricing for website engagements is a one-time setup fee due at
-          launch, {websitePlan.setup} depending on scope (full detail is published on
-          our <a href="/pricing">Pricing</a> page), followed by a {websitePlan.monthly} care
-          fee billed monthly thereafter. Content services are priced and billed
-          separately from website hosting: walkthrough videos range from {videoTiers[0].price}&ndash;{videoTiers[2].price},
-          due upon delivery, and ongoing social content retainers run {socialRetainer.price} depending
-          on volume, billed monthly. A client may engage either service independently or
-          both together; content pricing is never bundled into the monthly care fee.
-          Pricing is subject to change for future engagements; any change will be
-          communicated before it applies to an existing client relationship.
+          Current pricing for a website engagement is a {websitePlan.setup} one-time
+          setup fee due at launch, followed by a {websitePlan.monthly} care fee billed
+          monthly thereafter. Each AI agent is a separate {agentTiers[0].setup} one-time
+          setup fee, followed by a monthly fee that varies by agent type (full detail
+          is published on our <a href="/pricing">Pricing</a> page). Digital content —
+          walkthrough video, graphics, and social assets — is quoted per project, not
+          billed as a retainer: walkthrough videos range from {videoTiers[0].price}&ndash;{videoTiers[2].price}
+          depending on length and complexity, due upon delivery. A client may engage
+          any of these service lines independently or together; none is ever bundled
+          into another's monthly fee. Pricing is subject to change for future
+          engagements; any change will be communicated before it applies to an
+          existing client relationship.
+        </p>
+
+        <h2>AI agent services</h2>
+        <p>
+          Every AI agent Aex Meridian builds is scoped to the specific business it
+          serves, discloses that it is an automated system at the start of every
+          conversation, and includes a path to escalate to a human for anything
+          outside its scope. An agent assists — it does not guarantee an outcome,
+          and it may occasionally provide an inaccurate or incomplete response
+          despite reasonable configuration and testing.
+        </p>
+        <p>
+          Aex Meridian does not build or operate agents that place outbound calls or
+          send outbound text messages to a client's customers or contacts. Any
+          contact data a client provides for use in an agent workflow (for example, a
+          customer list used for appointment reminders) must have appropriate
+          consent already in place; the client warrants this is the case and agrees
+          to indemnify Aex Meridian against any claim arising from contacts the
+          client supplied.
         </p>
 
         <h2>Intellectual property</h2>
@@ -73,10 +94,11 @@ const lastUpdated = 'July 8, 2026';
 
         <h2>Cancellation</h2>
         <p>
-          Monthly hosting and maintenance services, and monthly content retainers, may
-          each be canceled at any time with 30 days' written notice to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. One-time
-          engagements, such as an individual video project, are billed upon delivery
-          and are not subject to a cancellation notice period once completed.
+          Monthly hosting and maintenance, and any monthly agent service, may each be
+          canceled at any time with 30 days' written notice to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. One-time
+          engagements, such as an individual video project or a digital content batch,
+          are billed upon delivery and are not subject to a cancellation notice period
+          once completed.
         </p>
 
         <h2>No warranty</h2>

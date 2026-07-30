@@ -9,17 +9,19 @@ import {
   websitePlan,
   overflowRate,
   videoTiers,
-  socialRetainer,
+  digitalContentRates,
+  agentTiers,
+  bundles,
   startingWebsiteSetup,
   startingVideoPrice,
-  startingSocialPrice,
+  startingAgentPrice,
 } from '../data/pricing';
 
 const faqs = [
   {
     question: 'What does the $35 a month actually cover?',
     answer:
-      "Hosting, your domain's SSL and security, uptime monitoring, and small routine edits — swapping a photo, updating hours, fixing a typo. It's the same plan for every site; nothing upsells later.",
+      "Hosting, your domain's SSL and security, uptime monitoring, and up to 20 minutes of content edits every month — swapping a photo, updating hours, fixing a typo. It's the same plan for every site; nothing upsells later.",
   },
   {
     question: 'Do I own my website?',
@@ -29,17 +31,26 @@ const faqs = [
   {
     question: 'Is there a contract I get locked into?',
     answer:
-      "No. The monthly plan and any content retainer are both month-to-month, cancelable with 30 days' written notice — no multi-year terms, no financing agreement tied to the build.",
+      "No. The monthly plan and any agent or content engagement are all month-to-month, cancelable with 30 days' written notice — no multi-year terms, no financing agreement tied to the build.",
   },
   {
     question: "What if I need a change that's more than a quick edit?",
-    answer:
-      'Just ask — anything beyond routine edits is billed at $60/hour and quoted before any work starts, so you\'re never guessing what a request will cost.',
+    answer: `${overflowRate} Additional pages beyond the first 5 are $100 each — always quoted before any work starts, so you're never guessing what a request will cost.`,
   },
   {
-    question: 'Are video and social content billed with hosting?',
+    question: 'Does an AI agent replace a real person?',
     answer:
-      'No — content services are always billed separately, whether one-time or monthly, so the monthly plan never comes with a surprise attached.',
+      "No — it catches what would otherwise go to voicemail and hands off to a human for anything outside its scope. Every agent discloses it's AI and never pretends otherwise.",
+  },
+  {
+    question: 'What happens if a voice agent goes over its included minutes?',
+    answer:
+      "You're billed the overage rate stated in your agreement, never a surprise — and if you're consistently going over, the right fix is moving up a tier, not absorbing it quietly.",
+  },
+  {
+    question: 'Are agents and content billed with hosting?',
+    answer:
+      'No — agents and content are always billed separately from website hosting, whether one-time or monthly, so the monthly plan never comes with a surprise attached.',
   },
   {
     question: "What if I don't like the site before it launches?",
@@ -64,7 +75,7 @@ const faqSchema = {
 
 <Layout
   title="Pricing — Aex Meridian"
-  description="Straightforward pricing for websites, video tours, and social content retainers — no hidden fees, no long-term contracts."
+  description="Straightforward pricing for websites, AI agents, and digital content — no hidden fees, no long-term contracts."
 >
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
   <Header />
@@ -79,16 +90,16 @@ const faqSchema = {
     >
       <div slot="extra" class="page-hero-teasers">
         <div class="teaser">
-          <p class="teaser-value">{startingWebsiteSetup.split('–')[0]}<span>+</span></p>
+          <p class="teaser-value">{startingWebsiteSetup}<span>+</span></p>
           <p class="teaser-label">Website</p>
+        </div>
+        <div class="teaser">
+          <p class="teaser-value">{startingAgentPrice.replace('/mo', '')}<span>+/mo</span></p>
+          <p class="teaser-label">AI agents</p>
         </div>
         <div class="teaser">
           <p class="teaser-value">{startingVideoPrice}<span>+</span></p>
           <p class="teaser-label">Video</p>
-        </div>
-        <div class="teaser">
-          <p class="teaser-value">{startingSocialPrice.replace('/mo', '')}</p>
-          <p class="teaser-label">Social</p>
         </div>
       </div>
     </PageHero>
@@ -144,6 +155,60 @@ const faqSchema = {
       </div>
     </section>
 
+    <section class="section agents-pricing seam" id="agents">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">AI agents</p>
+          <h2 class="section-title">One setup fee, priced by what the agent does</h2>
+          <p class="section-subtext">
+            Every agent is $500 to set up, same as the website. Complexity is priced
+            into the monthly, not the setup — so the conversation never gets
+            complicated.
+          </p>
+        </div>
+
+        <div class="agent-grid" data-reveal>
+          {agentTiers.map((agent) => (
+            <div class="agent-card">
+              <h3 class="agent-name">{agent.name}</h3>
+              <p class="agent-tagline">{agent.tagline}</p>
+              <div class="agent-price-block">
+                <p class="agent-price">
+                  <span class="agent-price-value">{agent.setup}</span>
+                  <span class="agent-price-unit">setup</span>
+                </p>
+                <p class="agent-price-secondary">{agent.monthly}</p>
+              </div>
+              <p class="agent-desc">{agent.description}</p>
+              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
+              {agent.overageRate && <p class="agent-overage">{agent.overageRate}</p>}
+            </div>
+          ))}
+        </div>
+
+        <div class="section-head section-head-bundles" data-reveal>
+          <p class="eyebrow">Bundles</p>
+          <h2 class="section-title">Website + agent, bundled and discounted</h2>
+        </div>
+
+        <div class="bundle-grid" data-reveal>
+          {bundles.map((bundle) => (
+            <div class="bundle-card">
+              <h3 class="bundle-name">{bundle.name}</h3>
+              <p class="bundle-price">{bundle.setup}</p>
+              <p class="bundle-price-secondary">{bundle.monthly}</p>
+              <p class="bundle-note">{bundle.note}</p>
+            </div>
+          ))}
+        </div>
+
+        <p class="pricing-note">
+          Every agent discloses it's AI, on every channel, and always has a human
+          escalation path. Inbound only — no outbound calling or texting, ever.
+        </p>
+      </div>
+    </section>
+
     <section class="section video-social seam mode-dark-bleed">
       <div class="video-social-texture" aria-hidden="true"></div>
       <div class="container">
@@ -163,22 +228,28 @@ const faqSchema = {
         </div>
 
         <div class="section-head section-head-social" data-reveal>
-          <p class="eyebrow">Social content</p>
-          <h2 class="section-title">A retainer, handled for you</h2>
+          <p class="eyebrow">Graphics &amp; social content</p>
+          <h2 class="section-title">Flexible, quoted per project</h2>
         </div>
 
-        <div class="tier-grid tier-grid-single" data-reveal>
+        <div class="tier-grid" data-reveal>
           <div class="tier-card">
-            <p class="tier-price">{socialRetainer.price}</p>
-            <ul class="tier-included">
-              {socialRetainer.included.map((item) => <li>{item}</li>)}
-            </ul>
+            <h3 class="tier-name">Graphics</h3>
+            <p class="tier-price">{digitalContentRates.graphics}</p>
+          </div>
+          <div class="tier-card">
+            <h3 class="tier-name">Short-form video</h3>
+            <p class="tier-price">{digitalContentRates.shortFormVideo}</p>
+          </div>
+          <div class="tier-card">
+            <h3 class="tier-name">Ad hoc batch</h3>
+            <p class="tier-price">{digitalContentRates.batch}</p>
           </div>
         </div>
 
         <p class="pricing-note">
-          Content services are always billed separately from hosting — never bundled
-          into a monthly care line, so a video or retainer never comes with a surprise.
+          Content is quoted per project, never a committed retainer — take it when you
+          need it, skip it when you don't. Always billed separately from hosting.
         </p>
       </div>
     </section>
@@ -493,6 +564,150 @@ const faqSchema = {
     color: var(--color-ink-muted);
   }
 
+  /* AI agents — same light-card language as the website plan section above
+     it, so the two core product lines read as a matched pair. */
+  .agents-pricing {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .agent-card {
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .agent-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .agent-name {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .agent-tagline {
+    margin-top: var(--space-1);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-price-block {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line-on-light);
+  }
+
+  .agent-price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+  }
+
+  .agent-price-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .agent-price-unit {
+    font-size: 12px;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-price-secondary {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-teal);
+  }
+
+  .agent-desc {
+    margin-top: var(--space-3);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-best-for {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-best-for strong {
+    color: var(--color-ink);
+  }
+
+  .agent-overage {
+    margin-top: var(--space-2);
+    font-size: 12px;
+    color: var(--color-ink-muted);
+  }
+
+  .section-head-bundles {
+    margin-top: var(--space-2);
+  }
+
+  .bundle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  .bundle-card {
+    background: var(--color-navy);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-tinted-dark);
+  }
+
+  .bundle-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .bundle-price {
+    margin-top: var(--space-2);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-ivory);
+  }
+
+  .bundle-price-secondary {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-steel);
+  }
+
+  .bundle-note {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(247, 245, 240, 0.65);
+  }
+
   /* Video & social tiers — converted to dark-bleed for this pass: navy
      ground, ivory text, the aurora texture (cropped from this page's own
      hero video) as a low-opacity ambient layer, tying the section back to
@@ -545,12 +760,6 @@ const faqSchema = {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-3);
-  }
-
-  /* The social retainer is a single card, not a tier to compare against
-     siblings — constrained width instead of stretching a 3-column track. */
-  .tier-grid-single {
-    grid-template-columns: minmax(0, 420px);
   }
 
   .tier-card {
@@ -790,7 +999,9 @@ const faqSchema = {
       grid-template-columns: 1fr;
     }
 
-    .tier-grid {
+    .tier-grid,
+    .agent-grid,
+    .bundle-grid {
       grid-template-columns: 1fr;
     }
   }

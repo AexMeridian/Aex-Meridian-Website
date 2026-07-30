@@ -1,14 +1,16 @@
 ---
+import { agentTiers, videoTiers } from '../data/pricing';
+
 const offerings = [
   {
-    title: 'Listing walkthrough videos',
-    summary: 'Polished, voiced-over tours built for realtors, property managers, and Airbnb/VRBO hosts — ready to post.',
-    icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
+    title: 'AI agents that answer for you',
+    summary: `From ${agentTiers[0].setup} setup + ${agentTiers[0].monthly} — a chat or voice agent that catches the calls and messages you'd otherwise miss.`,
+    icon: '<path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" />',
   },
   {
-    title: 'Social content retainers',
-    summary: 'A steady rhythm of branded posts and short clips for local businesses that want a presence without adding another job to their week.',
-    icon: '<path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />',
+    title: 'Video & social content',
+    summary: `Walkthrough videos from ${videoTiers[0].price}, plus graphics and short-form clips — quoted per project, never a retainer.`,
+    icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
   },
 ];
 ---
@@ -18,11 +20,11 @@ const offerings = [
     <div class="content-copy">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Beyond the website</p>
-        <h2 class="section-title">Video and social content, without hiring a crew</h2>
+        <h2 class="section-title">An agent that answers, and content that keeps you visible</h2>
         <p class="section-subtext">
-          Realtors, hosts, and local businesses also come to us for video and social
-          content — built the same fast, affordable way as our sites, and billed
-          separately from hosting.
+          Businesses also come to us for an AI agent that catches missed calls and
+          messages, and for video and social content — both built the same fast,
+          affordable way as our sites, and both billed separately from hosting.
         </p>
       </div>
 

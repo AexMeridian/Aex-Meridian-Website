@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MeridianRule from '../components/MeridianRule.astro';
 import PageHero from '../components/PageHero.astro';
-import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+import { websitePlan, videoTiers, digitalContentRates, agentTiers, bundles } from '../data/pricing';
 
 const costRows = [
   {
@@ -37,15 +37,21 @@ const offerings = [
     icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
   },
   {
-    title: 'Social content retainers',
-    body: 'Ongoing branded posts, graphics, and short video clips for local businesses that want a steady social presence without adding another job to their week.',
+    title: 'Graphics & social content',
+    body: 'Branded posts, graphics, and short video clips for local businesses that want a steady social presence — priced per project, not a fixed monthly line.',
     list: [
-      `${socialRetainer.price} — ${socialRetainer.included[0]}`,
-      socialRetainer.included[1],
-      'Billed separately from hosting — no bundling required',
+      `Graphics: ${digitalContentRates.graphics}`,
+      `Short-form video: ${digitalContentRates.shortFormVideo}`,
+      `Ad hoc batch: ${digitalContentRates.batch}`,
     ],
     icon: '<path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />',
   },
+];
+
+const agentTrust = [
+  "Every agent discloses it's AI, on every channel, every time",
+  'A human escalation path is always available — never a dead end',
+  'Inbound only — no outbound calling or texting, ever',
 ];
 
 const workflow = [
@@ -58,7 +64,7 @@ const workflow = [
 
 <Layout
   title="What We Do — Aex Meridian"
-  description="Agency-quality websites, video tours, and social content for small businesses — the process, the pricing, and what's included."
+  description="Websites, AI agents, and digital content for small businesses — the process, the pricing, and what's included in each."
 >
   <Header />
   <main id="main-content">
@@ -66,8 +72,8 @@ const workflow = [
       video="/videos/what-we-do-bg.mp4"
       videoId="page-hero-loop"
       eyebrow="What we do"
-      title="A website that works, and content that keeps you visible"
-      subhead="Two services, handled by one studio: a site built to convert, and video and social content that keeps your business in front of people after it launches."
+      title="A website that works, an agent that answers, and content that keeps you visible"
+      subhead="Three services, handled by one studio: a site built to convert, an AI agent that catches the leads you'd otherwise miss, and content that keeps your business in front of people after launch."
     >
       <div slot="actions" class="page-hero-actions">
         <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
@@ -85,13 +91,18 @@ const workflow = [
           <span class="index-label">The website</span>
           <span class="index-arrow" aria-hidden="true">&rarr;</span>
         </a>
-        <a href="#wwd-content" class="index-row">
+        <a href="#wwd-agents" class="index-row">
           <span class="index-number">02</span>
-          <span class="index-label">Video &amp; content</span>
+          <span class="index-label">AI agents</span>
+          <span class="index-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="#wwd-content" class="index-row">
+          <span class="index-number">03</span>
+          <span class="index-label">Content</span>
           <span class="index-arrow" aria-hidden="true">&rarr;</span>
         </a>
         <a href="#workflow-section" class="index-row">
-          <span class="index-number">03</span>
+          <span class="index-number">04</span>
           <span class="index-label">The process</span>
           <span class="index-arrow" aria-hidden="true">&rarr;</span>
         </a>
@@ -142,6 +153,61 @@ const workflow = [
       </div>
     </section>
 
+    <section class="section wwd-agents seam" id="wwd-agents">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">AI agents</p>
+          <h2 class="section-title">The team member who never misses a call</h2>
+          <p class="section-subtext">
+            62% of small businesses still answer calls manually or let them go to
+            voicemail — and every missed call is a real job walking away. An agent
+            catches it: answers, texts back, books it in, all without you touching
+            a phone.
+          </p>
+        </div>
+
+        <div class="agent-grid" data-reveal>
+          {agentTiers.map((agent) => (
+            <div class:list={['agent-card', agent.id === 'lead-catcher' && 'agent-card--featured']}>
+              {agent.id === 'lead-catcher' && <span class="agent-badge">Start here</span>}
+              <h3 class="agent-name">{agent.name}</h3>
+              <p class="agent-tagline">{agent.tagline}</p>
+              <div class="agent-price-block">
+                <p class="agent-price">
+                  <span class="agent-price-value">{agent.setup}</span>
+                  <span class="agent-price-unit">setup</span>
+                </p>
+                <p class="agent-price-secondary">{agent.monthly}</p>
+              </div>
+              <p class="agent-desc">{agent.description}</p>
+              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="handled-row" data-reveal>
+          <div class="handled-card">
+            <p class="handled-heading">Every agent, guaranteed</p>
+            <ul class="handled-list">
+              {agentTrust.map((item) => (
+                <li>
+                  <span class="handled-icon" set:html={`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="price-card">
+            <p class="price-label">Bundle and save</p>
+            {bundles.slice(0, 2).map((bundle) => (
+              <p class="price-line">{bundle.monthly.split(' — ')[0]} <span>{bundle.name}</span></p>
+            ))}
+            <a href="/pricing#agents" class="bundle-link">See all bundles &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section wwd-content seam mode-dark-bleed" id="wwd-content">
       <div class="wwd-content-texture" aria-hidden="true"></div>
       <div class="container">
@@ -171,8 +237,9 @@ const workflow = [
         </div>
 
         <p class="content-support">
-          Content services are billed on top of any web engagement, one-time or as a
-          monthly add-on — website hosting stays its own monthly care line, always.
+          Content is quoted per project, never a committed retainer — take it when you
+          need it, skip it when you don't. Website hosting stays its own monthly care
+          line, always, regardless.
         </p>
       </div>
     </section>
@@ -458,6 +525,140 @@ const workflow = [
     font-size: 13px;
     font-weight: 400;
     color: rgba(247, 245, 240, 0.6);
+  }
+
+  .bundle-link {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-steel);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color var(--transition-fast);
+  }
+
+  .bundle-link:hover,
+  .bundle-link:focus-visible {
+    color: var(--color-ivory);
+  }
+
+  /* AI agents — same light-section card language as the website section
+     above it (ivory cards, teal accents), so the two "core product" sections
+     read as a matched pair before the darker content section changes key. */
+  .wwd-agents {
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .agent-card {
+    position: relative;
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: var(--transition);
+  }
+
+  .agent-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .agent-card--featured {
+    background: var(--color-white);
+    border: 2px solid var(--color-teal);
+    box-shadow: var(--shadow-tinted-light);
+  }
+
+  .agent-badge {
+    position: absolute;
+    top: -1px;
+    right: var(--space-3);
+    transform: translateY(-50%);
+    background: var(--color-teal);
+    color: var(--color-ivory);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .agent-name {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .agent-card--featured .agent-name {
+    color: var(--color-teal);
+  }
+
+  .agent-tagline {
+    margin-top: var(--space-1);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-price-block {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-line-on-light);
+  }
+
+  .agent-price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+  }
+
+  .agent-price-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .agent-price-unit {
+    font-size: 12px;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-price-secondary {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-teal);
+  }
+
+  .agent-desc {
+    margin-top: var(--space-3);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-best-for {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .agent-best-for strong {
+    color: var(--color-ink);
   }
 
   /* Video & content — the pass's dark-bleed moment: navy ground, a faint
@@ -766,6 +967,12 @@ const workflow = [
     .timeline-grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-5);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .agent-grid {
+      grid-template-columns: 1fr;
     }
   }
 

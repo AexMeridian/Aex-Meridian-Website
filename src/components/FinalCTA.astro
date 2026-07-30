@@ -1,5 +1,5 @@
 ---
-import { websitePlan, videoTiers, socialRetainer } from '../data/pricing';
+import { websitePlan, videoTiers, agentTiers } from '../data/pricing';
 import MeridianRule from './MeridianRule.astro';
 ---
 
@@ -7,10 +7,10 @@ import MeridianRule from './MeridianRule.astro';
   <div class="container cta-inner cta-band-inner" data-reveal>
     <MeridianRule dot="none" align="left" class="cta-rule" />
     <h2 class="cta-heading">Ready to see what we'd build for you?</h2>
-    <p class="cta-price-label">One flat plan, no tiers</p>
+    <p class="cta-price-label">One flat setup fee, no negotiation</p>
     <p class="cta-price-line">{websitePlan.setup} website setup, {websitePlan.monthly} after</p>
     <p class="cta-price-line cta-price-line-secondary">
-      Video tours from {videoTiers[0].price} &middot; content retainers from {socialRetainer.price}
+      AI agents from {agentTiers[0].setup} setup + {agentTiers[0].monthly} &middot; video tours from {videoTiers[0].price}
     </p>
     <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
     <a href="/#contact" class="btn btn-primary cta-btn btn-shimmer" data-magnetic>
