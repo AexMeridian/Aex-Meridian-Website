@@ -15,22 +15,54 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL('/images/og.jpg', Astro.site);
+const logoURL = new URL('/icon-512.png', Astro.site);
 
 // sameAs only ever lists profiles that actually exist — matches the same
 // "hidden until real" rule the footer's social icons follow (see
 // Footer.astro and src/data/site.ts).
 const sameAs = Object.values(socialLinks).filter(Boolean);
 
+// Three service lines, each modeled as a schema.org Service so search
+// engines can associate "Aex Meridian" with AI agents, not just websites —
+// this is the machine-readable version of the page copy on /what-we-do.
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   name: 'Aex Meridian',
+  description: 'Websites, AI agents, and digital content for small businesses — built fast and handled start to finish.',
   url: Astro.site?.toString(),
   email: contactEmail,
   telephone: contactPhoneHref.replace('tel:', ''),
   image: ogImageURL.toString(),
+  logo: logoURL.toString(),
   priceRange: '$',
   ...(sameAs.length > 0 ? { sameAs } : {}),
+  makesOffer: [
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'Website Design & Development',
+        description: 'A fast, mobile-responsive small-business website with hosting, edits, and support handled month to month.',
+      },
+    },
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'AI Agents',
+        description: 'Chat, voice, and workflow AI agents that catch missed calls and messages, book jobs, and follow up with leads — always disclosed as AI, with a human escalation path.',
+      },
+    },
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'Digital Content',
+        description: 'Walkthrough video, graphics, and short-form social content produced for small businesses.',
+      },
+    },
+  ],
 };
 ---
 
@@ -39,8 +71,12 @@ const organizationSchema = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0A0E14" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
