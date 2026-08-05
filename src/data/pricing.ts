@@ -3,10 +3,11 @@
 // hardcode a number in a page/component. This is what keeps Home, What We
 // Do, and Pricing from drifting out of sync with each other again.
 //
-// Numbers below match the Rev 3 business plan exactly. "Everything starts
-// at $500" is the plan's own headline sales message — website and every
-// agent type share the same flat setup fee, differentiated only by the
-// monthly. Don't round or approximate these; they're load-bearing.
+// Numbers below match the agent-first repositioning plan ("Business Plan
+// with agents 1.docx") exactly. Setup is still a flat $500 across every
+// product; the monthly is a range per agent now, scoped to each client's
+// actual volume, not a single flat number. Don't round or approximate
+// these; they're load-bearing.
 
 export interface WebsitePlan {
   setup: string;
@@ -76,80 +77,62 @@ export interface AgentTier {
   name: string;
   setup: string;
   monthly: string;
+  monthlyFrom: string;
   tagline: string;
   description: string;
   bestFor: string;
-  includedMinutes?: number;
-  overageRate?: string;
 }
 
+// Agent-first repositioning: pricing is a range per agent (scoped to the
+// client's actual call/lead volume), not one flat number like the website.
+// Order matches the business plan's own listed order — flagship first.
 export const agentTiers: AgentTier[] = [
   {
-    id: 'lead-catcher',
-    name: 'Lead Catcher',
+    id: 'voice-receptionist',
+    name: 'AI Voice Receptionist',
     setup: '$500',
-    monthly: '$75/mo',
-    tagline: 'The default attach — cheapest entry, fastest payoff',
+    monthly: '$300–$450/mo',
+    monthlyFrom: '$300',
+    tagline: 'The flagship — missed-call text-back included',
     description:
-      'A chat assistant embedded on your site, trained on your services, hours, pricing, and FAQs — plus missed-call text-back that texts a lead back within seconds of any unanswered call.',
-    bestFor: 'Every business with a website. The obvious starting point.',
+      'Answers calls 24/7 (or after-hours/overflow only), handles FAQs from your own content, books straight into your calendar, and texts back any missed or abandoned call within seconds. Delivers a call summary and transcript after every conversation.',
+    bestFor: 'Any business where a missed call is a lost job — trades, clinics, salons, restaurants, real estate.',
   },
   {
-    id: 'front-desk',
-    name: 'Front Desk',
+    id: 'website-chat',
+    name: 'Website Chat Agent',
     setup: '$500',
-    monthly: '$249/mo',
-    tagline: '300 minutes included, then $0.60/min',
+    monthly: '$150–$250/mo',
+    monthlyFrom: '$150',
+    tagline: 'Lead qualification, right on your site',
     description:
-      'A voice agent that answers the phone 24/7, handles FAQs, qualifies the caller, books straight into your calendar, and texts you a summary. Escalates to a human when it should.',
-    bestFor: 'Any business where a missed call is a lost job — trades, clinics, salons, restaurants, property managers.',
-    includedMinutes: 300,
-    overageRate: '$0.60 per minute beyond 300.',
+      'Lives on your website, answers from your own content, qualifies visitors on need and timeline, captures contact info, and routes hot leads to you by text or email.',
+    bestFor: 'Any business whose site already drives traffic — professional services, wellness, retail, real estate.',
   },
   {
-    id: 'back-office',
-    name: 'Back Office',
+    id: 'speed-to-lead',
+    name: 'Speed-to-Lead Agent',
     setup: '$500',
-    monthly: '$149/mo',
-    tagline: 'The highest-margin product in the lineup',
+    monthly: '$200–$350/mo',
+    monthlyFrom: '$200',
+    tagline: 'Responds in minutes, not hours',
     description:
-      'A workflow agent that handles the repetitive admin around a job: instant lead response, quote follow-up, appointment reminders, and post-job review requests.',
-    bestFor: 'Businesses already getting leads but losing them to slow follow-up.',
+      'The moment a form, ad, or chat lead comes in, it instantly texts or emails them back, asks a couple of qualifying questions, offers a booking link, and follows up on a short cadence until they reply.',
+    bestFor: 'Any business that buys leads or runs ads — home services, real estate, med-spa, fitness, legal.',
   },
 ];
 
-export interface Bundle {
-  name: string;
-  setup: string;
-  monthly: string;
-  note: string;
-}
-
-export const bundles: Bundle[] = [
-  {
-    name: 'Website + Lead Catcher',
-    setup: '$900 — save $100',
-    monthly: '$99/mo — save $11',
-    note: 'The default target for every client.',
-  },
-  {
-    name: 'Website + Front Desk',
-    setup: '$900 — save $100',
-    monthly: '$265/mo — save $19',
-    note: 'Trades, clinics, and other high-call businesses.',
-  },
-  {
-    name: 'Full Stack — all three agents',
-    setup: '$1,400',
-    monthly: '$399/mo',
-    note: 'Rare, but the ceiling to aim for.',
-  },
-];
+// No bundle-discount numbers exist in the current business plan — don't
+// invent them. This stays a plain, non-numeric note until real bundle
+// pricing is set.
+export const bundleNote = 'Most clients pair a website with one agent — ask what makes sense for your business.';
 
 // Quick "starting at" figures for teaser copy on Home/What We Do — always
-// derived from the plan above, never restated as separate literals.
+// derived from the plan above, never restated as separate literals. The
+// flagship agent is no longer the cheapest, so this is the lowest floor
+// across all three tiers (currently the Website Chat Agent), not tier[0].
 export const startingWebsiteSetup = websitePlan.setup;
 export const startingWebsiteMonthly = websitePlan.monthly;
 export const startingVideoPrice = videoTiers[0].price;
 export const startingAgentSetup = agentTiers[0].setup;
-export const startingAgentPrice = agentTiers[0].monthly;
+export const startingAgentPrice = `${agentTiers.reduce((min, t) => (Number(t.monthlyFrom.replace(/\D/g, '')) < Number(min.replace(/\D/g, '')) ? t.monthlyFrom : min), agentTiers[0].monthlyFrom)}/mo`;

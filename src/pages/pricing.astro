@@ -8,16 +8,23 @@ import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
 import {
   websitePlan,
   overflowRate,
-  videoTiers,
-  digitalContentRates,
   agentTiers,
-  bundles,
+  bundleNote,
   startingWebsiteSetup,
-  startingVideoPrice,
   startingAgentPrice,
 } from '../data/pricing';
 
 const faqs = [
+  {
+    question: 'How does agent pricing get set?',
+    answer:
+      "Every business's call and lead volume is different, so each agent's monthly price is quoted within the range shown once we understand your volume — you'll always have the exact number in writing before anything goes live.",
+  },
+  {
+    question: 'Does an AI agent replace a real person?',
+    answer:
+      "No — it catches what would otherwise go to voicemail or an unanswered form, and hands off to a human for anything outside its scope. Every agent discloses it's AI and never pretends otherwise.",
+  },
   {
     question: 'What does the $35 a month actually cover?',
     answer:
@@ -38,24 +45,14 @@ const faqs = [
     answer: `${overflowRate} Additional pages beyond the first 5 are $100 each — always quoted before any work starts, so you're never guessing what a request will cost.`,
   },
   {
-    question: 'Does an AI agent replace a real person?',
-    answer:
-      "No — it catches what would otherwise go to voicemail and hands off to a human for anything outside its scope. Every agent discloses it's AI and never pretends otherwise.",
-  },
-  {
-    question: 'What happens if a voice agent goes over its included minutes?',
-    answer:
-      "You're billed the overage rate stated in your agreement, never a surprise — and if you're consistently going over, the right fix is moving up a tier, not absorbing it quietly.",
-  },
-  {
     question: 'Are agents and content billed with hosting?',
     answer:
       'No — agents and content are always billed separately from website hosting, whether one-time or monthly, so the monthly plan never comes with a surprise attached.',
   },
   {
-    question: "What if I don't like the site before it launches?",
+    question: "What if I don't like what you built?",
     answer:
-      "Most projects start speculatively: we build a working site first and show it to you. You decide if it's worth launching before any setup fee is due.",
+      "Most projects — website or agent — start speculatively: we build or demo the real thing first and show you. You decide if it's worth moving forward before any setup fee is due.",
   },
 ];
 
@@ -90,19 +87,53 @@ const faqSchema = {
     >
       <div slot="extra" class="page-hero-teasers">
         <div class="teaser">
-          <p class="teaser-value">{startingWebsiteSetup}<span>+</span></p>
-          <p class="teaser-label">Website</p>
-        </div>
-        <div class="teaser">
           <p class="teaser-value">{startingAgentPrice.replace('/mo', '')}<span>+/mo</span></p>
           <p class="teaser-label">AI agents</p>
         </div>
         <div class="teaser">
-          <p class="teaser-value">{startingVideoPrice}<span>+</span></p>
-          <p class="teaser-label">Video</p>
+          <p class="teaser-value">{startingWebsiteSetup}<span>+</span></p>
+          <p class="teaser-label">Website</p>
         </div>
       </div>
     </PageHero>
+
+    <section class="section agents-pricing seam" id="agents">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">AI agents</p>
+          <h2 class="section-title">One setup fee, priced by what the agent does</h2>
+          <p class="section-subtext">
+            Every agent is $500 to set up, same as the website. The monthly is a
+            range, scoped to your actual call and lead volume — you'll always know
+            the exact number before anything goes live.
+          </p>
+        </div>
+
+        <div class="agent-grid" data-reveal>
+          {agentTiers.map((agent) => (
+            <div class="agent-card">
+              <h3 class="agent-name">{agent.name}</h3>
+              <p class="agent-tagline">{agent.tagline}</p>
+              <div class="agent-price-block">
+                <p class="agent-price">
+                  <span class="agent-price-value">{agent.setup}</span>
+                  <span class="agent-price-unit">setup</span>
+                </p>
+                <p class="agent-price-secondary">{agent.monthly}</p>
+              </div>
+              <p class="agent-desc">{agent.description}</p>
+              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
+            </div>
+          ))}
+        </div>
+
+        <p class="pricing-note">{bundleNote}</p>
+        <p class="pricing-note">
+          Every agent discloses it's AI, on every channel, and always has a human
+          escalation path. Inbound only — no outbound calling or texting, ever.
+        </p>
+      </div>
+    </section>
 
     <section class="section pricing-cards seam">
       <div class="pricing-glow" aria-hidden="true"></div>
@@ -110,7 +141,7 @@ const faqSchema = {
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">Website</p>
-          <h2 class="section-title">One plan, not a ladder to climb</h2>
+          <h2 class="section-title">The front door your agent answers from</h2>
         </div>
 
         <div class="plan-card" data-reveal>
@@ -155,101 +186,12 @@ const faqSchema = {
       </div>
     </section>
 
-    <section class="section agents-pricing seam" id="agents">
+    <section class="section content-footnote seam">
       <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">AI agents</p>
-          <h2 class="section-title">One setup fee, priced by what the agent does</h2>
-          <p class="section-subtext">
-            Every agent is $500 to set up, same as the website. Complexity is priced
-            into the monthly, not the setup — so the conversation never gets
-            complicated.
-          </p>
-        </div>
-
-        <div class="agent-grid" data-reveal>
-          {agentTiers.map((agent) => (
-            <div class="agent-card">
-              <h3 class="agent-name">{agent.name}</h3>
-              <p class="agent-tagline">{agent.tagline}</p>
-              <div class="agent-price-block">
-                <p class="agent-price">
-                  <span class="agent-price-value">{agent.setup}</span>
-                  <span class="agent-price-unit">setup</span>
-                </p>
-                <p class="agent-price-secondary">{agent.monthly}</p>
-              </div>
-              <p class="agent-desc">{agent.description}</p>
-              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
-              {agent.overageRate && <p class="agent-overage">{agent.overageRate}</p>}
-            </div>
-          ))}
-        </div>
-
-        <div class="section-head section-head-bundles" data-reveal>
-          <p class="eyebrow">Bundles</p>
-          <h2 class="section-title">Website + agent, bundled and discounted</h2>
-        </div>
-
-        <div class="bundle-grid" data-reveal>
-          {bundles.map((bundle) => (
-            <div class="bundle-card">
-              <h3 class="bundle-name">{bundle.name}</h3>
-              <p class="bundle-price">{bundle.setup}</p>
-              <p class="bundle-price-secondary">{bundle.monthly}</p>
-              <p class="bundle-note">{bundle.note}</p>
-            </div>
-          ))}
-        </div>
-
-        <p class="pricing-note">
-          Every agent discloses it's AI, on every channel, and always has a human
-          escalation path. Inbound only — no outbound calling or texting, ever.
-        </p>
-      </div>
-    </section>
-
-    <section class="section video-social seam mode-dark-bleed">
-      <div class="video-social-texture" aria-hidden="true"></div>
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">Video</p>
-          <h2 class="section-title">Listing walkthrough videos</h2>
-        </div>
-
-        <div class="tier-grid" data-reveal>
-          {videoTiers.map((tier) => (
-            <div class="tier-card">
-              <h3 class="tier-name">{tier.name}</h3>
-              <p class="tier-price">{tier.price}</p>
-              <p class="tier-detail">{tier.deliverable}</p>
-            </div>
-          ))}
-        </div>
-
-        <div class="section-head section-head-social" data-reveal>
-          <p class="eyebrow">Graphics &amp; social content</p>
-          <h2 class="section-title">Flexible, quoted per project</h2>
-        </div>
-
-        <div class="tier-grid" data-reveal>
-          <div class="tier-card">
-            <h3 class="tier-name">Graphics</h3>
-            <p class="tier-price">{digitalContentRates.graphics}</p>
-          </div>
-          <div class="tier-card">
-            <h3 class="tier-name">Short-form video</h3>
-            <p class="tier-price">{digitalContentRates.shortFormVideo}</p>
-          </div>
-          <div class="tier-card">
-            <h3 class="tier-name">Ad hoc batch</h3>
-            <p class="tier-price">{digitalContentRates.batch}</p>
-          </div>
-        </div>
-
-        <p class="pricing-note">
-          Content is quoted per project, never a committed retainer — take it when you
-          need it, skip it when you don't. Always billed separately from hosting.
+        <p class="content-footnote-text">
+          Walkthrough video and social content are available occasionally, by
+          request — not a standing service with a published rate card. Ask if it's
+          something you need.
         </p>
       </div>
     </section>
@@ -290,7 +232,7 @@ const faqSchema = {
         <MeridianRule dot="none" align="left" class="cta-rule" />
         <h2 class="cta-heading">Not sure which fits?</h2>
         <p class="cta-sub">Tell us about your business — we'll tell you honestly what makes sense.</p>
-        <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+        <p class="cta-guarantee">You see it work before you pay a dollar.</p>
         <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
           <span>Book a free consultation</span>
           <span class="btn-arrow">&rarr;</span>
@@ -655,175 +597,21 @@ const faqSchema = {
     color: var(--color-ink);
   }
 
-  .agent-overage {
-    margin-top: var(--space-2);
-    font-size: 12px;
+  /* Content footnote — deliberately not a full section (no cards, no rate
+     list): content is dormant/on-request per the current business plan, so
+     this gets one quiet line, not the visual weight of a marketed line. */
+  .content-footnote {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  .content-footnote-text {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
     color: var(--color-ink-muted);
-  }
-
-  .section-head-bundles {
-    margin-top: var(--space-2);
-  }
-
-  .bundle-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
-  }
-
-  .bundle-card {
-    background: var(--color-navy);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    box-shadow: var(--shadow-tinted-dark);
-  }
-
-  .bundle-name {
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ivory);
-  }
-
-  .bundle-price {
-    margin-top: var(--space-2);
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-ivory);
-  }
-
-  .bundle-price-secondary {
-    margin-top: 2px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-steel);
-  }
-
-  .bundle-note {
-    margin-top: var(--space-2);
-    font-size: 13px;
-    line-height: 1.5;
-    color: rgba(247, 245, 240, 0.65);
-  }
-
-  /* Video & social tiers — converted to dark-bleed for this pass: navy
-     ground, ivory text, the aurora texture (cropped from this page's own
-     hero video) as a low-opacity ambient layer, tying the section back to
-     the page's opening moment. Card style follows the site's existing
-     dark-card convention (see what-we-do.astro's .content-offer). */
-  .video-social {
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Local overrides win the light-section defaults set earlier in this
-     same stylesheet (same specificity, later source order) — .mode-dark-bleed
-     sets these in global.css, but this page's own .section-title { color:
-     var(--color-ink); } rule above (page-wide, same selector) would
-     otherwise win by source order and make the heading nearly invisible
-     on navy. */
-  .video-social .eyebrow {
-    color: var(--color-steel);
-  }
-
-  .video-social .section-title {
-    color: var(--color-ivory);
-  }
-
-  .video-social-texture {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image: url('/images/textures/horizon.webp');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.13;
-    pointer-events: none;
-  }
-
-  .video-social .container {
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-head-social {
-    margin-top: var(--space-7);
-  }
-
-  .video-social .pricing-note {
-    color: var(--color-muted);
-  }
-
-  .tier-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
-  }
-
-  .tier-card {
-    background: var(--color-navy-surface);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    transition: var(--transition);
-  }
-
-  .tier-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--color-steel);
-    box-shadow: var(--shadow-tinted-dark);
-  }
-
-  .tier-name {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ivory);
-  }
-
-  .tier-price {
-    margin-top: 4px;
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-steel);
-  }
-
-  .tier-detail {
-    margin-top: var(--space-2);
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-muted);
-  }
-
-  .tier-included {
-    list-style: none;
-    margin: var(--space-2) 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .tier-included li {
-    position: relative;
-    padding-left: 20px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-muted);
-  }
-
-  .tier-included li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9px;
-    width: 8px;
-    height: 1px;
-    background: var(--color-steel);
   }
 
   /* FAQ — the objections a prospect actually has right before they'd book
@@ -999,9 +787,7 @@ const faqSchema = {
       grid-template-columns: 1fr;
     }
 
-    .tier-grid,
-    .agent-grid,
-    .bundle-grid {
+    .agent-grid {
       grid-template-columns: 1fr;
     }
   }

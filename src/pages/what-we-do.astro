@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MeridianRule from '../components/MeridianRule.astro';
 import PageHero from '../components/PageHero.astro';
-import { websitePlan, videoTiers, digitalContentRates, agentTiers, bundles } from '../data/pricing';
+import { websitePlan, agentTiers, bundleNote } from '../data/pricing';
 
 const costRows = [
   {
@@ -25,29 +25,6 @@ const handled = [
   'No logins, dashboards, or tools to learn',
 ];
 
-const offerings = [
-  {
-    title: 'Listing walkthrough videos',
-    body: 'A polished vertical video tour with voiceover, licensed music, and text overlays — built for realtors, property managers, and Airbnb/VRBO hosts who want their listings to stand out and move faster.',
-    list: [
-      `${videoTiers[0].name}: ${videoTiers[0].price} — ${videoTiers[0].deliverable}`,
-      `${videoTiers[2].name}: ${videoTiers[2].price} — ${videoTiers[2].deliverable}`,
-      'Delivered ready to post, in vertical and landscape formats',
-    ],
-    icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
-  },
-  {
-    title: 'Graphics & social content',
-    body: 'Branded posts, graphics, and short video clips for local businesses that want a steady social presence — priced per project, not a fixed monthly line.',
-    list: [
-      `Graphics: ${digitalContentRates.graphics}`,
-      `Short-form video: ${digitalContentRates.shortFormVideo}`,
-      `Ad hoc batch: ${digitalContentRates.batch}`,
-    ],
-    icon: '<path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />',
-  },
-];
-
 const agentTrust = [
   "Every agent discloses it's AI, on every channel, every time",
   'A human escalation path is always available — never a dead end',
@@ -58,13 +35,13 @@ const workflow = [
   { number: '01', title: 'Gather', description: 'You send photos, key details, and any branding — takes minutes, not a meeting.' },
   { number: '02', title: 'Draft', description: 'We build a first pass around what you gave us — usually within a day or two.' },
   { number: '03', title: 'Review', description: 'Every draft is checked for accuracy and brand fit before you ever see it.' },
-  { number: '04', title: 'Deliver', description: 'Ready-to-post files, branded to your business. Nothing publishes without your sign-off.' },
+  { number: '04', title: 'Deliver', description: 'Ready to go live, branded to your business. Nothing publishes without your sign-off.' },
 ];
 ---
 
 <Layout
   title="What We Do — Aex Meridian"
-  description="Websites, AI agents, and digital content for small businesses — the process, the pricing, and what's included in each."
+  description="AI agents that answer, qualify, and follow up for small businesses — plus the website they run from. The process, the pricing, and what's included in each."
 >
   <Header />
   <main id="main-content">
@@ -72,8 +49,8 @@ const workflow = [
       video="/videos/what-we-do-bg.mp4"
       videoId="page-hero-loop"
       eyebrow="What we do"
-      title="A website that works, an agent that answers, and content that keeps you visible"
-      subhead="Three services, handled by one studio: a site built to convert, an AI agent that catches the leads you'd otherwise miss, and content that keeps your business in front of people after launch."
+      title="The agent that answers, and the website it lives on"
+      subhead="An AI agent that catches the calls and leads you're missing — plus the site it runs from. Video and social content, available if you need it."
     >
       <div slot="actions" class="page-hero-actions">
         <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
@@ -86,38 +63,90 @@ const workflow = [
       </div>
 
       <nav slot="extra" class="page-hero-index" aria-label="On this page">
-        <a href="#wwd-website" class="index-row">
-          <span class="index-number">01</span>
-          <span class="index-label">The website</span>
-          <span class="index-arrow" aria-hidden="true">&rarr;</span>
-        </a>
         <a href="#wwd-agents" class="index-row">
-          <span class="index-number">02</span>
+          <span class="index-number">01</span>
           <span class="index-label">AI agents</span>
           <span class="index-arrow" aria-hidden="true">&rarr;</span>
         </a>
-        <a href="#wwd-content" class="index-row">
-          <span class="index-number">03</span>
-          <span class="index-label">Content</span>
+        <a href="#wwd-website" class="index-row">
+          <span class="index-number">02</span>
+          <span class="index-label">The website</span>
           <span class="index-arrow" aria-hidden="true">&rarr;</span>
         </a>
         <a href="#workflow-section" class="index-row">
-          <span class="index-number">04</span>
+          <span class="index-number">03</span>
           <span class="index-label">The process</span>
           <span class="index-arrow" aria-hidden="true">&rarr;</span>
         </a>
       </nav>
     </PageHero>
 
+    <section class="section wwd-agents seam" id="wwd-agents">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">AI agents</p>
+          <h2 class="section-title">The team member who never misses a call</h2>
+          <p class="section-subtext">
+            Roughly 62% of small-business calls go unanswered, and about 85% of
+            those callers never call back — worth an estimated $126,000 a year in
+            lost business for the average service company. An agent catches it:
+            answers the call, texts back a missed one, follows up on a lead, and
+            books the job, all without you touching anything.
+          </p>
+          <p class="section-source">Source: ServiceTitan; 411 Locals, 2016.</p>
+        </div>
+
+        <div class="agent-grid" data-reveal>
+          {agentTiers.map((agent) => (
+            <div class:list={['agent-card', agent.id === 'voice-receptionist' && 'agent-card--featured']}>
+              {agent.id === 'voice-receptionist' && <span class="agent-badge">Flagship</span>}
+              <h3 class="agent-name">{agent.name}</h3>
+              <p class="agent-tagline">{agent.tagline}</p>
+              <div class="agent-price-block">
+                <p class="agent-price">
+                  <span class="agent-price-value">{agent.setup}</span>
+                  <span class="agent-price-unit">setup</span>
+                </p>
+                <p class="agent-price-secondary">{agent.monthly}</p>
+              </div>
+              <p class="agent-desc">{agent.description}</p>
+              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="handled-row" data-reveal>
+          <div class="handled-card">
+            <p class="handled-heading">Every agent, guaranteed</p>
+            <ul class="handled-list">
+              {agentTrust.map((item) => (
+                <li>
+                  <span class="handled-icon" set:html={`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="price-card">
+            <p class="price-label">Setup, every time</p>
+            <p class="price-line">{agentTiers[0].setup} <span>per agent, flat</span></p>
+            <p class="bundle-note-text">{bundleNote}</p>
+            <a href="/pricing#agents" class="bundle-link">See full agent pricing &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section wwd-website seam" id="wwd-website">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">The website</p>
-          <h2 class="section-title">Built fast, without cutting corners</h2>
+          <h2 class="section-title">The front door your agent answers from</h2>
           <p class="section-subtext">
             Every site is custom-built on a modern, static-first stack — no WordPress,
-            no plugins to break, no CMS to maintain. That's why a site that takes an
-            agency two months takes us days, and why it loads fast and stays secure.
+            no plugins to break, no CMS to maintain. It's also the source material for
+            your agent: the same content that describes your business becomes its
+            knowledge base, so nothing gets built twice.
           </p>
         </div>
 
@@ -153,94 +182,12 @@ const workflow = [
       </div>
     </section>
 
-    <section class="section wwd-agents seam" id="wwd-agents">
+    <section class="section wwd-content-note seam">
       <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">AI agents</p>
-          <h2 class="section-title">The team member who never misses a call</h2>
-          <p class="section-subtext">
-            62% of small businesses still answer calls manually or let them go to
-            voicemail — and every missed call, unanswered message, or slow follow-up
-            is a real job walking away. An agent catches it: answers the chat, texts
-            back a missed call, follows up on a quote, books the job, all without you
-            touching anything.
-          </p>
-        </div>
-
-        <div class="agent-grid" data-reveal>
-          {agentTiers.map((agent) => (
-            <div class:list={['agent-card', agent.id === 'lead-catcher' && 'agent-card--featured']}>
-              {agent.id === 'lead-catcher' && <span class="agent-badge">Start here</span>}
-              <h3 class="agent-name">{agent.name}</h3>
-              <p class="agent-tagline">{agent.tagline}</p>
-              <div class="agent-price-block">
-                <p class="agent-price">
-                  <span class="agent-price-value">{agent.setup}</span>
-                  <span class="agent-price-unit">setup</span>
-                </p>
-                <p class="agent-price-secondary">{agent.monthly}</p>
-              </div>
-              <p class="agent-desc">{agent.description}</p>
-              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
-            </div>
-          ))}
-        </div>
-
-        <div class="handled-row" data-reveal>
-          <div class="handled-card">
-            <p class="handled-heading">Every agent, guaranteed</p>
-            <ul class="handled-list">
-              {agentTrust.map((item) => (
-                <li>
-                  <span class="handled-icon" set:html={`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div class="price-card">
-            <p class="price-label">Bundle and save</p>
-            {bundles.slice(0, 2).map((bundle) => (
-              <p class="price-line">{bundle.monthly.split(' — ')[0]} <span>{bundle.name}</span></p>
-            ))}
-            <a href="/pricing#agents" class="bundle-link">See all bundles &rarr;</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section wwd-content seam mode-dark-bleed" id="wwd-content">
-      <div class="wwd-content-texture" aria-hidden="true"></div>
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">Video &amp; content</p>
-          <h2 class="section-title">Stay visible after the site goes live</h2>
-          <p class="section-subtext">
-            A website gets you found. Video and social content keep you top of mind.
-            We produce both in-house with a fast, repeatable process, so premium
-            content doesn't require a production budget or a crew.
-          </p>
-        </div>
-
-        <div class="content-split" data-reveal>
-          {offerings.map((offer) => (
-            <div class="content-offer">
-              <span class="content-icon-badge">
-                <span class="content-icon" set:html={`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${offer.icon}</svg>`} />
-              </span>
-              <h3 class="content-title">{offer.title}</h3>
-              <p class="content-body">{offer.body}</p>
-              <ul class="content-list">
-                {offer.list.map((item) => <li>{item}</li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <p class="content-support">
-          Content is quoted per project, never a committed retainer — take it when you
-          need it, skip it when you don't. Website hosting stays its own monthly care
-          line, always, regardless.
+        <p class="content-note-text">
+          We also take on walkthrough video and social content — occasionally, by
+          request. It isn't a standing service with a published rate card; mention
+          it when you reach out if it's something you need.
         </p>
       </div>
     </section>
@@ -250,7 +197,7 @@ const workflow = [
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">The process</p>
-          <h2 class="section-title">From raw material to ready-to-post</h2>
+          <h2 class="section-title">From what you send us to what goes live</h2>
         </div>
 
         <div class="timeline">
@@ -276,7 +223,7 @@ const workflow = [
         <MeridianRule dot="none" align="left" class="cta-rule" />
         <h2 class="cta-heading">Ready to talk about your project?</h2>
         <p class="cta-sub">No pressure, no jargon — just a conversation about what you need.</p>
-        <p class="cta-guarantee">You see the finished site before you pay a dollar.</p>
+        <p class="cta-guarantee">You see it work before you pay a dollar.</p>
         <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
           <span>Book a free consultation</span>
           <span class="btn-arrow">&rarr;</span>
@@ -662,139 +609,39 @@ const workflow = [
     color: var(--color-ink);
   }
 
-  /* Video & content — the pass's dark-bleed moment: navy ground, a faint
-     water-light crop (this page's own hero video family) drifting behind
-     the two offering cards. */
-  .wwd-content {
-    position: relative;
-    overflow: hidden;
+  /* Cited stat under the agents section-subtext — same small/muted
+     treatment as the Wyzowl citation on ContentServices.astro and the
+     video-stats source line on how-it-works.astro. */
+  .section-source {
+    margin-top: var(--space-2);
+    font-size: 12px;
+    color: var(--color-ink-muted);
+    opacity: 0.8;
   }
 
-  /* Local overrides win the light-section defaults set earlier in this
-     same stylesheet (same specificity, later source order) — this section
-     needs the dark-background variants of both. */
-  .wwd-content .eyebrow {
-    color: var(--color-steel);
+  .bundle-note-text {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(247, 245, 240, 0.7);
   }
 
-  .wwd-content .section-title {
-    color: var(--color-ivory);
+  /* Content footnote — deliberately not a full section (no cards, no rate
+     list): content is dormant/on-request per the current business plan, so
+     this gets one quiet line, not the visual weight of a marketed line. */
+  .wwd-content-note {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    padding: var(--space-4) 0;
   }
 
-  .wwd-content-texture {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image: url('/images/textures/water-light.webp');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.13;
-    pointer-events: none;
-  }
-
-  .wwd-content .container {
-    position: relative;
-    z-index: 1;
-  }
-
-  .content-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
-
-  /* Dark-card convention (matches PastWork.astro's build-card): surface a
-     shade lighter than the navy ground, hairline border, tinted glow and
-     lift on hover instead of the light-section's flat divider line. */
-  .content-offer {
-    background: var(--color-navy-surface);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    transition: var(--transition);
-  }
-
-  .content-offer:hover {
-    transform: translateY(-4px);
-    border-color: var(--color-steel);
-    box-shadow: var(--shadow-tinted-dark);
-  }
-
-  .content-icon-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-sm);
-    background: rgba(107, 135, 168, 0.16);
-    margin-bottom: var(--space-3);
-    transition: var(--transition);
-  }
-
-  .content-offer:hover .content-icon-badge {
-    background: var(--color-teal);
-  }
-
-  .content-icon {
-    display: inline-flex;
-    color: var(--color-steel);
-    transition: var(--transition);
-  }
-
-  .content-offer:hover .content-icon {
-    color: var(--color-ivory);
-  }
-
-  .content-title {
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ivory);
-    margin-bottom: var(--space-2);
-  }
-
-  .content-body {
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--color-muted);
-    margin-bottom: var(--space-3);
-  }
-
-  .content-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .content-list li {
-    position: relative;
-    padding-left: 20px;
+  .content-note-text {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
     font-size: 14px;
     line-height: 1.6;
-    color: var(--color-muted);
-  }
-
-  .content-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9px;
-    width: 8px;
-    height: 1px;
-    background: var(--color-steel);
-  }
-
-  .content-support {
-    margin-top: var(--space-5);
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--color-muted);
-    max-width: 640px;
+    color: var(--color-ink-muted);
   }
 
   /* Workflow timeline */
@@ -984,11 +831,6 @@ const workflow = [
 
     .handled-row {
       grid-template-columns: 1fr;
-    }
-
-    .content-split {
-      grid-template-columns: 1fr;
-      gap: var(--space-3);
     }
 
     .timeline-grid {

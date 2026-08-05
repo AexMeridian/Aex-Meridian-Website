@@ -9,8 +9,8 @@ interface Props {
 }
 
 const {
-  title = 'Aex Meridian — Websites, AI Agents & Content for Businesses',
-  description = 'Websites, AI agents, and digital content for small businesses — professional results, built fast and handled start to finish.',
+  title = 'Aex Meridian — AI Agents & Websites for Small Businesses',
+  description = 'AI agents that answer, qualify, and follow up for small businesses — plus the websites they run from. Built fast and handled start to finish.',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -29,7 +29,7 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   name: 'Aex Meridian',
-  description: 'Websites, AI agents, and digital content for small businesses — built fast and handled start to finish.',
+  description: 'AI agents that answer, qualify, and follow up for small businesses — plus the websites they run from.',
   url: Astro.site?.toString(),
   email: contactEmail,
   telephone: contactPhoneHref.replace('tel:', ''),
@@ -42,24 +42,16 @@ const organizationSchema = {
       '@type': 'Offer',
       itemOffered: {
         '@type': 'Service',
-        name: 'Website Design & Development',
-        description: 'A fast, mobile-responsive small-business website with hosting, edits, and support handled month to month.',
-      },
-    },
-    {
-      '@type': 'Offer',
-      itemOffered: {
-        '@type': 'Service',
         name: 'AI Agents',
-        description: 'Chat, voice, and workflow AI agents that catch missed calls and messages, book jobs, and follow up with leads — always disclosed as AI, with a human escalation path.',
+        description: 'An AI voice receptionist with missed-call text-back, a website chat and lead-qualification agent, and a speed-to-lead follow-up agent — always disclosed as AI, with a human escalation path.',
       },
     },
     {
       '@type': 'Offer',
       itemOffered: {
         '@type': 'Service',
-        name: 'Digital Content',
-        description: 'Walkthrough video, graphics, and short-form social content produced for small businesses.',
+        name: 'Website Design & Development',
+        description: 'A fast, mobile-responsive small-business website with hosting, edits, and support handled month to month — the site an AI agent runs from.',
       },
     },
   ],

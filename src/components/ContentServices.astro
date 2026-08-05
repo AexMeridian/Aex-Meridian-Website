@@ -1,30 +1,39 @@
 ---
-import { agentTiers, videoTiers } from '../data/pricing';
+// Repurposed from a video/social teaser into the homepage's agents section
+// as part of the agent-first repositioning — agents are now the flagship
+// product and get the prominent early homepage slot content used to have
+// (see index.astro for the new section order).
+import { agentTiers } from '../data/pricing';
 
 const offerings = [
   {
-    title: 'AI agents that answer for you',
-    summary: `From ${agentTiers[0].setup} setup + ${agentTiers[0].monthly} — a chat or voice agent that catches the calls and messages you'd otherwise miss.`,
+    title: agentTiers[0].name,
+    summary: `From ${agentTiers[0].setup} setup + ${agentTiers[0].monthly} — answers your phone 24/7, texts back any missed call, and books the job.`,
+    icon: '<path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />',
+  },
+  {
+    title: agentTiers[1].name,
+    summary: `From ${agentTiers[1].setup} setup + ${agentTiers[1].monthly} — qualifies visitors on your site and routes hot leads straight to you.`,
     icon: '<path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" />',
   },
   {
-    title: 'Video & social content',
-    summary: `Walkthrough videos from ${videoTiers[0].price}, plus graphics and short-form clips — quoted per project, never a retainer.`,
-    icon: '<path d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z" /><path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" />',
+    title: agentTiers[2].name,
+    summary: `From ${agentTiers[2].setup} setup + ${agentTiers[2].monthly} — responds to a new lead in seconds and follows up until they reply.`,
+    icon: '<path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" />',
   },
 ];
 ---
 
-<section class="section content-services seam mode-editorial" id="content-services">
+<section class="section content-services seam mode-editorial" id="agents-teaser">
   <div class="container content-split">
     <div class="content-copy">
       <div class="section-head" data-reveal>
-        <p class="eyebrow">Beyond the website</p>
-        <h2 class="section-title">An agent that answers, and content that keeps you visible</h2>
+        <p class="eyebrow">AI agents</p>
+        <h2 class="section-title">The agent that catches what you'd otherwise miss</h2>
         <p class="section-subtext">
-          Businesses also come to us for an AI agent that catches missed calls and
-          messages, and for video and social content — both built the same fast,
-          affordable way as our sites, and both billed separately from hosting.
+          Calls, messages, and leads — an AI agent answers, texts back, and follows
+          up so your business stays responsive around the clock, without you
+          touching anything.
         </p>
       </div>
 
@@ -43,21 +52,25 @@ const offerings = [
       </ul>
 
       <p class="content-closing">
-        <a href="/pricing">See full pricing &rarr;</a>
+        <a href="/pricing">See full agent pricing &rarr;</a>
+      </p>
+      <p class="content-note">
+        We also take on video and social content occasionally, by request.
       </p>
     </div>
 
-    <!-- No real photography of finished video/social work exists yet. A
-         decorative shape stack used to sit here communicating nothing —
-         replaced with the same sourced stat this pitch actually rests on
-         (also cited on How It Works), so the space next to the offer
-         copy argues for the offer instead of just filling it. -->
+    <!-- No real photography of finished agent work exists yet. A sourced
+         stat stands in for the missing portfolio proof, styled as this
+         site's existing dark-card convention rather than a decorative
+         shape — same pattern used before for the video stat, now the
+         agents pitch's own real number. -->
     <div class="content-proof" data-reveal>
       <p class="content-proof-number">85<span>%</span></p>
       <p class="content-proof-body">
-        of people say video has convinced them to buy a product or service.
+        of people whose call goes unanswered never call back — most call a
+        competitor instead.
       </p>
-      <p class="content-proof-source">Source: Wyzowl, State of Video Marketing 2026.</p>
+      <p class="content-proof-source">Source: ServiceTitan; 411 Locals, 2016.</p>
     </div>
   </div>
 </section>
@@ -92,15 +105,15 @@ const offerings = [
     color: var(--color-ink-muted);
   }
 
-  /* Condensed to a short, price-free summary — full tiers and numbers
-     live on Pricing, this is just enough to know the service exists and
-     to prompt the click through. */
+  /* Stacked, not a 2-up grid — three agent lines now, each a full
+     sentence, inside a column that's already just over half the section
+     width (see .content-split). */
   .content-summary {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-4);
   }
 
@@ -161,6 +174,12 @@ const offerings = [
     color: var(--color-steel);
   }
 
+  .content-note {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+  }
+
   /* Proof card — a real, sourced stat standing in for the missing
      portfolio photography, styled as a dark tinted card (this site's
      existing dark-card convention) rather than a decorative shape. */
@@ -210,12 +229,6 @@ const offerings = [
     .content-proof {
       max-width: 420px;
       margin: 0 auto;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .content-summary {
-      grid-template-columns: 1fr;
     }
   }
 </style>
