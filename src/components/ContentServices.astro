@@ -5,29 +5,32 @@
 // (see index.astro for the new section order).
 import { agentTiers } from '../data/pricing';
 
+// Trimmed per Phase 6 of the page-genre rework: What We Do now owns the
+// full comparison (mechanism, pricing, best-for, wrong-choice), so this
+// stays a one-line teaser per agent — no prices restated here.
 const offerings = [
   {
     title: agentTiers[0].name,
-    summary: `From ${agentTiers[0].setup} setup + ${agentTiers[0].monthly} — answers your phone 24/7, texts back any missed call, and books the job.`,
+    summary: 'Answers your phone 24/7, texts back any missed call, and books the job.',
     icon: '<path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />',
   },
   {
     title: agentTiers[1].name,
-    summary: `From ${agentTiers[1].setup} setup + ${agentTiers[1].monthly} — qualifies visitors on your site and routes hot leads straight to you.`,
+    summary: 'Qualifies visitors on your site and routes hot leads straight to you.',
     icon: '<path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" />',
   },
   {
     title: agentTiers[2].name,
-    summary: `From ${agentTiers[2].setup} setup + ${agentTiers[2].monthly} — responds to a new lead in seconds and follows up until they reply.`,
+    summary: 'Responds to a new lead in seconds and follows up until they reply.',
     icon: '<path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" />',
   },
 ];
 ---
 
-<section class="section content-services seam mode-editorial" id="agents-teaser">
+<section class="section content-services seam mode-dark-bleed mode-glow" id="agents-teaser">
   <div class="container content-split">
     <div class="content-copy">
-      <div class="section-head" data-reveal>
+      <div class="section-head" data-reveal data-depth="8">
         <p class="eyebrow">AI agents</p>
         <h2 class="section-title">The agent that catches what you'd otherwise miss</h2>
         <p class="section-subtext">
@@ -37,9 +40,9 @@ const offerings = [
         </p>
       </div>
 
-      <ul class="content-summary" data-reveal>
+      <ul class="content-summary" data-reveal-stagger>
         {offerings.map((offer) => (
-          <li class="content-offer">
+          <li class="content-offer" data-reveal>
             <span class="content-icon-badge">
               <span class="content-icon" set:html={`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${offer.icon}</svg>`} />
             </span>
@@ -52,7 +55,7 @@ const offerings = [
       </ul>
 
       <p class="content-closing">
-        <a href="/pricing">See full agent pricing &rarr;</a>
+        <a href="/what-we-do">See the full comparison &rarr;</a>
       </p>
       <p class="content-note">
         We also take on video and social content occasionally, by request.
@@ -64,7 +67,7 @@ const offerings = [
          site's existing dark-card convention rather than a decorative
          shape — same pattern used before for the video stat, now the
          agents pitch's own real number. -->
-    <div class="content-proof" data-reveal>
+    <div class="content-proof" data-reveal data-magnetic="card">
       <p class="content-proof-number">85<span>%</span></p>
       <p class="content-proof-body">
         of people whose call goes unanswered never call back — most call a
@@ -76,9 +79,9 @@ const offerings = [
 </section>
 
 <style>
-  /* .mode-editorial supplies the white background/ink text; this section
-     just builds the asymmetric split on top — copy on the left, a
-     lightweight CSS visual on the right. */
+  /* .mode-dark-bleed/.mode-glow supply the navy background, ivory text, and
+     ambient wash; this section just builds the asymmetric split on top —
+     copy on the left, the proof card on the right. */
   .content-split {
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
@@ -95,14 +98,14 @@ const offerings = [
   }
 
   .section-title {
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   .section-subtext {
     margin-top: var(--space-2);
     font-size: 17px;
     line-height: 1.7;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
   /* Stacked, not a 2-up grid — three agent lines now, each a full
@@ -131,8 +134,8 @@ const offerings = [
     width: 40px;
     height: 40px;
     border-radius: var(--radius-sm);
-    background: rgba(61, 107, 107, 0.1);
-    color: var(--color-teal);
+    background: rgba(107, 135, 168, 0.16);
+    color: var(--color-steel);
   }
 
   .content-offer-copy {
@@ -146,13 +149,13 @@ const offerings = [
     font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   .content-body {
     font-size: 14px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
   .content-closing {
@@ -164,20 +167,20 @@ const offerings = [
   }
 
   .content-closing a {
-    color: var(--color-teal);
+    color: var(--color-steel);
     text-decoration: none;
     transition: var(--transition-fast);
   }
 
   .content-closing a:hover,
   .content-closing a:focus-visible {
-    color: var(--color-steel);
+    color: var(--color-ivory);
   }
 
   .content-note {
     margin-top: var(--space-2);
     font-size: 13px;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
   /* Proof card — a real, sourced stat standing in for the missing
@@ -187,9 +190,30 @@ const offerings = [
     position: relative;
     padding: var(--space-6) var(--space-5);
     background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-teal) 130%);
+    border: 1px solid transparent;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-tinted-light);
     text-align: center;
+    transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out),
+      border-color 0.35s var(--ease-out);
+  }
+
+  .content-proof:hover,
+  .content-proof:focus-within {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-glow-steel);
+    border-color: rgba(107, 135, 168, 0.4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .content-proof {
+      transition: box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .content-proof:hover,
+    .content-proof:focus-within {
+      transform: none;
+    }
   }
 
   .content-proof-number {

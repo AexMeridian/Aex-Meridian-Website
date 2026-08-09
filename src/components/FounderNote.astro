@@ -10,7 +10,7 @@ import { contactEmail, contactPhoneHref, contactPhoneDisplay } from '../data/sit
 const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images/founder.jpg'));
 ---
 
-<section class="section founder-note seam">
+<section class="section founder-note seam mode-dark-bleed mode-glow">
   <div class="container founder-note-inner" data-reveal>
     <div class="founder-note-portrait">
       {founderPhotoExists ? (
@@ -38,8 +38,6 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
 <style>
   .founder-note {
-    background: var(--color-white);
-    color: var(--color-ink);
     padding: var(--space-5) 0;
   }
 
@@ -89,18 +87,18 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     font-size: 16px;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     margin-bottom: 2px;
   }
 
   .founder-note-body {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
   .founder-note-body a {
-    color: var(--color-teal);
+    color: var(--color-steel);
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
@@ -108,7 +106,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
   .founder-note-body a:hover,
   .founder-note-body a:focus-visible {
-    color: var(--color-steel-on-light);
+    color: var(--color-ivory);
   }
 
   .founder-note-contact {
@@ -122,7 +120,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
   .founder-note-link {
     font-size: 14px;
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: var(--transition-fast);
@@ -130,8 +128,8 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
   .founder-note-link:hover,
   .founder-note-link:focus-visible {
-    color: var(--color-teal);
-    border-bottom-color: var(--color-teal);
+    color: var(--color-steel);
+    border-bottom-color: var(--color-steel);
   }
 
   @media (max-width: 760px) {

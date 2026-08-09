@@ -2,14 +2,22 @@
 import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHref, socialLinks as socialUrls } from '../data/site';
 import MeridianRule from './MeridianRule.astro';
 
+interface Props {
+  // Pages with their own embedded ContactForm should jump to it directly
+  // rather than round-tripping to Home's copy — mirrors Header.astro's
+  // same contactHref prop.
+  contactHref?: string;
+}
+
+const { contactHref = '/#contact' } = Astro.props;
+
 const year = new Date().getFullYear();
 
 const quickLinks = [
   { label: 'What We Do', href: '/what-we-do' },
   { label: 'How It Works', href: '/how-it-works' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'Website Cost Guide', href: '/how-much-does-a-website-cost' },
-  { label: 'Get in Touch', href: '/#contact' },
+  { label: 'Get in Touch', href: contactHref },
 ];
 
 const legalLinks = [

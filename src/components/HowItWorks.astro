@@ -19,10 +19,9 @@ const steps = [
   },
 ];
 
-const STAGGER_MS = 120;
 ---
 
-<section class="section how-it-works seam" id="what-we-do">
+<section class="section how-it-works seam mode-dark-bleed" id="what-we-do">
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">The process</p>
@@ -36,9 +35,9 @@ const STAGGER_MS = 120;
         ))}
       </div>
 
-      <div class="timeline-grid">
-        {steps.map((step, i) => (
-          <div class="timeline-step" data-reveal style={`transition-delay: ${i * STAGGER_MS}ms`}>
+      <div class="timeline-grid" data-reveal-stagger>
+        {steps.map((step) => (
+          <div class="timeline-step" data-reveal>
             <span class="step-index" aria-hidden="true">{step.number}</span>
             <h3 class="step-title">{step.title}</h3>
             <p class="step-desc">{step.description}</p>
@@ -55,13 +54,19 @@ const STAGGER_MS = 120;
 
 <style>
   .how-it-works {
-    background: var(--color-white);
-    color: var(--color-ink);
+    background: var(--color-navy);
+    color: var(--color-ivory);
   }
 
+  /* Local overrides win the light-section defaults set earlier in the
+     global stylesheet (same specificity, later source order) — same
+     pattern used any time a section that used to be light flips dark. */
+  .how-it-works .eyebrow {
+    color: var(--color-steel);
+  }
 
   .section-title {
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   /* Timeline rail — a meridian line joining the three steps, drawing in
@@ -100,7 +105,7 @@ const STAGGER_MS = 120;
     height: 12px;
     border-radius: 50%;
     background: var(--color-teal);
-    box-shadow: 0 0 0 4px var(--color-white), 0 0 14px rgba(61, 107, 107, 0.45);
+    box-shadow: 0 0 0 4px var(--color-navy), 0 0 14px rgba(61, 107, 107, 0.45);
   }
 
   .timeline-grid {
@@ -111,14 +116,14 @@ const STAGGER_MS = 120;
 
   .timeline-step {
     /* Scroll-entrance start state (overrides the global [data-reveal] 20px
-       default to match the rest of the page's card-entrance rhythm). */
-    opacity: 0;
+       default to match the rest of the page's card-entrance rhythm). Content
+       itself is never opacity-gated — see the [data-reveal] rule in
+       global.css — only position/scale animate. */
     transform: translateY(16px);
-    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+    transition: transform 0.5s var(--ease-out);
   }
 
   .timeline-step.in-view {
-    opacity: 1;
     transform: translateY(0);
   }
 
@@ -129,13 +134,13 @@ const STAGGER_MS = 120;
     font-weight: 600;
     line-height: 1;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(20, 24, 31, 0.18);
+    -webkit-text-stroke: 1px rgba(247, 245, 240, 0.18);
     margin-bottom: var(--space-2);
     transition: -webkit-text-stroke-color 0.3s ease;
   }
 
   .timeline-step:hover .step-index {
-    -webkit-text-stroke-color: var(--color-teal);
+    -webkit-text-stroke-color: var(--color-steel);
   }
 
   .step-title {
@@ -145,7 +150,7 @@ const STAGGER_MS = 120;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     margin-bottom: var(--space-2);
   }
 
@@ -169,7 +174,7 @@ const STAGGER_MS = 120;
   .step-desc {
     font-size: 15px;
     line-height: 1.65;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
     max-width: 30ch;
   }
 
@@ -179,7 +184,6 @@ const STAGGER_MS = 120;
     }
 
     .timeline-step {
-      opacity: 1 !important;
       transform: none !important;
       transition: none !important;
     }
@@ -206,13 +210,13 @@ const STAGGER_MS = 120;
   }
 
   .how-it-works-closing a {
-    color: var(--color-teal);
+    color: var(--color-steel);
     text-decoration: none;
     transition: var(--transition-fast);
   }
 
   .how-it-works-closing a:hover,
   .how-it-works-closing a:focus-visible {
-    color: var(--color-steel);
+    color: var(--color-ivory);
   }
 </style>

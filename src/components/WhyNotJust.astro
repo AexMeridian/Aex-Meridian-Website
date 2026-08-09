@@ -31,14 +31,14 @@ const rows = [
 ];
 ---
 
-<section class="section why-not-just seam">
+<section class="section why-not-just seam mode-dark-bleed mode-glow">
   <div class="container">
-    <div class="section-head" data-reveal>
+    <div class="section-head" data-reveal data-depth="8">
       <p class="eyebrow">The comparison</p>
       <h2 class="section-title">Why not just&hellip;</h2>
     </div>
 
-    <div class="compare-table" data-reveal>
+    <div class="compare-table" data-reveal data-depth="9">
       <div class="compare-row compare-head">
         <span class="compare-cell compare-label" aria-hidden="true"></span>
         {columns.map((col, i) => (
@@ -79,28 +79,20 @@ const rows = [
 </section>
 
 <style>
-  .why-not-just {
-    background: var(--color-ivory);
-    color: var(--color-ink);
-  }
-
-
   .section-title {
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   /* A real table, not three cards — a comparison only works if you can
      scan across a row. The Aex Meridian column gets a quiet highlight for
      orientation (it's the reader's own column), not a badge proclaiming
-     a winner — some rows above genuinely favor an alternative. */
+     a winner — some rows above genuinely favor an alternative. Sits
+     directly on the section's own dark background with hairline row
+     rules — no boxed white panel — matching the un-carded documentation
+     language used for comparisons everywhere else on the site now. */
   .compare-table {
     display: flex;
     flex-direction: column;
-    background: var(--color-white);
-    border: 1px solid var(--color-line-on-light);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-tinted-light);
   }
 
   .compare-row {
@@ -109,26 +101,27 @@ const rows = [
   }
 
   .compare-row + .compare-row {
-    border-top: 1px solid var(--color-line-on-light);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .compare-head {
+    border-bottom: 1px solid rgba(247, 245, 240, 0.16);
   }
 
   .compare-cell {
     padding: var(--space-3);
     font-size: 14px;
     line-height: 1.5;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
   .compare-label {
     font-weight: 600;
-    color: var(--color-ink);
-    background: var(--color-ivory);
+    color: var(--color-ivory);
   }
 
   .compare-cell.is-us {
-    background: rgba(61, 107, 107, 0.06);
-    color: var(--color-ink);
-    border-left: 1px solid rgba(61, 107, 107, 0.2);
+    color: var(--color-ivory);
   }
 
   .compare-head .compare-cell {
@@ -136,7 +129,7 @@ const rows = [
     font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   .compare-head .compare-col-head.is-us {
@@ -160,16 +153,12 @@ const rows = [
     }
 
     .compare-card {
-      background: var(--color-white);
-      border: 1px solid var(--color-line-on-light);
-      border-radius: var(--radius-md);
-      padding: var(--space-4);
-      box-shadow: var(--shadow-tinted-light);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-line);
     }
 
     .compare-card.is-us {
-      border-color: var(--color-teal);
-      background: rgba(61, 107, 107, 0.05);
+      border-top-color: var(--color-teal);
     }
 
     .compare-card-name {
@@ -177,7 +166,7 @@ const rows = [
       font-size: 18px;
       font-weight: 600;
       letter-spacing: -0.02em;
-      color: var(--color-ink);
+      color: var(--color-ivory);
     }
 
     .compare-card.is-us .compare-card-name {
@@ -196,7 +185,7 @@ const rows = [
       flex-direction: column;
       gap: 2px;
       padding-top: var(--space-2);
-      border-top: 1px solid var(--color-line-on-light);
+      border-top: 1px solid var(--color-line);
     }
 
     .compare-card-row:first-child {
@@ -209,14 +198,14 @@ const rows = [
       font-weight: 600;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: var(--color-steel-on-light);
+      color: var(--color-steel);
     }
 
     .compare-card-row dd {
       margin: 0;
       font-size: 14px;
       line-height: 1.5;
-      color: var(--color-ink-muted);
+      color: var(--color-muted);
     }
   }
 </style>

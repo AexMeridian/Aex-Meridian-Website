@@ -1,6 +1,10 @@
 # build output
 dist/
 
+# generated page screenshots (for design review / sharing with an LLM)
+screenshots/
+screenshots [0-9]*/
+
 # generated types
 .astro/
 

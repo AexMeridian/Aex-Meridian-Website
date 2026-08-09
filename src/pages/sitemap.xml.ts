@@ -3,7 +3,7 @@
 // adding a dependency.
 import type { APIRoute } from 'astro';
 
-const staticPaths = ['', 'what-we-do', 'how-it-works', 'pricing', 'how-much-does-a-website-cost', 'privacy', 'terms'];
+const staticPaths = ['', 'what-we-do', 'how-it-works', 'pricing', 'privacy', 'terms'];
 
 export const GET: APIRoute = ({ site }) => {
   const base = site?.toString().replace(/\/$/, '') ?? '';

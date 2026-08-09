@@ -2,22 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 import MeridianRule from '../components/MeridianRule.astro';
-import PageHero from '../components/PageHero.astro';
 import { websitePlan, agentTiers, bundleNote } from '../data/pricing';
-
-const costRows = [
-  {
-    name: 'Traditional agency',
-    items: ['$2,000–$9,000+ to build', 'Weeks to months to launch', 'Maintenance often billed separately'],
-    highlighted: false,
-  },
-  {
-    name: 'Aex Meridian',
-    items: ['A small fraction of that to launch', 'Live in days, not months', 'Hosting and upkeep included monthly'],
-    highlighted: true,
-  },
-];
 
 const handled = [
   'Hosting, uptime, and security',
@@ -31,57 +18,170 @@ const agentTrust = [
   'Inbound only — no outbound calling or texting, ever',
 ];
 
-const workflow = [
-  { number: '01', title: 'Gather', description: 'You send photos, key details, and any branding — takes minutes, not a meeting.' },
-  { number: '02', title: 'Draft', description: 'We build a first pass around what you gave us — usually within a day or two.' },
-  { number: '03', title: 'Review', description: 'Every draft is checked for accuracy and brand fit before you ever see it.' },
-  { number: '04', title: 'Deliver', description: 'Ready to go live, branded to your business. Nothing publishes without your sign-off.' },
+// Matrix copy not already in data/pricing.ts. "oneLiner" condenses each
+// agent's existing `description` field to one sentence — same facts, no
+// new claims. "wrongChoice" is genuinely new content per the spec: drafted
+// as the direct inverse of each agent's existing `bestFor` line, not as a
+// new statistic or claim about the business. DRAFT — confirm wording with
+// Caleb before treating as final published copy.
+const matrixCopy: Record<string, { oneLiner: string; wrongChoice: string }> = {
+  'voice-receptionist': {
+    oneLiner: 'Answers every call 24/7, texts back the ones it misses, and books straight into your calendar.',
+    wrongChoice: "Your phone barely rings, or someone's already answering every call.",
+  },
+  'website-chat': {
+    oneLiner: 'Chats with visitors in real time, qualifies them against your own site content, and routes hot leads to you.',
+    wrongChoice: "Your site doesn't get meaningful traffic yet — there's no one for it to talk to.",
+  },
+  'speed-to-lead': {
+    oneLiner: 'The moment a form or ad lead comes in, it texts them back in seconds and follows up until they reply.',
+    wrongChoice: "You don't run ads or take inbound leads — it has nothing to act on.",
+  },
+};
+
+const matrixRowLabels = ['What it does', 'Setup', 'Monthly', 'Best for', 'Wrong choice if'] as const;
+
+const matrixAgents = agentTiers.map((agent) => ({
+  id: agent.id,
+  name: agent.name,
+  featured: agent.id === 'voice-receptionist',
+  rows: {
+    'What it does': matrixCopy[agent.id].oneLiner,
+    Setup: agent.setup,
+    Monthly: agent.monthly,
+    'Best for': agent.bestFor,
+    'Wrong choice if': matrixCopy[agent.id].wrongChoice,
+  },
+}));
+
+// Build-time comparison — bar lengths are an illustrative ratio (8:1) for
+// "weeks to months" vs "within a week", not a claimed precise day count.
+// Displayed labels are the dollar ranges and time descriptions already
+// published elsewhere on the site, unchanged.
+const buildCompareRaw = [
+  { name: 'Traditional agency', cost: '$2,000–$9,000+', time: 'Weeks to months to launch', weight: 8, highlighted: false },
+  { name: 'Aex Meridian', cost: `${websitePlan.setup} flat`, time: 'Live in days — often within a week', weight: 1, highlighted: true },
+];
+const totalWeight = buildCompareRaw.reduce((sum, r) => sum + r.weight, 0);
+const buildCompare = buildCompareRaw.map((r) => ({ ...r, percent: Math.round((r.weight / totalWeight) * 100) }));
+
+// No real client sites exist yet — these are concept builds, not a
+// portfolio. Each is a from-scratch design pass for a fictional business
+// (fictional name, .example domain — reserved by RFC 2606 for exactly this,
+// never a resolvable address), built to show range across genuinely
+// different audiences rather than one template re-skinned three times.
+// Every fact below is either invented-and-labeled-as-such or already
+// published elsewhere on this site (agent names, "best agent fit" pairings)
+// — nothing here claims to be a real client, a real result, or a real number.
+const concepts = [
+  {
+    id: 'trades',
+    domain: 'cascadeplumbing.example',
+    initials: 'CP',
+    name: 'Cascade Plumbing & Heating',
+    category: 'Trades & home services',
+    headline: 'Water heater out? We’re there today.',
+    sub: '24/7 emergency service — same technician, upfront price before any work starts.',
+    cta: 'Request service',
+    navItems: ['Services', 'Service Area', 'Contact'],
+    agent: 'Best agent fit: AI Voice Receptionist',
+    note: 'Dark and utilitarian, built to load fast on a phone held by someone standing next to a leak — not someone idly browsing. The whole page answers one question: can they come now.',
+  },
+  {
+    id: 'wellness',
+    domain: 'stonewellmassage.example',
+    initials: 'SM',
+    name: 'Stonewell Massage & Recovery',
+    category: 'Personal care & wellness',
+    headline: 'An hour that’s actually just for you.',
+    sub: 'Deep tissue, sports recovery, and prenatal massage — book online in under a minute.',
+    cta: 'Book your session',
+    navItems: ['Services', 'Book Online', 'About'],
+    agent: 'Best agent fit: AI Voice Receptionist',
+    note: 'Slower and quieter, with room to breathe — the opposite instinct from the plumbing site, because the two businesses are selling opposite feelings before a visitor reads a word.',
+  },
+  {
+    id: 'retail',
+    domain: 'marrowbakehouse.example',
+    initials: 'MB',
+    name: 'Marrow Bakehouse',
+    category: 'Local shops & retail',
+    headline: 'Baked before sunrise, gone by ten.',
+    sub: 'Sourdough, pastry, and the daily board — see what’s in the case before you drive over.',
+    cta: 'See today’s menu',
+    navItems: ['Today’s Menu', 'Hours', 'Find Us'],
+    agent: 'Best agent fit: Website Chat Agent',
+    note: 'The board changes every morning, so the one job the site has is showing today’s answer — not a static menu that stopped being true six months ago.',
+  },
 ];
 ---
 
 <Layout
   title="What We Do — Aex Meridian"
-  description="AI agents that answer, qualify, and follow up for small businesses — plus the website they run from. The process, the pricing, and what's included in each."
+  description="AI agents that answer, qualify, and follow up for small businesses — plus the website they run from. The pricing and what's included."
 >
-  <Header />
-  <main id="main-content">
-    <PageHero
-      video="/videos/what-we-do-bg.mp4"
-      videoId="page-hero-loop"
-      eyebrow="What we do"
-      title="The agent that answers, and the website it lives on"
-      subhead="An AI agent that catches the calls and leads you're missing — plus the site it runs from. Video and social content, available if you need it."
-    >
-      <div slot="actions" class="page-hero-actions">
-        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
-          <span>Book a free consultation</span>
-          <span class="btn-arrow">&rarr;</span>
-        </a>
-        <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
-          <span>See who we work with</span>
-        </a>
+  <Header contactHref="#contact" />
+  <main id="main-content" class="wwd-page">
+    <div class="wwd-open">
+      <MeridianRule dot="none" align="full" />
+      <div class="container">
+        <div class="wwd-open-inner" data-reveal>
+          <p class="eyebrow">What we do</p>
+          <h1 class="wwd-title">The agent that answers, and the website it lives on</h1>
+          <p class="wwd-subhead">
+            An AI agent that catches the calls and leads you're missing — plus the site
+            it runs from. This page is the spec sheet: what each agent does, what it
+            costs, and when it isn't the right call.
+          </p>
+
+          <div class="wwd-actions">
+            <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+              <span>Book a free consultation</span>
+              <span class="btn-arrow">&rarr;</span>
+            </a>
+            <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
+              <span>See who we work with</span>
+            </a>
+          </div>
+
+          <nav class="wwd-index-nav" aria-label="On this page">
+            <a href="#wwd-agents" class="wwd-index-row">
+              <span class="wwd-index-number">01</span>
+              <span class="wwd-index-label">AI agents</span>
+              <span class="wwd-index-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="#wwd-website" class="wwd-index-row">
+              <span class="wwd-index-number">02</span>
+              <span class="wwd-index-label">The website</span>
+              <span class="wwd-index-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+            <a href="#wwd-concepts" class="wwd-index-row">
+              <span class="wwd-index-number">03</span>
+              <span class="wwd-index-label">Concept builds</span>
+              <span class="wwd-index-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </nav>
+        </div>
       </div>
+    </div>
 
-      <nav slot="extra" class="page-hero-index" aria-label="On this page">
-        <a href="#wwd-agents" class="index-row">
-          <span class="index-number">01</span>
-          <span class="index-label">AI agents</span>
-          <span class="index-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="#wwd-website" class="index-row">
-          <span class="index-number">02</span>
-          <span class="index-label">The website</span>
-          <span class="index-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-        <a href="#workflow-section" class="index-row">
-          <span class="index-number">03</span>
-          <span class="index-label">The process</span>
-          <span class="index-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-      </nav>
-    </PageHero>
+    <section class="section wwd-chat seam" id="wwd-chat">
+      <div class="container">
+        <div class="chat-placeholder" data-reveal>
+          <p class="eyebrow">Try it</p>
+          <h2 class="chat-placeholder-title">Ask the agent about Aex Meridian</h2>
+          <p class="chat-placeholder-body">
+            The plan is a live chat agent right here, trained on this page's own
+            content, answering questions about the product by being the product.
+            It isn't wired up yet — flagging it rather than faking it with a static
+            mockup.
+          </p>
+          <p class="chat-placeholder-flag"><!-- PLACEHOLDER: real chat widget, needs a backend + API key not yet in this project --></p>
+        </div>
+      </div>
+    </section>
 
-    <section class="section wwd-agents seam" id="wwd-agents">
+    <section class="section wwd-agents seam mode-glow" id="wwd-agents">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">AI agents</p>
@@ -96,22 +196,45 @@ const workflow = [
           <p class="section-source">Source: ServiceTitan; 411 Locals, 2016.</p>
         </div>
 
-        <div class="agent-grid" data-reveal>
-          {agentTiers.map((agent) => (
-            <div class:list={['agent-card', agent.id === 'voice-receptionist' && 'agent-card--featured']}>
-              {agent.id === 'voice-receptionist' && <span class="agent-badge">Flagship</span>}
-              <h3 class="agent-name">{agent.name}</h3>
-              <p class="agent-tagline">{agent.tagline}</p>
-              <div class="agent-price-block">
-                <p class="agent-price">
-                  <span class="agent-price-value">{agent.setup}</span>
-                  <span class="agent-price-unit">setup</span>
-                </p>
-                <p class="agent-price-secondary">{agent.monthly}</p>
+        <!-- A dossier per agent, stacked and hairline-separated, not a
+             scrolling table — the site's own rule against generic grids
+             applied to the one section most tempted to become a
+             spreadsheet. Reads top to bottom like a spec sheet you'd
+             actually read, not a table you have to scroll sideways to
+             finish. -->
+        <div class="agent-dossier-list" data-reveal-stagger>
+          {matrixAgents.map((agent, i) => (
+            <article class:list={['agent-dossier', agent.featured && 'is-featured']} data-reveal>
+              <header class="agent-dossier-head">
+                <span class="agent-dossier-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="agent-dossier-name">{agent.name}</h3>
+                {agent.featured && <span class="agent-dossier-badge">Flagship</span>}
+              </header>
+
+              <p class="agent-dossier-does">{agent.rows['What it does']}</p>
+
+              <div class="agent-dossier-figures">
+                <div class="agent-dossier-figure">
+                  <span class="agent-dossier-figure-value">{agent.rows['Setup']}</span>
+                  <span class="agent-dossier-figure-label">Setup</span>
+                </div>
+                <div class="agent-dossier-figure">
+                  <span class="agent-dossier-figure-value agent-dossier-figure-value--accent">{agent.rows['Monthly']}</span>
+                  <span class="agent-dossier-figure-label">Monthly</span>
+                </div>
               </div>
-              <p class="agent-desc">{agent.description}</p>
-              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
-            </div>
+
+              <div class="agent-dossier-notes">
+                <p>
+                  <span class="agent-dossier-note-label">Best for</span>
+                  {agent.rows['Best for']}
+                </p>
+                <p class="agent-dossier-note--caveat">
+                  <span class="agent-dossier-note-label">Wrong choice if</span>
+                  {agent.rows['Wrong choice if']}
+                </p>
+              </div>
+            </article>
           ))}
         </div>
 
@@ -137,7 +260,7 @@ const workflow = [
       </div>
     </section>
 
-    <section class="section wwd-website seam" id="wwd-website">
+    <section class="section wwd-website seam mode-glow" id="wwd-website">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">The website</p>
@@ -150,13 +273,17 @@ const workflow = [
           </p>
         </div>
 
-        <div class="cost-grid" data-reveal>
-          {costRows.map((row) => (
-            <div class:list={['cost-card', { highlighted: row.highlighted }]}>
-              <h3 class="cost-name">{row.name}</h3>
-              <ul class="cost-list">
-                {row.items.map((item) => <li>{item}</li>)}
-              </ul>
+        <div class="build-compare" data-reveal>
+          {buildCompare.map((row) => (
+            <div class:list={['build-compare-row', row.highlighted && 'build-compare-row--us']}>
+              <p class="build-compare-name">{row.name}</p>
+              <div class="build-compare-track">
+                <div class="build-compare-bar" style={`width: ${row.percent}%`}></div>
+              </div>
+              <p class="build-compare-labels">
+                <span class="build-compare-cost">{row.cost}</span>
+                <span class="build-compare-time">{row.time}</span>
+              </p>
             </div>
           ))}
         </div>
@@ -182,72 +309,142 @@ const workflow = [
       </div>
     </section>
 
-    <section class="section wwd-content-note seam">
-      <div class="container">
-        <p class="content-note-text">
-          We also take on walkthrough video and social content — occasionally, by
-          request. It isn't a standing service with a published rate card; mention
-          it when you reach out if it's something you need.
-        </p>
-      </div>
-    </section>
-
-    <section class="section wwd-workflow seam" id="workflow-section">
-      <div class="beam-sweep" aria-hidden="true"></div>
+    <section class="section wwd-concepts seam mode-glow" id="wwd-concepts">
       <div class="container">
         <div class="section-head" data-reveal>
-          <p class="eyebrow">The process</p>
-          <h2 class="section-title">From what you send us to what goes live</h2>
+          <p class="eyebrow">Not real clients</p>
+          <h2 class="section-title">Three businesses, three different builds</h2>
+          <p class="section-subtext">
+            No portfolio yet — so here's a from-scratch design pass for three
+            different kinds of businesses instead. Not a template reused three
+            times; yours would look like this, specific to you.
+          </p>
         </div>
 
-        <div class="timeline">
-          <div class="timeline-track" data-reveal aria-hidden="true">
-            {workflow.map(() => <span class="track-node"></span>)}
-          </div>
-
-          <div class="timeline-grid">
-            {workflow.map((step, i) => (
-              <div class="timeline-step" data-reveal style={`transition-delay: ${i * 100}ms`}>
-                <span class="step-index" aria-hidden="true">{step.number}</span>
-                <h3 class="step-title">{step.title}</h3>
-                <p class="step-desc">{step.description}</p>
+        <div class="concept-list" data-reveal-stagger>
+          {concepts.map((c, i) => (
+            <article class:list={['concept-row', i % 2 === 1 && 'concept-row--reverse']} data-reveal>
+              <div class="concept-visual">
+                <div class:list={['concept-frame', `concept-frame--${c.id}`]} aria-hidden="true">
+                  <div class="concept-chrome">
+                    <span class="concept-chrome-dots"><i></i><i></i><i></i></span>
+                    <span class="concept-chrome-url">{c.domain}</span>
+                  </div>
+                  <div class="concept-screen">
+                    <div class="concept-mock-nav">
+                      <span class="concept-mock-logo">{c.initials}</span>
+                      {c.navItems.map((item) => <span class="concept-mock-navitem">{item}</span>)}
+                    </div>
+                    <div class="concept-mock-hero">
+                      <div class="concept-mock-text">
+                        <p class="concept-mock-eyebrow">{c.category}</p>
+                        <h4 class="concept-mock-headline">{c.headline}</h4>
+                        <p class="concept-mock-sub">{c.sub}</p>
+                        <span class="concept-mock-cta">{c.cta} &rarr;</span>
+                      </div>
+                      <div class="concept-mock-photo"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
+
+              <div class="concept-copy">
+                <span class="concept-tag">Concept &mdash; not a real client</span>
+                <p class="concept-category">{c.category}</p>
+                <h3 class="concept-name">{c.name}</h3>
+                <p class="concept-note">{c.note}</p>
+                <p class="concept-agent">{c.agent}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
 
     <section class="section wwd-cta cta-band">
+      <video class="cta-band-video" data-src="/videos/cta-depth.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
       <div class="container wwd-cta-inner cta-band-inner" data-reveal>
         <MeridianRule dot="none" align="left" class="cta-rule" />
         <h2 class="cta-heading">Ready to talk about your project?</h2>
         <p class="cta-sub">No pressure, no jargon — just a conversation about what you need.</p>
         <p class="cta-guarantee">You see it work before you pay a dollar.</p>
-        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+        <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
           <span>Book a free consultation</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
       </div>
     </section>
+    <ContactForm />
   </main>
-  <Footer />
+  <Footer contactHref="#contact" />
 </Layout>
 
 <style>
-  /* On-page index — was a full-height side column beside the text
-     (a second hero "shape" unique to this page); now a compact chip row
-     stacked below the CTAs, so the hero's shell (height, alignment,
-     column width) matches every other sub-page while this page keeps its
-     one distinguishing feature: three functional jump-links. */
-  .page-hero-index {
+  .wwd-page {
+    background-color: var(--color-navy);
+    color: var(--color-ivory);
+  }
+
+  .wwd-page .eyebrow {
+    color: var(--color-steel);
+  }
+
+  /* Opening — replaces the full-bleed video hero. Same navy/ivory register
+     as every other section on this now-photo-less page, so the nav sits
+     directly on page background from the very first pixel; the hairline
+     rule (not a photo) is the page's first visual statement. */
+  .wwd-open {
+    padding: var(--space-6) 0 var(--space-5);
+  }
+
+  .wwd-open-inner {
+    max-width: 640px;
+  }
+
+  .wwd-title {
+    margin-top: var(--space-2);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 3.4vw, 2.75rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .wwd-subhead {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-muted);
+    max-width: 560px;
+  }
+
+  .wwd-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .wwd-actions .btn-ghost {
+    border-color: rgba(247, 245, 240, 0.45);
+  }
+
+  .wwd-actions .btn-ghost:hover,
+  .wwd-actions .btn-ghost:focus-visible {
+    border-color: var(--color-ivory);
+    background: rgba(247, 245, 240, 0.08);
+  }
+
+  .wwd-index-nav {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
     margin-top: var(--space-4);
   }
 
-  .index-row {
+  .wwd-index-row {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -259,13 +456,13 @@ const workflow = [
     transition: var(--transition-fast);
   }
 
-  .index-row:hover,
-  .index-row:focus-visible {
+  .wwd-index-row:hover,
+  .wwd-index-row:focus-visible {
     border-color: var(--color-steel);
     background: rgba(107, 135, 168, 0.16);
   }
 
-  .index-number {
+  .wwd-index-number {
     font-family: var(--font-display);
     font-size: 12px;
     font-weight: 600;
@@ -273,121 +470,203 @@ const workflow = [
     color: var(--color-steel);
   }
 
-  .index-label {
+  .wwd-index-label {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--color-ivory);
   }
 
-  .index-arrow {
+  .wwd-index-arrow {
     color: rgba(247, 245, 240, 0.5);
     transition: transform var(--transition-fast), color var(--transition-fast);
   }
 
-  .index-row:hover .index-arrow,
-  .index-row:focus-visible .index-arrow {
+  .wwd-index-row:hover .wwd-index-arrow,
+  .wwd-index-row:focus-visible .wwd-index-arrow {
     transform: translateX(2px);
     color: var(--color-steel);
   }
 
-  /* The website */
-  .wwd-website {
-    background: var(--color-white);
-    color: var(--color-ink);
+  /* Chat placeholder — dashed border deliberately reads as "not finished"
+     rather than dressing up an empty feature as a real one. */
+  .wwd-chat {
+    padding: var(--space-4) 0;
   }
 
+  .chat-placeholder {
+    max-width: 640px;
+    padding: var(--space-4);
+    border: 1px dashed rgba(247, 245, 240, 0.28);
+    border-radius: var(--radius-md);
+  }
+
+  .chat-placeholder-title {
+    margin-top: var(--space-1);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .chat-placeholder-body {
+    margin-top: var(--space-2);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-muted);
+  }
+
+  .chat-placeholder-flag {
+    display: none;
+  }
 
   .section-title {
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   .section-subtext {
     margin-top: var(--space-2);
     font-size: 17px;
     line-height: 1.7;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  .cost-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3);
+  .section-source {
+    margin-top: var(--space-2);
+    font-size: 12px;
+    color: var(--color-muted);
+    opacity: 0.8;
+  }
+
+  /* Agent dossier — three stacked spec sheets instead of a scrolling
+     comparison table. Each agent reads top to bottom (name, what it does,
+     the two figures, then the two judgment calls) rather than left to
+     right across columns, so nothing needs a horizontal scroll container
+     on any screen width. The flagship gets a struck-through amber rule
+     instead of a badge-in-a-box. */
+  .agent-dossier-list {
+    display: flex;
+    flex-direction: column;
     margin-bottom: var(--space-4);
   }
 
-  .cost-card {
-    position: relative;
-    background: var(--color-ivory);
-    border: 1px solid var(--color-line-on-light);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    overflow: hidden;
-    transition: var(--transition);
+  .agent-dossier {
+    padding: var(--space-5) 0;
+    border-top: 1px solid rgba(247, 245, 240, 0.14);
   }
 
-  .cost-card.highlighted {
-    background: var(--color-white);
-    border: 2px solid var(--color-teal);
-    box-shadow: var(--shadow-tinted-light);
+  .agent-dossier:last-child {
+    border-bottom: 1px solid rgba(247, 245, 240, 0.14);
   }
 
-  /* Meridian top-accent — only on the "us" card, so it reads as a
-     deliberate highlight rather than decorating both sides of a
-     comparison equally. */
-  .cost-card.highlighted::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-teal), var(--color-steel), var(--color-teal));
+  .agent-dossier.is-featured {
+    border-top-color: var(--color-amber);
   }
 
-  .cost-card.highlighted:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .cost-name {
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
+  .agent-dossier-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin-bottom: var(--space-3);
   }
 
-  .cost-card.highlighted .cost-name {
-    color: var(--color-teal);
+  .agent-dossier-index {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--color-steel);
   }
 
-  .cost-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .agent-dossier-name {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.6vw, 27px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .agent-dossier-badge {
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    background: var(--color-amber);
+    border-radius: var(--radius-sm);
+  }
+
+  .agent-dossier-does {
+    max-width: 64ch;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .agent-dossier-figures {
+    display: flex;
+    gap: var(--space-6);
+    margin-bottom: var(--space-4);
+  }
+
+  .agent-dossier-figure {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .agent-dossier-figure-value {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ivory);
+  }
+
+  .agent-dossier-figure-value--accent {
+    color: var(--color-steel);
+  }
+
+  .agent-dossier-figure-label {
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .agent-dossier-notes {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    max-width: 62ch;
   }
 
-  .cost-list li {
-    position: relative;
-    padding-left: 20px;
-    font-size: 15px;
+  .agent-dossier-notes p {
+    font-size: 14px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  .cost-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9px;
-    width: 8px;
-    height: 1px;
-    background: var(--color-steel);
+  .agent-dossier-note--caveat {
+    font-style: italic;
+    color: rgba(247, 245, 240, 0.55);
+  }
+
+  .agent-dossier-note-label {
+    display: inline;
+    margin-right: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-style: normal;
+    color: var(--color-steel);
   }
 
   .handled-row {
@@ -406,7 +685,7 @@ const workflow = [
   }
 
   .handled-card:hover {
-    box-shadow: var(--shadow-tinted-light);
+    box-shadow: var(--shadow-tinted-dark);
   }
 
   .handled-heading {
@@ -465,6 +744,7 @@ const workflow = [
     font-weight: 600;
     color: var(--color-ivory);
     line-height: 1.5;
+    font-variant-numeric: tabular-nums;
   }
 
   .price-line span {
@@ -472,7 +752,15 @@ const workflow = [
     font-family: var(--font-body);
     font-size: 13px;
     font-weight: 400;
+    font-variant-numeric: normal;
     color: rgba(247, 245, 240, 0.6);
+  }
+
+  .bundle-note-text {
+    margin-top: var(--space-2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(247, 245, 240, 0.7);
   }
 
   .bundle-link {
@@ -491,299 +779,310 @@ const workflow = [
     color: var(--color-ivory);
   }
 
-  /* AI agents — same light-section card language as the website section
-     above it (ivory cards, teal accents), so the two "core product" sections
-     read as a matched pair before the darker content section changes key. */
-  .wwd-agents {
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-  .agent-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
+  /* Build-time comparison — a to-scale bar replaces the old two-card
+     layout. Same axis, same track width; the numbers are text labels,
+     never printed on the bar itself. */
+  .build-compare {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 720px;
     margin-bottom: var(--space-4);
   }
 
-  .agent-card {
-    position: relative;
-    background: var(--color-ivory);
-    border: 1px solid var(--color-line-on-light);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    transition: var(--transition);
+  .build-compare-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
-  .agent-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
+  .build-compare-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-muted);
   }
 
-  .agent-card--featured {
-    background: var(--color-white);
-    border: 2px solid var(--color-teal);
-    box-shadow: var(--shadow-tinted-light);
-  }
-
-  .agent-badge {
-    position: absolute;
-    top: -1px;
-    right: var(--space-3);
-    transform: translateY(-50%);
-    background: var(--color-teal);
+  .build-compare-row--us .build-compare-name {
     color: var(--color-ivory);
+  }
+
+  .build-compare-track {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background: rgba(247, 245, 240, 0.07);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .build-compare-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: rgba(247, 245, 240, 0.24);
+  }
+
+  .build-compare-row--us .build-compare-bar {
+    background: linear-gradient(90deg, var(--color-teal), var(--color-steel));
+    box-shadow: 0 0 12px rgba(61, 107, 107, 0.5);
+  }
+
+  .build-compare-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    font-size: 13px;
+  }
+
+  .build-compare-cost {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ivory);
+  }
+
+  .build-compare-time {
+    color: var(--color-muted);
+  }
+
+  /* Concept builds — three from-scratch design passes standing in for a
+     portfolio that doesn't exist yet. Alternating rows, same idiom as How
+     It Works' client profiles, not three tiles in a grid. The
+     browser-chrome mockup is illustrative only (aria-hidden); the real,
+     accessible "not a real client" disclosure lives in the visible
+     .concept-tag text beside it. */
+  .concept-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+    margin-top: var(--space-6);
+  }
+
+  .concept-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .concept-row--reverse {
+    grid-template-columns: 1fr 1.3fr;
+  }
+
+  .concept-row--reverse .concept-visual {
+    order: 2;
+  }
+
+  .concept-visual {
+    perspective: 1400px;
+  }
+
+  .concept-frame {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(247, 245, 240, 0.12);
+    box-shadow: var(--shadow-tinted-dark);
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .concept-row:hover .concept-frame {
+    transform: rotateY(-2deg) rotateX(1deg) scale(1.015);
+  }
+
+  .concept-chrome {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px 14px;
+    background: #14181f;
+    border-bottom: 1px solid rgba(247, 245, 240, 0.08);
+  }
+
+  .concept-chrome-dots {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .concept-chrome-dots i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(247, 245, 240, 0.22);
+  }
+
+  .concept-chrome-url {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(247, 245, 240, 0.4);
+    padding: 3px 10px;
+    background: rgba(247, 245, 240, 0.04);
+    border-radius: var(--radius-full);
+  }
+
+  .concept-screen {
+    background: var(--cb);
+    color: var(--cf);
+    padding: 22px 24px 30px;
+  }
+
+  .concept-mock-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: 28px;
+  }
+
+  .concept-mock-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin-right: auto;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cb);
+    background: var(--ca);
+    border-radius: 6px;
+  }
+
+  .concept-mock-navitem {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--cf);
+    opacity: 0.65;
+  }
+
+  .concept-mock-hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .concept-mock-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ca);
+    margin-bottom: 8px;
+  }
+
+  .concept-mock-headline {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--cf);
+    margin-bottom: 8px;
+  }
+
+  .concept-mock-sub {
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--cf);
+    opacity: 0.7;
+    max-width: 32ch;
+    margin-bottom: 14px;
+  }
+
+  .concept-mock-cta {
+    display: inline-block;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 4px 10px;
+    color: var(--cb);
+    background: var(--ca);
+    padding: 8px 14px;
     border-radius: var(--radius-sm);
   }
 
-  .agent-name {
-    font-family: var(--font-display);
-    font-size: 19px;
+  .concept-mock-photo {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-sm);
+    background: var(--cp);
+  }
+
+  /* Three concrete palettes, not one template with the accent swapped —
+     dark and functional for trades, light and unhurried for wellness,
+     warm and tactile for retail. */
+  .concept-frame--trades {
+    --cb: #12181f;
+    --cf: #f2efe9;
+    --ca: #c9a46b;
+    --cp: linear-gradient(155deg, #1c2733 0%, #3a4756 100%);
+  }
+
+  .concept-frame--wellness {
+    --cb: #f7f3ec;
+    --cf: #2b2621;
+    --ca: #6b8776;
+    --cp: linear-gradient(155deg, #d8cdb8 0%, #a8b8a0 100%);
+  }
+
+  .concept-frame--wellness .concept-mock-headline {
     font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
   }
 
-  .agent-card--featured .agent-name {
-    color: var(--color-teal);
-  }
-
-  .agent-tagline {
-    margin-top: var(--space-1);
-    font-size: 13px;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-price-block {
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-line-on-light);
-  }
-
-  .agent-price {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-1);
-  }
-
-  .agent-price-value {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-  }
-
-  .agent-price-unit {
-    font-size: 12px;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-price-secondary {
-    margin-top: 2px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-teal);
-  }
-
-  .agent-desc {
-    margin-top: var(--space-3);
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-best-for {
-    margin-top: var(--space-2);
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-best-for strong {
-    color: var(--color-ink);
-  }
-
-  /* Cited stat under the agents section-subtext — same small/muted
-     treatment as the Wyzowl citation on ContentServices.astro and the
-     video-stats source line on how-it-works.astro. */
-  .section-source {
-    margin-top: var(--space-2);
-    font-size: 12px;
-    color: var(--color-ink-muted);
-    opacity: 0.8;
-  }
-
-  .bundle-note-text {
-    margin-top: var(--space-2);
-    font-size: 13px;
-    line-height: 1.5;
-    color: rgba(247, 245, 240, 0.7);
-  }
-
-  /* Content footnote — deliberately not a full section (no cards, no rate
-     list): content is dormant/on-request per the current business plan, so
-     this gets one quiet line, not the visual weight of a marketed line. */
-  .wwd-content-note {
-    background: var(--color-ivory);
-    color: var(--color-ink);
-    padding: var(--space-4) 0;
-  }
-
-  .content-note-text {
-    max-width: 640px;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-ink-muted);
-  }
-
-  /* Workflow timeline */
-  .wwd-workflow {
-    position: relative;
-    overflow: hidden;
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-  /* One-time light beam — sweeps top to bottom the first time this section
-     scrolls into view, "illuminating" the steps as it passes. Triggered
-     once via IntersectionObserver in the script below. */
-  .beam-sweep {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -25%;
-    height: 45%;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0;
-    background: linear-gradient(
-      180deg,
-      transparent,
-      rgba(107, 135, 168, 0.32),
-      rgba(61, 107, 107, 0.22),
-      transparent
-    );
-  }
-
-  .beam-sweep.is-active {
-    animation: beam-sweep-down 1.5s ease-out forwards;
-  }
-
-  @keyframes beam-sweep-down {
-    0% {
-      transform: translateY(-20%);
-      opacity: 0;
-    }
-    12% {
-      opacity: 1;
-    }
-    85% {
-      opacity: 0.5;
-    }
-    100% {
-      transform: translateY(320%);
-      opacity: 0;
-    }
+  .concept-frame--retail {
+    --cb: #231a14;
+    --cf: #f5eee3;
+    --ca: #d98e4a;
+    --cp: linear-gradient(155deg, #7a4a2c 0%, #c98a4a 100%);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .beam-sweep,
-    .beam-sweep.is-active {
-      display: none;
+    .concept-row:hover .concept-frame {
+      transform: none;
     }
   }
 
-  .timeline-track {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 12px;
-    margin-bottom: var(--space-5);
-  }
-
-  .timeline-track::before {
-    content: '';
-    position: absolute;
-    left: 6px;
-    right: 6px;
-    top: 50%;
-    height: 1px;
-    background: linear-gradient(90deg, var(--color-teal), var(--color-steel), var(--color-teal));
-    opacity: 0.5;
-    transform: translateY(-50%) scaleX(0);
-    transform-origin: left;
-    transition: transform 0.9s var(--ease-out) 0.15s;
-  }
-
-  .timeline-track.in-view::before {
-    transform: translateY(-50%) scaleX(1);
-  }
-
-  .track-node {
-    position: relative;
-    z-index: 1;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--color-teal);
-    box-shadow: 0 0 0 4px var(--color-white), 0 0 14px rgba(61, 107, 107, 0.45);
-  }
-
-  .timeline-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-3);
-  }
-
-  .timeline-step {
-    opacity: 0;
-    transform: translateY(16px) scale(0.94);
-    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-  }
-
-  .timeline-step.in-view {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  .step-index {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
+  .concept-tag {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    padding: 4px 10px;
+    font-size: 11px;
     font-weight: 600;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(20, 24, 31, 0.18);
-    margin-bottom: var(--space-2);
-    transition: -webkit-text-stroke-color 0.3s ease;
+    letter-spacing: 0.04em;
+    color: var(--color-amber);
+    border: 1px solid rgba(var(--color-amber-rgb), 0.4);
+    border-radius: var(--radius-full);
   }
 
-  .timeline-step:hover .step-index {
-    -webkit-text-stroke-color: var(--color-teal);
+  .concept-category {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+    margin-bottom: var(--space-1);
   }
 
-  .step-title {
+  .concept-name {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: clamp(24px, 2.8vw, 30px);
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
-    margin-bottom: var(--space-2);
+    color: var(--color-ivory);
+    margin-bottom: var(--space-3);
   }
 
-  .step-desc {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-ink-muted);
+  .concept-note {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-muted);
+    max-width: 52ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .concept-agent {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-ivory);
   }
 
   /* Closing CTA */
@@ -795,68 +1094,42 @@ const workflow = [
     margin-top: var(--space-4);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .timeline-track::before {
-      transform: translateY(-50%) scaleX(1);
-    }
-
-    .timeline-step {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-    }
-  }
-
   @media (max-width: 860px) {
-    .timeline-track {
-      display: none;
-    }
-
-    .timeline-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-5);
-    }
-  }
-
-  @media (max-width: 860px) {
-    .agent-grid {
+    .concept-row,
+    .concept-row--reverse {
       grid-template-columns: 1fr;
+    }
+
+    .concept-row--reverse .concept-visual {
+      order: 0;
     }
   }
 
   @media (max-width: 640px) {
-    .cost-grid {
-      grid-template-columns: 1fr;
+    .wwd-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .wwd-actions .btn {
+      justify-content: center;
+      width: 100%;
     }
 
     .handled-row {
       grid-template-columns: 1fr;
     }
 
-    .timeline-grid {
+    .concept-mock-hero {
       grid-template-columns: 1fr;
+    }
+
+    .concept-mock-photo {
+      display: none;
+    }
+
+    .concept-mock-sub {
+      max-width: none;
     }
   }
 </style>
-
-<script>
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const workflowSection = document.getElementById('workflow-section');
-  const beam = workflowSection?.querySelector('.beam-sweep');
-
-  if (workflowSection instanceof HTMLElement && beam instanceof HTMLElement && !prefersReducedMotion) {
-    const beamObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            beam.classList.add('is-active');
-            beamObserver.unobserve(entry.target); // one-time only
-          }
-        });
-      },
-      { threshold: 0.25 }
-    );
-    beamObserver.observe(workflowSection);
-  }
-</script>

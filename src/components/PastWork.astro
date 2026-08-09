@@ -26,7 +26,7 @@ const categories = [
 ---
 
 <section class="section real-builds seam mode-dark-bleed" id="our-work">
-  <div class="real-builds-texture" aria-hidden="true"></div>
+  <div class="real-builds-texture" data-scroll-drift="24" data-depth="400" aria-hidden="true"></div>
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">Who we serve</p>
@@ -37,9 +37,9 @@ const categories = [
       </p>
     </div>
 
-    <div class="builds-grid" data-reveal>
+    <div class="builds-grid" data-reveal-stagger>
       {categories.map((category, i) => (
-        <div class:list={['build-card', i === 0 && 'build-card--lead']}>
+        <div class:list={['build-card', i === 0 && 'build-card--lead']} data-reveal data-magnetic="card">
           <span class="build-icon-badge">
             <span class="build-icon" set:html={`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${category.icon}</svg>`} />
           </span>
@@ -91,7 +91,7 @@ const categories = [
     z-index: 0;
     background-image: url('/images/textures/aurora-mountains.webp');
     background-size: cover;
-    background-position: center;
+    background-position: center calc(50% + var(--tex-drift, 0px));
     opacity: 0.13;
     pointer-events: none;
   }
@@ -123,7 +123,8 @@ const categories = [
     border-radius: var(--radius-md);
     background: var(--color-navy-surface);
     padding: var(--space-5) var(--space-4);
-    transition: var(--transition);
+    transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out),
+      border-color 0.35s var(--ease-out);
   }
 
   .build-card--lead {
@@ -141,29 +142,22 @@ const categories = [
     overflow: hidden;
   }
 
-  /* The lead card is nearly twice the height of its two stacked siblings
-     — without something to occupy that extra room, the icon/title/body
-     block reads as bottom-anchored with a dead void above it. A large
-     ghosted numeral (same device used on the How It Works profiles) fills
-     the space with the site's own signature detail instead of empty air. */
-  .build-card--lead::before {
-    content: '01';
-    position: absolute;
-    top: var(--space-4);
-    right: var(--space-4);
-    font-family: var(--font-display);
-    font-size: 9rem;
-    font-weight: 600;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-    pointer-events: none;
+  .build-card:hover,
+  .build-card:focus-within {
+    transform: translateY(-6px);
+    border-color: var(--color-steel);
+    box-shadow: var(--shadow-glow-steel);
   }
 
-  .build-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--color-steel);
-    box-shadow: var(--shadow-tinted-dark);
+  @media (prefers-reduced-motion: reduce) {
+    .build-card {
+      transition: box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .build-card:hover,
+    .build-card:focus-within {
+      transform: none;
+    }
   }
 
   .build-icon-badge {

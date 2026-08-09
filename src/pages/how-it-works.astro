@@ -4,6 +4,7 @@ import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 import WorkGrid from '../components/WorkGrid.astro';
 import DeviceFrame from '../components/DeviceFrame.astro';
 import MeridianRule from '../components/MeridianRule.astro';
@@ -12,25 +13,21 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
 
 const workflow = [
   {
-    number: '01',
     title: 'Gather',
     day: 'Day 1',
     description: 'You send photos, key details, and any branding — takes minutes, not a meeting.',
   },
   {
-    number: '02',
     title: 'Draft',
     day: 'Days 2–4',
     description: 'We build a first pass around what you gave us.',
   },
   {
-    number: '03',
     title: 'Review',
     day: 'Day 5',
     description: 'Every draft is checked for accuracy and brand fit before you ever see it.',
   },
   {
-    number: '04',
     title: 'Deliver',
     day: 'Within a week',
     description: 'Ready-to-post files, branded to your business. Nothing publishes without your sign-off.',
@@ -122,12 +119,6 @@ const starPositions = [
   { x: 24, y: 62 },
 ];
 
-const videoStats = [
-  { value: '85', suffix: '%', label: 'of people say video has convinced them to buy a product or service' },
-  { value: '84', suffix: '%', label: 'want to see more video from the brands and businesses they follow' },
-  { value: '82', suffix: '%', label: 'of marketers say video delivers a strong return on investment' },
-];
-
 // One-file drop-in: swap in a real photo at public/images/founder.jpg and
 // this switches from the monogram automatically — no code change needed.
 const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images/founder.jpg'));
@@ -137,7 +128,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
   title="How It Works — Aex Meridian"
   description="How a project actually runs, what's included in every build, and who Aex Meridian builds for — real client profiles and the process behind them."
 >
-  <Header />
+  <Header contactHref="#contact" />
   <main id="main-content">
     <PageHero
       video="/videos/our-work-bg.mp4"
@@ -174,7 +165,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
       </nav>
 
       <div slot="actions" class="page-hero-actions">
-        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+        <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
           <span>Book a free consultation</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
@@ -184,28 +175,27 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
       </div>
     </PageHero>
 
-    <section class="section process seam" id="process">
+    <section class="section process seam mode-dark-bleed mode-glow" id="process">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">The process</p>
           <h2 class="section-title">From first email to the finished thing</h2>
         </div>
 
-        <div class="timeline">
-          <div class="timeline-track" data-reveal aria-hidden="true">
-            {workflow.map(() => <span class="track-node"></span>)}
-          </div>
-
-          <div class="timeline-grid">
-            {workflow.map((step, i) => (
-              <div class="timeline-step" data-reveal style={`transition-delay: ${i * 100}ms`}>
-                <span class="step-index" aria-hidden="true">{step.number}</span>
-                <span class="step-day">{step.day}</span>
-                <h3 class="step-title">{step.title}</h3>
-                <p class="step-desc">{step.description}</p>
-              </div>
-            ))}
-          </div>
+        <!-- The course line — a plotted route with a waypoint per stage,
+             standing in for a generic four-column grid. "Aex Meridian" is
+             itself a navigation term (a meridian is a line used to chart a
+             course); this is that idea made literal for the one section on
+             the site that's genuinely sequential. -->
+        <div class="course-line" data-reveal>
+          {workflow.map((step) => (
+            <div class="course-stop">
+              <span class="course-stop-marker" aria-hidden="true"></span>
+              <span class="course-stop-day">{step.day}</span>
+              <h3 class="course-stop-title">{step.title}</h3>
+              <p class="course-stop-desc">{step.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -217,39 +207,34 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
           <h2 class="section-title">What's included, no exceptions</h2>
         </div>
 
-        <ul class="included-list">
+        <ul class="manifest-list" data-reveal-stagger>
           {included.map((item, i) => (
-            <li data-reveal style={`transition-delay: ${i * 60}ms`}>
-              <span class="included-icon-badge">
-                <span class="included-icon" set:html={`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
-              </span>
-              <span class="included-text">{item}</span>
+            <li class="manifest-item" data-reveal>
+              <span class="manifest-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span class="manifest-text">{item}</span>
             </li>
           ))}
         </ul>
       </div>
     </section>
 
-    <section class="section profiles seam">
+    <section class="section profiles seam mode-dark-bleed">
+      <video class="profiles-video" data-src="/videos/starfield-horizon.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">Who we build for</p>
           <h2 class="section-title">Five kinds of businesses we know well</h2>
         </div>
 
-        <div class="profile-list">
+        <div class="profile-list" data-reveal-stagger>
           {profiles.map((profile, i) => (
             <div
               id={`profile-${profile.slug}`}
               class:list={['profile-row', i % 2 === 1 && 'profile-row--reverse']}
               data-reveal
             >
-              <div class:list={['profile-visual', `profile-visual--${['teal', 'steel', 'amber'][i % 3]}`]}>
-                <span class="profile-icon-badge">
-                  <span class="profile-icon" set:html={`<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${profile.icon}</svg>`} />
-                </span>
-                <span class="profile-visual-tag">{profile.star}</span>
-                <span class="profile-visual-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div class:list={['profile-visual', `profile-visual--${['teal', 'steel', 'amber'][i % 3]}`]} aria-hidden="true">
+                <span class="profile-visual-word">{profile.star}</span>
               </div>
               <div class="profile-copy">
                 <span class="profile-tag">{profile.star}</span>
@@ -266,7 +251,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
         <div class="profiles-fallback" data-reveal>
           <p class="profiles-fallback-text">
             Not one of these five? They're the businesses we see most, not the only ones
-            we take on — <a href="/#contact">get in touch</a> and we'll tell you honestly
+            we take on — <a href="#contact">get in touch</a> and we'll tell you honestly
             if we're a fit.
           </p>
         </div>
@@ -274,7 +259,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     </section>
 
     <section class="section device-showcase mode-dark-bleed">
-      <div class="device-showcase-texture" aria-hidden="true"></div>
+      <div class="device-showcase-texture" data-scroll-drift="24" aria-hidden="true"></div>
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">See it for yourself</p>
@@ -300,29 +285,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
     <WorkGrid />
 
-    <section class="section video-stats seam">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">Why video matters</p>
-          <h2 class="section-title">Video isn't optional anymore, even at your size</h2>
-        </div>
-
-        <div class="stats-rail" data-reveal>
-          {videoStats.map((stat) => (
-            <div class="stat-item">
-              <p class="stat-number">
-                <span data-count-target={stat.value} data-count-suffix={stat.suffix}>0{stat.suffix}</span>
-              </p>
-              <p class="stat-label">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        <p class="stats-source">Source: Wyzowl, State of Video Marketing 2026.</p>
-      </div>
-    </section>
-
-    <section class="section founder seam" id="founder">
+    <section class="section founder seam mode-dark-bleed mode-glow" id="founder">
       <div class="container founder-grid">
         <div class="founder-portrait" data-reveal>
           {founderPhotoExists ? (
@@ -357,19 +320,21 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     </section>
 
     <section class="section ow-cta cta-band">
+      <video class="cta-band-video" data-src="/videos/cta-depth.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
       <div class="container ow-cta-inner cta-band-inner" data-reveal>
         <MeridianRule dot="none" align="left" class="cta-rule" />
         <h2 class="cta-heading">Think we're a fit?</h2>
         <p class="cta-sub">Tell us about your business — we'll tell you honestly if we can help.</p>
         <p class="cta-guarantee">You see it work before you pay a dollar.</p>
-        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+        <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
           <span>Book a free consultation</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
       </div>
     </section>
+    <ContactForm />
   </main>
-  <Footer />
+  <Footer contactHref="#contact" />
 </Layout>
 
 <style>
@@ -496,203 +461,203 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
 
   .section-title {
-    color: var(--color-ink);
+    color: var(--color-ivory);
+  }
+
+  /* Sits directly under the hero, still on navy — without its own mark
+     this section would bleed into the hero above with no seam at all,
+     which is the exact "one continuous hero" problem this page had. A
+     faint chart of concentric rings (a course plotted from a fixed point,
+     literal for a page whose signature motif is already a plotted route)
+     reads as a document surface, not a scene, the moment the fold ends. */
+  .process {
+    position: relative;
+    background-image: repeating-radial-gradient(
+      circle at 12% 8%,
+      rgba(var(--color-amber-rgb), 0.05) 0px,
+      rgba(var(--color-amber-rgb), 0.05) 1px,
+      transparent 1px,
+      transparent 84px
+    );
   }
 
   /* The process — now this page's primary content, not a teaser. Concrete
      day-ranges are the substitute for portfolio proof: specificity reads
-     as more credible than a vague "fast turnaround" claim. */
-  .process {
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-  .timeline-track {
+     as more credible than a vague "fast turnaround" claim. Plotted as a
+     course line rather than a four-column grid or a scroll-scrubbed pin —
+     a dashed route with a diamond waypoint per stage, reading top to
+     bottom like an actual log instead of a slideshow the scrollbar has to
+     fight through. */
+  .course-line {
     position: relative;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 12px;
-    margin-bottom: var(--space-5);
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: 640px;
+    padding-left: 4px;
   }
 
-  .timeline-track::before {
+  .course-line::before {
     content: '';
     position: absolute;
-    left: 6px;
-    right: 6px;
-    top: 50%;
-    height: 1px;
-    background: linear-gradient(90deg, var(--color-amber), var(--color-steel), var(--color-amber));
-    opacity: 0.5;
-    transform: translateY(-50%) scaleX(0);
-    transform-origin: left;
-    transition: transform 0.9s var(--ease-out) 0.15s;
+    left: 9px;
+    top: 8px;
+    bottom: 8px;
+    border-left: 2px dashed rgba(var(--color-amber-rgb), 0.5);
   }
 
-  .timeline-track.in-view::before {
-    transform: translateY(-50%) scaleX(1);
-  }
-
-  .track-node {
+  .course-stop {
     position: relative;
-    z-index: 1;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+    padding-left: 40px;
+  }
+
+  .course-stop-marker {
+    position: absolute;
+    left: 3px;
+    top: 6px;
+    width: 13px;
+    height: 13px;
     background: var(--color-amber);
-    box-shadow: 0 0 0 4px var(--color-white), 0 0 14px rgba(var(--color-amber-rgb), 0.45);
+    transform: rotate(45deg);
+    box-shadow: 0 0 0 4px var(--color-navy), 0 0 14px rgba(var(--color-amber-rgb), 0.5);
   }
 
-  .timeline-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-3);
-  }
-
-  .timeline-step {
-    opacity: 0;
-    transform: translateY(16px) scale(0.94);
-    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-  }
-
-  .timeline-step.in-view {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  .step-index {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: 600;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(20, 24, 31, 0.18);
-    transition: -webkit-text-stroke-color 0.3s ease;
-  }
-
-  .timeline-step:hover .step-index {
-    -webkit-text-stroke-color: var(--color-amber);
-  }
-
-  .step-day {
+  .course-stop-day {
     display: inline-block;
-    margin-top: var(--space-2);
-    font-size: 12px;
+    margin-bottom: 4px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
     color: var(--color-amber);
   }
 
-  .step-title {
+  .course-stop-title {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
-    margin: var(--space-1) 0 var(--space-2);
+    color: var(--color-ivory);
+    margin-bottom: 6px;
   }
 
-  .step-desc {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-ink-muted);
+  .course-stop-desc {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-muted);
+    max-width: 46ch;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .timeline-track::before {
-      transform: translateY(-50%) scaleX(1);
-    }
-
-    .timeline-step {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-    }
-  }
-
-  @media (max-width: 860px) {
-    .timeline-track {
-      display: none;
-    }
-
-    .timeline-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-5);
-    }
-  }
-
-  @media (max-width: 640px) {
-    .timeline-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* What's included */
+  /* First hard seam on the page — a genuine light break right after the
+     process section, instead of navy running unbroken from the hero to
+     the footer. Same paper register Pricing uses, borrowed for one
+     section rather than a whole page. */
   .included {
     background: var(--color-ivory);
     color: var(--color-ink);
   }
 
-  /* A single wide column of larger, more deliberate lines reads as a real
-     statement of scope rather than a compact spec-sheet grid — the same
-     eight items, just given room to breathe. Meridian hairlines between
-     rows stand in for the old checklist's implicit grid lines. */
-  .included-list {
+  .included .eyebrow {
+    color: var(--color-steel-on-light);
+  }
+
+  .included .section-title {
+    color: var(--color-ink);
+  }
+
+  /* A manifest, not a checklist — tabular index numbers instead of a
+     checkmark-in-a-circle for every row, which is the site's own rule
+     against slot-filler icons applied to itself. Two columns use the
+     width instead of leaving half the section empty. */
+  .manifest-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    max-width: 680px;
+    max-width: 920px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--space-6);
   }
 
-  .included-list li {
+  .manifest-item {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--space-3);
     padding: var(--space-3) 0;
-    position: relative;
+    border-bottom: 1px solid var(--color-line-on-light);
   }
 
-  .included-list li:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: linear-gradient(90deg, var(--color-teal), var(--color-line-on-light) 45%, transparent);
-  }
-
-  .included-icon-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .manifest-index {
     flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(61, 107, 107, 0.12);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
     color: var(--color-teal);
   }
 
-  .included-text {
-    font-size: 19px;
+  .manifest-text {
+    font-size: 18px;
     font-weight: 500;
     color: var(--color-ink);
   }
 
   @media (max-width: 640px) {
-    .included-text {
-      font-size: 17px;
+    .manifest-list {
+      grid-template-columns: 1fr;
+    }
+
+    .manifest-text {
+      font-size: 16px;
     }
   }
 
-  /* Client profiles */
+  /* Client profiles — flipped to dark (from white) to break up the page's
+     longest light stretch; the profile-visual tiles already gradient into
+     navy, so putting the whole section on navy turns that into a real
+     environment instead of tiles floating on a white card. */
   .profiles {
-    background: var(--color-white);
-    color: var(--color-ink);
+    position: relative;
+    overflow: hidden;
+    background: var(--color-navy);
+    color: var(--color-ivory);
+  }
+
+  /* Echoes the constellation nav up in the hero — a starfield horizon
+     bleeding faintly under the same five profiles it linked down to,
+     kept quiet enough to read as depth rather than a second scene. */
+  .profiles-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    opacity: 0.22;
+    filter: saturate(0.6) brightness(0.85);
+    pointer-events: none;
+  }
+
+  .profiles > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .profiles .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .profiles .section-title {
+    color: var(--color-ivory);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .profiles-video {
+      display: none;
+    }
   }
 
   /* A real callout, not a muted afterthought — this list reads as
@@ -702,8 +667,8 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     margin-top: var(--space-6);
     padding: var(--space-4) var(--space-5);
     text-align: center;
-    background: rgba(61, 107, 107, 0.06);
-    border: 1px solid rgba(61, 107, 107, 0.24);
+    background: rgba(61, 107, 107, 0.12);
+    border: 1px solid rgba(107, 135, 168, 0.3);
     border-radius: var(--radius-md);
   }
 
@@ -711,13 +676,13 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     font-size: 17px;
     line-height: 1.6;
     font-weight: 500;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     max-width: 56ch;
     margin: 0 auto;
   }
 
   .profiles-fallback-text a {
-    color: var(--color-teal);
+    color: var(--color-steel);
     text-decoration: underline;
     text-underline-offset: 2px;
     font-weight: 600;
@@ -725,7 +690,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
   .profiles-fallback-text a:hover,
   .profiles-fallback-text a:focus-visible {
-    color: var(--color-steel-on-light);
+    color: var(--color-ivory);
   }
 
   /* Editorial, alternating rows — each of the five profiles gets a real
@@ -757,25 +722,23 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     order: 2;
   }
 
-  /* Was a flat ivory box holding only a near-invisible stroke-outline
-     numeral and a small icon — with no photography behind it, that read
-     as an empty/broken image slot exactly where a photo belongs, not a
-     deliberate design choice. Rebuilt as an unmistakable category tile: a
-     solid brand-color gradient, a large icon on a translucent badge, and
-     the profile's own tag repeated as bold type — cycling through the
-     site's three accents (teal/steel/amber) so the five rows don't read
-     as five copies of the same card. */
+  /* No icon, no badge — an icon-in-a-colored-box reads as a slot that
+     needed filling, not a deliberate choice, and doesn't say anything a
+     generic "services" page couldn't also say. The category name itself,
+     set oversized in the display face and bleeding past its own edges,
+     carries the row instead — cycling through the site's three accents
+     (teal/steel/amber) so the five rows still read as five distinct
+     tiles, not five copies of the same card. Purely decorative repeat of
+     .profile-tag/.profile-title just below, so it's aria-hidden. */
   .profile-visual {
     position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3);
     height: 200px;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-tinted-light);
+    box-shadow: var(--shadow-tinted-dark);
   }
 
   .profile-visual--teal {
@@ -790,37 +753,15 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     background: linear-gradient(135deg, #C9A46B 0%, var(--color-navy) 130%);
   }
 
-  .profile-icon-badge {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-md);
-    background: rgba(247, 245, 240, 0.16);
-    color: var(--color-ivory);
-  }
-
-  .profile-visual-tag {
-    position: relative;
-    z-index: 1;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-ivory);
-  }
-
-  .profile-visual-number {
-    position: absolute;
-    top: var(--space-3);
-    right: var(--space-3);
+  .profile-visual-word {
     font-family: var(--font-display);
-    font-size: 13px;
+    font-size: clamp(2.1rem, 3.4vw, 2.9rem);
     font-weight: 600;
-    color: rgba(247, 245, 240, 0.55);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: rgba(247, 245, 240, 0.92);
+    padding: 0 var(--space-2);
   }
 
   /* Echoes the constellation star's own label back — confirmation that
@@ -840,7 +781,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     font-size: 22px;
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     margin-bottom: var(--space-2);
   }
 
@@ -848,7 +789,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     max-width: 68ch;
     font-size: 16px;
     line-height: 1.7;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
     margin-bottom: var(--space-3);
   }
 
@@ -866,7 +807,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     padding-left: 20px;
     font-size: 14px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
   .profile-benefits li::before {
@@ -908,7 +849,7 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     z-index: 0;
     background-image: url('/images/textures/aurora-mountains.webp');
     background-size: cover;
-    background-position: center;
+    background-position: center calc(50% + var(--tex-drift, 0px));
     opacity: 0.14;
     pointer-events: none;
   }
@@ -957,66 +898,6 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     }
   }
 
-  /* Video stats */
-  .video-stats {
-    background: var(--color-ivory);
-    color: var(--color-ink);
-  }
-
-  .stats-rail {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .stat-item {
-    position: relative;
-    padding: 0 var(--space-4);
-  }
-
-  .stat-item:not(:first-child)::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 8px;
-    width: 1px;
-    background: linear-gradient(180deg, transparent, var(--color-teal), transparent);
-  }
-
-  .stat-item:first-child {
-    padding-left: 0;
-  }
-
-  .stat-number {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 6vw, 4.5rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
-    color: var(--color-amber);
-    line-height: 1;
-    margin-bottom: var(--space-2);
-  }
-
-  .stat-label {
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--color-ink-muted);
-    max-width: 230px;
-  }
-
-  .stats-source {
-    margin-top: var(--space-5);
-    font-size: 13px;
-    color: var(--color-ink-muted);
-    opacity: 0.8;
-  }
-
-  /* Founder */
-  .founder {
-    background: var(--color-ivory);
-    color: var(--color-ink);
-  }
 
   .founder-grid {
     display: grid;
@@ -1040,8 +921,8 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
        properly framed. */
     object-position: center 20%;
     border-radius: var(--radius-lg);
-    border: 1px solid var(--color-line-on-light);
-    box-shadow: var(--shadow-tinted-light);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-tinted-dark);
   }
 
   .founder-monogram {
@@ -1054,11 +935,11 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     font-size: 64px;
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-amber);
-    background: var(--color-white);
-    border: 1px solid var(--color-line-on-light);
+    color: var(--color-ivory);
+    background: linear-gradient(160deg, var(--color-navy) 0%, var(--color-teal) 140%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-tinted-light);
+    box-shadow: var(--shadow-tinted-dark);
   }
 
   .founder-name {
@@ -1066,14 +947,14 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     font-size: clamp(1.5rem, 2.8vw, 2rem);
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     margin: var(--space-2) 0 var(--space-3);
   }
 
   .founder-body {
     font-size: 16px;
     line-height: 1.7;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
     max-width: 60ch;
   }
 
@@ -1133,58 +1014,12 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
       height: 160px;
     }
 
-    .stats-rail {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
-    }
-
-    .stat-item {
-      padding: var(--space-4) 0 0;
-    }
-
-    .stat-item:not(:first-child)::before {
-      left: 8px;
-      right: 8px;
-      top: 0;
-      bottom: auto;
-      width: auto;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--color-teal), transparent);
-    }
-
-    .stat-item:first-child {
-      padding-top: 0;
-    }
   }
 </style>
 
 <script>
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
-
-  // Timeline track draw-in, same pattern used on What We Do's workflow
-  // section.
-  const track = document.querySelector('.timeline-track');
-  const steps = document.querySelectorAll('.timeline-step');
-
-  if (prefersReducedMotion) {
-    track?.classList.add('in-view');
-    steps.forEach((step) => step.classList.add('in-view'));
-  } else {
-    const timelineObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            timelineObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    if (track) timelineObserver.observe(track);
-    steps.forEach((step) => timelineObserver.observe(step));
-  }
 
   // Cursor-reactive 3D tilt on each profile row — skipped on touch devices
   // and when reduced motion is requested.
@@ -1194,12 +1029,29 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
 
       const TILT_MAX = 4; // degrees — subtle, not a gimmick
 
-      row.addEventListener('mousemove', (event) => {
+      let ticking = false;
+      let lastEvent: MouseEvent | null = null;
+
+      const applyTilt = () => {
+        if (!lastEvent) return;
         const rect = row.getBoundingClientRect();
-        const px = (event.clientX - rect.left) / rect.width - 0.5;
-        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        const px = (lastEvent.clientX - rect.left) / rect.width - 0.5;
+        const py = (lastEvent.clientY - rect.top) / rect.height - 0.5;
         row.style.transform = `perspective(900px) rotateX(${(-py * TILT_MAX).toFixed(2)}deg) rotateY(${(px * TILT_MAX).toFixed(2)}deg)`;
-      });
+        ticking = false;
+      };
+
+      row.addEventListener(
+        'mousemove',
+        (event) => {
+          lastEvent = event;
+          if (!ticking) {
+            window.requestAnimationFrame(applyTilt);
+            ticking = true;
+          }
+        },
+        { passive: true }
+      );
 
       row.addEventListener('mouseleave', () => {
         row.style.transform = '';

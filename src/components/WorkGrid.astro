@@ -16,16 +16,16 @@ const items = work as WorkItem[];
 ---
 
 {items.length > 0 && (
-  <section class="section work-grid-section seam">
+  <section class="section work-grid-section seam mode-dark-bleed mode-glow">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Recent work</p>
         <h2 class="section-title">A few examples</h2>
       </div>
 
-      <div class="work-grid" data-reveal>
+      <div class="work-grid" data-reveal-stagger>
         {items.map((item) => (
-          <a href={item.url} class="work-card">
+          <a href={item.url} class="work-card" data-reveal>
             <img src={item.image} alt={`Screenshot of the ${item.title} website`} loading="lazy" width="480" height="320" class="work-card-image" />
             <div class="work-card-body">
               <p class="work-card-industry">{item.industry}</p>
@@ -40,14 +40,8 @@ const items = work as WorkItem[];
 )}
 
 <style>
-  .work-grid-section {
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-
   .section-title {
-    color: var(--color-ink);
+    color: var(--color-ivory);
   }
 
   .work-grid {

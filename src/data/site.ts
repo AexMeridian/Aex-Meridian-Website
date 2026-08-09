@@ -10,7 +10,7 @@ export const contactPhoneSmsHref = 'sms:+17205951706';
 // exists — a link to an empty/nonexistent profile is negative proof,
 // especially for a studio that sells social content.
 export const socialLinks = {
-  linkedin: '',
+  linkedin: 'https://www.linkedin.com/company/aex-meridian/',
   instagram: '',
   facebook: '',
 };

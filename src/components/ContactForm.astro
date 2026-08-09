@@ -32,6 +32,10 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
           <span class="contact-link-label">Text</span>
           <span class="contact-link-value">{contactPhoneDisplay}</span>
         </a>
+        <div class="contact-link contact-link--static">
+          <span class="contact-link-label">Based in</span>
+          <span class="contact-link-value">Spokane, WA</span>
+        </div>
       </div>
     </div>
 
@@ -142,6 +146,14 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
   .contact-link:hover,
   .contact-link:focus-visible {
     border-color: var(--color-steel);
+  }
+
+  .contact-link--static {
+    cursor: default;
+  }
+
+  .contact-link--static:hover {
+    border-color: var(--color-line);
   }
 
   .contact-link-label {

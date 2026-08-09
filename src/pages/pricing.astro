@@ -2,19 +2,22 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 import MeridianRule from '../components/MeridianRule.astro';
-import PageHero from '../components/PageHero.astro';
-import { PRICING_VIDEO_FILTER } from '../data/heroGrading';
 import {
   websitePlan,
   overflowRate,
   agentTiers,
-  bundleNote,
   startingWebsiteSetup,
   startingAgentPrice,
 } from '../data/pricing';
 
 const faqs = [
+  {
+    question: 'Why is this so much less than a typical agency quote?',
+    answer:
+      "Mainly stack and process: a modern static-first build with no CMS licensing, no plugin overhead, and no large agency team markup. The scope is real, not a bait-and-switch — see exactly what's included above.",
+  },
   {
     question: 'How does agent pricing get set?',
     answer:
@@ -26,9 +29,19 @@ const faqs = [
       "No — it catches what would otherwise go to voicemail or an unanswered form, and hands off to a human for anything outside its scope. Every agent discloses it's AI and never pretends otherwise.",
   },
   {
+    question: 'Why is the setup fee the same for everyone?',
+    answer:
+      "$500 covers the same core scope for almost every small business site — up to 5 pages, mobile-responsive, a working contact form. If your project genuinely needs more (extra pages, e-commerce, custom integrations), that's scoped and quoted separately, never hidden inside the base fee.",
+  },
+  {
     question: 'What does the $35 a month actually cover?',
     answer:
       "Hosting, your domain's SSL and security, uptime monitoring, and up to 20 minutes of content edits every month — swapping a photo, updating hours, fixing a typo. It's the same plan for every site; nothing upsells later.",
+  },
+  {
+    question: 'Does the price go up once I sign?',
+    answer:
+      "No. The number you're quoted before the build starts is the number you pay — no add-on fees once work is underway, no retroactive increase on the monthly plan either.",
   },
   {
     question: 'Do I own my website?',
@@ -43,6 +56,11 @@ const faqs = [
   {
     question: "What if I need a change that's more than a quick edit?",
     answer: `${overflowRate} Additional pages beyond the first 5 are $100 each — always quoted before any work starts, so you're never guessing what a request will cost.`,
+  },
+  {
+    question: "What if my business needs something outside the standard scope?",
+    answer:
+      'Say so on the consultation call and we\'ll tell you honestly whether it fits the standard build or needs a custom quote — either way, you\'ll know the number before you commit to anything.',
   },
   {
     question: 'Are agents and content billed with hosting?',
@@ -72,62 +90,106 @@ const faqSchema = {
 
 <Layout
   title="Pricing — Aex Meridian"
-  description="Straightforward pricing for websites, AI agents, and digital content — no hidden fees, no long-term contracts."
+  description="What a website or AI agent actually costs for a small business — flat setup fees, real monthly numbers, no quote-call runaround."
 >
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
-  <Header />
-  <main id="main-content">
-    <PageHero
-      video="/videos/pricing-bg.mp4"
-      videoId="pricing-hero-loop"
-      eyebrow="Pricing"
-      title="Straightforward pricing, every time"
-      objectPosition="center 65%"
-      videoFilter={PRICING_VIDEO_FILTER}
-    >
-      <div slot="extra" class="page-hero-teasers">
-        <div class="teaser">
-          <p class="teaser-value">{startingAgentPrice.replace('/mo', '')}<span>+/mo</span></p>
-          <p class="teaser-label">AI agents</p>
-        </div>
-        <div class="teaser">
-          <p class="teaser-value">{startingWebsiteSetup}<span>+</span></p>
-          <p class="teaser-label">Website</p>
+  <Header forceSolid contactHref="#contact" />
+  <main id="main-content" class="pricing-page">
+    <div class="pricing-open">
+      <video class="pricing-open-video" src="/videos/dawn-horizon.mp4" muted autoplay playsinline loop preload="auto" aria-hidden="true"></video>
+      <MeridianRule dot="none" align="full" />
+      <div class="container">
+        <div class="pricing-open-inner" data-reveal>
+          <p class="eyebrow">Pricing</p>
+          <h1 class="pricing-title">Every price, one page.</h1>
+
+          <div class="price-giant-row">
+            <div class="price-giant-item">
+              <p class="price-giant-value">{startingAgentPrice.replace('/mo', '')}<span>+/mo</span></p>
+              <p class="price-giant-label">AI agents</p>
+            </div>
+            <div class="price-giant-item">
+              <p class="price-giant-value">{startingWebsiteSetup}<span>+</span></p>
+              <p class="price-giant-label">Website</p>
+            </div>
+          </div>
+
+          <p class="pricing-open-sub">
+            A flat $500 to set up any agent or the website. Monthly is a range for
+            agents, scoped to your volume; one flat plan for the site. Both broken
+            down below.
+          </p>
+
+          <!-- The core "why a real number, not a quote call" pitch — condensed
+               from what used to be its own page. Deliberately one paragraph,
+               not a 3-card "here's why agencies hide pricing" grid; that
+               device is exactly the kind of thing that reads the same on
+               every studio's site. -->
+          <p class="pricing-open-note">
+            Search "how much does a website cost" and most answers are "it
+            depends," followed by a request to book a call — so you can't compare
+            it to anything until you've already given someone 30 minutes. This is
+            the real number, not a lead-gen quote form.
+          </p>
+
+          <!-- Everything the two giant numbers are starting-from figures
+               for, at a glance — so the opening states the actual menu,
+               not just its floor. -->
+          <div class="pricing-glance" data-reveal-stagger>
+            {agentTiers.map((agent) => (
+              <div class="pricing-glance-item" data-reveal>
+                <p class="pricing-glance-name">{agent.name}</p>
+                <p class="pricing-glance-figures">
+                  <span>{agent.setup} setup</span>
+                  <span class="pricing-glance-dot" aria-hidden="true">&middot;</span>
+                  <span>{agent.monthly}</span>
+                </p>
+              </div>
+            ))}
+            <div class="pricing-glance-item pricing-glance-item--website" data-reveal>
+              <p class="pricing-glance-name">Website</p>
+              <p class="pricing-glance-figures">
+                <span>{websitePlan.setup} setup</span>
+                <span class="pricing-glance-dot" aria-hidden="true">&middot;</span>
+                <span>{websitePlan.monthly}</span>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </PageHero>
+    </div>
 
     <section class="section agents-pricing seam" id="agents">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">AI agents</p>
           <h2 class="section-title">One setup fee, priced by what the agent does</h2>
-          <p class="section-subtext">
-            Every agent is $500 to set up, same as the website. The monthly is a
-            range, scoped to your actual call and lead volume — you'll always know
-            the exact number before anything goes live.
-          </p>
         </div>
 
-        <div class="agent-grid" data-reveal>
+        <div class="price-rows" data-reveal-stagger>
           {agentTiers.map((agent) => (
-            <div class="agent-card">
-              <h3 class="agent-name">{agent.name}</h3>
-              <p class="agent-tagline">{agent.tagline}</p>
-              <div class="agent-price-block">
-                <p class="agent-price">
-                  <span class="agent-price-value">{agent.setup}</span>
-                  <span class="agent-price-unit">setup</span>
-                </p>
-                <p class="agent-price-secondary">{agent.monthly}</p>
+            <div class="price-row" data-reveal>
+              <div class="price-row-name">
+                <h3>{agent.name}</h3>
+                <p>{agent.tagline}</p>
               </div>
-              <p class="agent-desc">{agent.description}</p>
-              <p class="agent-best-for"><strong>Best for:</strong> {agent.bestFor}</p>
+              <div class="price-row-figures">
+                <p class="price-row-figure">
+                  <span class="price-row-value">{agent.setup}</span>
+                  <span class="price-row-unit">setup</span>
+                </p>
+                <p class="price-row-figure">
+                  <span class="price-row-value price-row-value--accent">{agent.monthly}</span>
+                </p>
+              </div>
             </div>
           ))}
         </div>
 
-        <p class="pricing-note">{bundleNote}</p>
+        <p class="pricing-note">
+          What each agent does, who it's for, and when it's the wrong choice — the
+          full comparison lives on <a href="/what-we-do">What We Do</a>.
+        </p>
         <p class="pricing-note">
           Every agent discloses it's AI, on every channel, and always has a human
           escalation path. Inbound only — no outbound calling or texting, ever.
@@ -135,53 +197,73 @@ const faqSchema = {
       </div>
     </section>
 
-    <section class="section pricing-cards seam">
-      <div class="pricing-glow" aria-hidden="true"></div>
-
+    <section class="section website-pricing seam" id="website">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">Website</p>
-          <h2 class="section-title">The front door your agent answers from</h2>
+          <h2 class="section-title">One flat plan for the site</h2>
         </div>
 
-        <div class="plan-card" data-reveal>
-          <div class="plan-card-main">
-            <p class="plan-tagline">{websitePlan.tagline}</p>
+        <div class="price-block" data-reveal>
+          <p class="price-block-tagline">{websitePlan.tagline}</p>
 
-            <div class="plan-price-block">
-              <p class="plan-price">
-                <span class="plan-price-value">{websitePlan.setup}</span>
-                <span class="plan-price-unit">one-time setup</span>
-              </p>
-              <p class="plan-price-secondary">
-                {websitePlan.monthly} <span>ongoing hosting &amp; care</span>
-              </p>
-            </div>
-
-            <a href="/#contact" class="btn btn-primary btn-shimmer plan-cta" data-magnetic>
-              <span>Book a free consultation</span>
-            </a>
+          <div class="price-block-figures">
+            <p class="price-row-figure">
+              <span class="price-row-value">{websitePlan.setup}</span>
+              <span class="price-row-unit">one-time setup</span>
+            </p>
+            <p class="price-row-figure">
+              <span class="price-row-value price-row-value--accent">{websitePlan.monthly}</span>
+              <span class="price-row-unit">ongoing hosting &amp; care</span>
+            </p>
           </div>
 
-          <ul class="plan-features">
+          <ul class="price-block-scope">
             {websitePlan.scope.map((item) => <li>{item}</li>)}
           </ul>
+
+          <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+            <span>Book a free consultation</span>
+            <span class="btn-arrow">&rarr;</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="section care-plans seam">
+    <section class="section care-plans seam" id="care">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">What's covered</p>
           <h2 class="section-title">Every site gets the same care</h2>
+          <p class="section-subtext">
+            The setup fee is a one-time build cost — the {websitePlan.monthly} figure
+            below is hosting, uptime, security, and small routine edits, so there's no
+            separate hosting bill showing up later, and no charge for asking us to
+            update a phone number or swap a photo.
+          </p>
         </div>
 
-        <div class="care-card" data-reveal>
-          <ul class="care-features">
-            {websitePlan.careFeatures.map((item) => <li>{item}</li>)}
-          </ul>
-          <p class="care-overflow">{overflowRate}</p>
+        <ul class="care-list" data-reveal>
+          {websitePlan.careFeatures.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="care-overflow">{overflowRate}</p>
+      </div>
+    </section>
+
+    <section class="section price-breakdown seam" id="breakdown">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Where the money goes</p>
+          <h2 class="section-title">Where the $500 goes</h2>
+        </div>
+
+        <div class="breakdown-placeholder" data-reveal>
+          <p>
+            A real, itemized breakdown of the setup fee — build hours, hosting
+            setup, domain/SSL, margin, whatever the actual split is — belongs here.
+            It isn't built yet because it needs real figures, not estimates.
+          </p>
+          <p class="breakdown-flag"><!-- PLACEHOLDER: real $500 setup-fee breakdown, needs figures from Caleb --></p>
         </div>
       </div>
     </section>
@@ -196,14 +278,11 @@ const faqSchema = {
       </div>
     </section>
 
-    <section class="section pricing-faq seam">
+    <section class="section pricing-faq seam" id="faq">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow">Common questions</p>
           <h2 class="section-title">Before you reach out</h2>
-          <p class="pricing-faq-subtext">
-            For the reasoning behind these numbers, see our <a href="/how-much-does-a-website-cost">website cost guide</a>.
-          </p>
         </div>
 
         <div class="faq-list" data-reveal>
@@ -228,381 +307,389 @@ const faqSchema = {
     </section>
 
     <section class="section pricing-cta cta-band">
+      <video class="cta-band-video" data-src="/videos/cta-depth.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
       <div class="container pricing-cta-inner cta-band-inner" data-reveal>
         <MeridianRule dot="none" align="left" class="cta-rule" />
         <h2 class="cta-heading">Not sure which fits?</h2>
         <p class="cta-sub">Tell us about your business — we'll tell you honestly what makes sense.</p>
         <p class="cta-guarantee">You see it work before you pay a dollar.</p>
-        <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+        <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
           <span>Book a free consultation</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
       </div>
     </section>
+    <ContactForm />
   </main>
-  <Footer />
+  <Footer contactHref="#contact" />
 </Layout>
 
 <style>
-  /* Numeral-led teaser row — the structural difference from the other
-     pages' prose subheads: numbers first, previewing the three cards
-     below, no paragraph of copy. Keeps this hero shorter/terser than
-     What We Do's or Our Work's, matching "straightforward pricing." */
-  .page-hero-teasers {
-    display: flex;
-    gap: var(--space-5);
-    margin-top: var(--space-4);
+  .pricing-page {
+    background-color: var(--color-navy);
+    color: var(--color-ivory);
   }
 
-  .teaser-value {
+  .pricing-page .eyebrow {
+    color: var(--color-steel);
+  }
+
+  .pricing-title {
+    margin-top: var(--space-2);
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 3.4vw, 2.75rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .pricing-open {
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-6) 0 var(--space-5);
+  }
+
+  /* A dawn breaking on the horizon, low enough to read as light in the
+     room rather than a photo — the same "one continuous dawn" idea the
+     giant numbers already lean on, made literal behind them. */
+  .pricing-open-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 65%;
+    opacity: 0.16;
+    filter: saturate(0.65) brightness(0.8);
+    pointer-events: none;
+  }
+
+  .pricing-open > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pricing-open-video {
+      display: none;
+    }
+  }
+
+  .pricing-open-inner {
+    max-width: 760px;
+  }
+
+  /* The two opening numbers — deliberately larger than any headline
+     anywhere else on the site, including Home's hero. Set directly as
+     page content, not inside a card. */
+  .price-giant-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    margin-top: var(--space-3);
+  }
+
+  /* The mono face, not the display serif — reserved sitewide for numerals
+     and data specifically (see --font-mono in global.css), so the site's
+     single biggest figures read as a real number, not an editorial
+     flourish. The meridian gold ties these to the sun system's peak
+     moment: this page opens with the boldest color statement on the site
+     the same way it already opens with the boldest type statement. */
+  .price-giant-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: clamp(4.2rem, 11vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-meridian);
+  }
+
+  .price-giant-value span {
+    font-size: 0.28em;
+    font-weight: 600;
+    color: var(--color-steel);
+    margin-left: 4px;
+  }
+
+  .price-giant-label {
+    margin-top: var(--space-1);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .pricing-open-sub {
+    margin-top: var(--space-4);
+    max-width: 520px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  .pricing-open-note {
+    margin-top: var(--space-3);
+    max-width: 520px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-muted);
+    opacity: 0.85;
+  }
+
+  /* The full menu, not just its two starting figures — a compact strip
+     of every price on the page, so the opening states the whole offer
+     before anyone has to scroll to find it. */
+  .pricing-glance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .pricing-glance-item {
+    min-width: 150px;
+  }
+
+  .pricing-glance-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+    margin-bottom: 4px;
+  }
+
+  .pricing-glance-figures {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ivory);
+  }
+
+  .pricing-glance-dot {
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+
+  .section-title {
+    color: var(--color-ivory);
+  }
+
+  .section-subtext {
+    margin-top: var(--space-2);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+
+  /* Price rows — hairline rules instead of cards, tabular figures, no
+     background fill shift between rows. */
+  .price-rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .price-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .price-row-name h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--color-ivory);
   }
 
-  .teaser-value span {
+  .price-row-name p {
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  .price-row-figures {
+    display: flex;
+    gap: var(--space-5);
+    flex-shrink: 0;
+  }
+
+  .price-row-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .price-row-value {
+    font-family: var(--font-mono);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ivory);
+  }
+
+  .price-row-value--accent {
     color: var(--color-steel);
   }
 
-  .teaser-label {
-    margin-top: 2px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(247, 245, 240, 0.6);
+  .price-row-unit {
+    font-size: 12px;
+    color: var(--color-muted);
   }
 
-  /* Pricing cards */
-  .pricing-cards {
-    position: relative;
-    overflow: hidden;
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-  .section-head {
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-title {
-    color: var(--color-ink);
-  }
-
-  /* One static ambient glow behind the single plan card — no more
-     hover-driven color-shifting between tiers, since there's only one
-     plan to light up now. */
-  .pricing-glow {
-    position: absolute;
-    inset: -15% -10%;
-    z-index: 0;
-    pointer-events: none;
-    filter: blur(60px);
-    background: radial-gradient(circle at 50% 30%, rgba(61, 107, 107, 0.28), transparent 65%);
-  }
-
-  .pricing-cards .container {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* One plan, presented as a single wide card: the price block anchors the
-     left, the scope list fills the right — reads as a considered answer,
-     not a lonely leftover grid cell. */
-  .plan-card {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 280px) 1fr;
-    gap: var(--space-6);
-    background: var(--color-white);
-    border: 1px solid var(--color-line-on-light);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
-    box-shadow: var(--shadow-sm);
-    opacity: 0.32;
-    filter: brightness(0.6);
-    transition: opacity 0.7s var(--ease-out), filter 0.7s var(--ease-out), box-shadow 0.3s ease;
-  }
-
-  .plan-card::before {
-    content: '';
-    position: absolute;
-    inset: -24px;
-    z-index: -1;
-    border-radius: var(--radius-lg);
-    background: radial-gradient(circle at 50% 25%, rgba(61, 107, 107, 0.22), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.9s ease;
-  }
-
-  .plan-card.in-view {
-    opacity: 1;
-    filter: brightness(1);
-  }
-
-  .plan-card.in-view::before {
-    opacity: 1;
-  }
-
-  .plan-card:hover {
-    box-shadow: var(--shadow-md);
-  }
-
-  .plan-card-main {
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--color-line-on-light);
-    padding-right: var(--space-6);
-  }
-
-  .plan-tagline {
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--color-ink-muted);
-  }
-
-  .plan-price-block {
+  .pricing-note {
     margin-top: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-line-on-light);
-  }
-
-  .plan-price {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-1);
-    flex-wrap: wrap;
-  }
-
-  .plan-price-value {
-    font-family: var(--font-display);
-    font-size: 30px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-  }
-
-  .plan-price-unit {
-    font-size: 13px;
-    color: var(--color-ink-muted);
-  }
-
-  .plan-price-secondary {
-    margin-top: 4px;
     font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    max-width: 640px;
+  }
+
+  .pricing-note a {
+    color: var(--color-steel);
     font-weight: 600;
-    color: var(--color-teal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
-  .plan-price-secondary span {
-    font-weight: 400;
-    color: var(--color-ink-muted);
+  .pricing-note a:hover,
+  .pricing-note a:focus-visible {
+    color: var(--color-ivory);
   }
 
-  .plan-cta {
-    margin-top: var(--space-5);
-    justify-content: center;
+  /* Website — one plain block, not a card: tagline, figures, scope list,
+     one CTA. Same hairline-rule language as the agent rows above it. */
+  .price-block {
+    max-width: 640px;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line);
   }
 
-  .plan-features {
+  .price-block-tagline {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .price-block-figures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    margin-top: var(--space-4);
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .price-block-figures .price-row-figure {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .price-block-scope {
     list-style: none;
-    margin: 0;
+    margin: var(--space-4) 0 0;
     padding: 0;
-    align-self: center;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-2) var(--space-4);
   }
 
-  .plan-features li {
+  .price-block-scope li {
     position: relative;
     padding-left: 20px;
     font-size: 15px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  .plan-features li::before {
+  .price-block-scope li::before {
     content: '';
     position: absolute;
     left: 0;
     top: 9px;
     width: 8px;
     height: 1px;
-    background: var(--color-steel);
+    background: var(--color-teal);
   }
 
-  .pricing-note {
-    margin-top: var(--space-6);
-    text-align: center;
-    font-size: 14px;
-    color: var(--color-ink-muted);
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
+  .price-block .btn {
+    margin-top: var(--space-5);
   }
 
-  /* Monthly care comparison */
-  .care-plans {
-    background: var(--color-ivory);
-    color: var(--color-ink);
-  }
-
-  /* Statement-adjacent intro — more weight and air than a standard
-     section-head, since this heading introduces the single care card
-     below it. */
-  .care-plans .section-head {
-    max-width: 640px;
-    margin-bottom: var(--space-6);
-  }
-
-  .care-plans .section-title {
-    font-size: clamp(2.5rem, 4.6vw, 3.75rem);
-  }
-
-  .care-card {
-    max-width: 640px;
-    background: var(--color-white);
-    border: 1px solid var(--color-line-on-light);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
-  }
-
-  .care-features {
+  /* Care list — same plain, unboxed treatment. */
+  .care-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    max-width: 640px;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
   }
 
-  .care-features li {
+  .care-list li {
     position: relative;
     padding-left: 20px;
     font-size: 15px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  .care-features li::before {
+  .care-list li::before {
     content: '';
     position: absolute;
     left: 0;
     top: 9px;
     width: 8px;
     height: 1px;
-    background: var(--color-steel);
+    background: var(--color-teal);
   }
 
   .care-overflow {
     margin-top: var(--space-4);
     padding-top: var(--space-4);
-    border-top: 1px solid var(--color-line-on-light);
+    border-top: 1px solid var(--color-line);
+    max-width: 640px;
     font-size: 14px;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  /* AI agents — same light-card language as the website plan section above
-     it, so the two core product lines read as a matched pair. */
-  .agents-pricing {
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-  .agent-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-  }
-
-  .agent-card {
-    background: var(--color-ivory);
-    border: 1px solid var(--color-line-on-light);
-    border-radius: var(--radius-md);
+  /* Breakdown placeholder — same dashed-border "flagged, not faked"
+     language as What We Do's chat placeholder. Real figures needed before
+     this becomes a real itemized table. */
+  .breakdown-placeholder {
+    max-width: 640px;
     padding: var(--space-4);
-    transition: var(--transition);
+    border: 1px dashed rgba(247, 245, 240, 0.24);
+    border-radius: var(--radius-md);
   }
 
-  .agent-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
+  .breakdown-placeholder p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-muted);
   }
 
-  .agent-name {
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-  }
-
-  .agent-tagline {
-    margin-top: var(--space-1);
-    font-size: 13px;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-price-block {
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-line-on-light);
-  }
-
-  .agent-price {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-1);
-  }
-
-  .agent-price-value {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--color-ink);
-  }
-
-  .agent-price-unit {
-    font-size: 12px;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-price-secondary {
-    margin-top: 2px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-teal);
-  }
-
-  .agent-desc {
-    margin-top: var(--space-3);
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-best-for {
-    margin-top: var(--space-2);
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--color-ink-muted);
-  }
-
-  .agent-best-for strong {
-    color: var(--color-ink);
-  }
-
-  /* Content footnote — deliberately not a full section (no cards, no rate
-     list): content is dormant/on-request per the current business plan, so
-     this gets one quiet line, not the visual weight of a marketed line. */
-  .content-footnote {
-    background: var(--color-ivory);
-    color: var(--color-ink);
+  .breakdown-flag {
+    display: none;
   }
 
   .content-footnote-text {
@@ -611,31 +698,11 @@ const faqSchema = {
     text-align: center;
     font-size: 14px;
     line-height: 1.6;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  /* FAQ — the objections a prospect actually has right before they'd book
-     (ownership, contracts, billing separation, what happens if they don't
-     like it) answered in place, so the closing CTA isn't the first moment
-     any of that comes up. Native <details>/<summary>, grouped by a shared
-     name so opening one closes the others — no JS required. */
-  .pricing-faq {
-    background: var(--color-white);
-    color: var(--color-ink);
-  }
-
-  .pricing-faq-subtext {
-    margin-top: var(--space-2);
-    font-size: 15px;
-    color: var(--color-ink-muted);
-  }
-
-  .pricing-faq-subtext a {
-    color: var(--color-teal);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
+  /* FAQ — already unboxed (native <details>, MeridianRule dividers); only
+     the color tokens change for the dark page. */
   .faq-list {
     max-width: 720px;
     display: flex;
@@ -643,10 +710,6 @@ const faqSchema = {
     gap: var(--space-3);
   }
 
-  /* Rows are unboxed — no per-row border/background. The divider between
-     rows is a MeridianRule (rendered between items, not after the last),
-     so the same signature gradient line that underlines every eyebrow and
-     heading also separates these rows, instead of a generic rectangle. */
   .faq-item {
     padding: 0;
   }
@@ -665,18 +728,18 @@ const faqSchema = {
     font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--color-ink);
+    color: var(--color-ivory);
     cursor: pointer;
     list-style: none;
     transition: color var(--transition-fast);
   }
 
   .faq-item[open] .faq-question {
-    color: var(--color-teal);
+    color: var(--color-steel);
   }
 
   .faq-question:focus-visible {
-    outline: 2px solid var(--color-teal);
+    outline: 2px solid var(--color-steel);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
@@ -698,7 +761,7 @@ const faqSchema = {
     position: absolute;
     top: 50%;
     left: 50%;
-    background: var(--color-teal);
+    background: var(--color-steel);
     transform: translate(-50%, -50%);
     transition: transform var(--transition-fast);
   }
@@ -717,13 +780,6 @@ const faqSchema = {
     transform: translate(-50%, -50%) rotate(90deg);
   }
 
-  /* Real height animation for native <details> — a CSS-grid 0fr/1fr
-     wrapper rather than JS scrollHeight measuring. Declaring display:grid
-     directly on .faq-answer overrides the UA stylesheet's default
-     `details:not([open]) > *:not(summary) { display: none }`, so the
-     element stays rendered (and animatable) at every state; the .is-open
-     class (toggled in sync with the <details> `open` state via the
-     `toggle` event, see the page script) drives the actual open/close. */
   .faq-answer {
     display: grid;
     grid-template-rows: 0fr;
@@ -742,10 +798,12 @@ const faqSchema = {
     padding: 0 0 var(--space-4);
     font-size: 15px;
     line-height: 1.7;
-    color: var(--color-ink-muted);
+    color: var(--color-muted);
   }
 
-  /* Closing CTA */
+  /* Closing CTA — a more saturated version of the same navy, so it still
+     reads as the page's final beat even though the rest of the page is
+     dark now too. */
   .pricing-cta {
     background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
   }
@@ -755,51 +813,39 @@ const faqSchema = {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .plan-card {
-      opacity: 1 !important;
-      filter: brightness(1) !important;
-      transition: none !important;
-    }
-
-    .plan-card::before {
-      opacity: 1 !important;
-      transition: none !important;
-    }
-
     .faq-answer {
       transition: none !important;
     }
   }
 
-  @media (max-width: 760px) {
-    .plan-card {
-      grid-template-columns: 1fr;
+  @media (max-width: 640px) {
+    .price-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
     }
 
-    .plan-card-main {
-      border-right: none;
-      border-bottom: 1px solid var(--color-line-on-light);
-      padding-right: 0;
-      padding-bottom: var(--space-4);
+    .price-row-figures {
+      gap: var(--space-4);
     }
 
-    .plan-features {
-      grid-template-columns: 1fr;
+    .price-row-figure {
+      align-items: flex-start;
+      text-align: left;
     }
 
-    .agent-grid {
+    .price-block-figures {
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .price-block-scope {
       grid-template-columns: 1fr;
     }
   }
 </style>
 
 <script>
-  // FAQ height animation — <details>/<summary> stays fully functional
-  // (and works with JS disabled, just without the smooth motion); this
-  // just syncs a .is-open class on the CSS-grid answer wrapper to each
-  // <details> element's native `open` state via the `toggle` event, which
-  // fires both when an item opens and when the shared `name` group closes
-  // it in favor of another.
   document.querySelectorAll('.faq-item').forEach((item) => {
     const answer = item.querySelector('.faq-answer');
     if (!(answer instanceof HTMLElement) || !(item instanceof HTMLDetailsElement)) return;

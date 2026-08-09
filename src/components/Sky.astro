@@ -1,0 +1,52 @@
+---
+// Mounted once at the layout root. The canvas paints the real WebGL sky;
+// the wrapper's own background is a live CSS gradient fallback (driven by
+// the same --sky-top/--sky-horizon vars raf-loop.js writes each frame) for
+// browsers where WebGL init fails, and the static default below is what
+// renders before JS runs at all or under prefers-reduced-motion.
+---
+
+<div class="sky-field" aria-hidden="true">
+  <canvas id="sky-canvas"></canvas>
+</div>
+
+<style>
+  .sky-field {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, var(--sky-top, #050810), var(--sky-horizon, #0b111c));
+  }
+
+  #sky-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* The horizon brightens locally under the cursor — the sky's own box IS
+     the viewport, so no background-attachment: fixed trick is needed here
+     the way .hover-glow needs it for cards. */
+  .sky-field::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: calc(var(--pointer-active, 0) * 0.35);
+    background: radial-gradient(
+      circle 320px at var(--pointer-x, 50vw) var(--pointer-y, 50vh),
+      rgba(255, 255, 255, 0.14),
+      transparent 70%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sky-field {
+      background: var(--color-navy);
+    }
+
+    #sky-canvas {
+      display: none;
+    }
+  }
+</style>

@@ -1,6 +1,6 @@
 The company
 
-Aex Meridian LLC is the most expensive website studio a small business can hire. I'm Caleb, the founder. Clients pay top-of-market rates because the work is categorically better than what anyone else in the space produces — not incrementally nicer, not "good for the price." There is no cheaper studio doing comparable work. That's the whole premise of the business, and it's the frame for every decision you make on a build.
+Aex Meridian LLC prices and positions itself as the fast, transparent alternative to a traditional web/marketing agency. I'm Caleb, the founder. The production quality is categorically better than what a small business would get from a template, a freelancer, or a DIY builder — not incrementally nicer, not "good for the price." But relative to a legacy agency charging thousands on an opaque, quote-call-gated timeline, Aex Meridian is faster and more honest: flat published pricing, no sales-call theater, a real thing built and shown before any money changes hands. Both halves of that matter equally — don't let "fast and transparent" drift into "cheap and generic," and don't let "premium craft" drift into "we're simply the most expensive option available." That tension is the frame for every decision you make on a build.
 
 The work is Astro, plain CSS, vanilla JS. Built in VS Code with you, committed to GitHub by me, deployed to Cloudflare Pages. Small, fast, static, no framework bloat — the simplicity of the stack is a choice, not a budget constraint.
 

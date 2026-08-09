@@ -11,12 +11,10 @@
 //   and returns a clear error instead of a silent 500, so the front end's
 //   fallback messaging has something real to react to.
 //
-// TO DO before this goes live: verify a sending domain in Resend and swap
-// FROM_ADDRESS below to something on it (e.g. "Aex Meridian
-// <noreply@aexmeridian.com>"). Resend's shared onboarding@resend.dev
-// address works without domain verification but is meant for testing —
-// deliverability to Gmail/Outlook is not guaranteed long-term.
-const FROM_ADDRESS = 'Aex Meridian Website <onboarding@resend.dev>';
+// Requires aexmeridian.com to be verified as a sending domain in Resend
+// (SPF/DKIM/DMARC records) before this address will actually send —
+// until then, Resend will reject mail from it.
+const FROM_ADDRESS = 'Aex Meridian Website <noreply@aexmeridian.com>';
 const TO_ADDRESS = 'CEO@AexMeridian.com';
 
 const escapeHtml = (value) =>

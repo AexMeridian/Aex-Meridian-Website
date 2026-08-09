@@ -21,8 +21,11 @@ export default defineConfig({
     enabled: false,
   },
   redirects: {
-    // "Our Work" was renamed to "How It Works" — keep any existing links
-    // or bookmarks to the old path resolving.
-    '/our-work': '/how-it-works',
+    // "Our Work" was folded into What We Do — keep any existing links or
+    // bookmarks to the old path resolving.
+    '/our-work': '/what-we-do',
+    // The Website Cost Guide was folded into Pricing (same numbers, same
+    // rationale, one page) — same reasoning.
+    '/how-much-does-a-website-cost': '/pricing',
   },
 });

@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import PageTransition from '../components/PageTransition.astro';
+import Sky from '../components/Sky.astro';
+import MeridianRail from '../components/MeridianRail.astro';
 import { contactEmail, contactPhoneHref, socialLinks } from '../data/site';
 
 interface Props {
@@ -36,6 +38,10 @@ const organizationSchema = {
   image: ogImageURL.toString(),
   logo: logoURL.toString(),
   priceRange: '$',
+  areaServed: {
+    '@type': 'City',
+    name: 'Spokane',
+  },
   ...(sameAs.length > 0 ? { sameAs } : {}),
   makesOffer: [
     {
@@ -90,25 +96,48 @@ const organizationSchema = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
+    <Sky />
+    <MeridianRail />
     <a href="#main-content" class="skip-link">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"></div>
     <PageTransition />
     <slot />
 
     <script>
-      import { initReveal } from '../scripts/reveal.js';
+      import { initRise } from '../scripts/rise.js';
       import { initCountUp } from '../scripts/countUp.js';
       import { initMagnetic } from '../scripts/magnetic.js';
       import { initScrollProgress } from '../scripts/scrollProgress.js';
-      initReveal(document);
+      import { initScrollDrift } from '../scripts/scrollDrift.js';
+      import { initPanelGlow } from '../scripts/panelGlow.js';
+      import { initRafLoop } from '../scripts/raf-loop.js';
+      import { initDepthField } from '../scripts/depthField.js';
+      import { initMeridianRail } from '../scripts/meridianRail.js';
+      import { initPointerLight } from '../scripts/pointerLight.js';
+      import { initLazyVideo } from '../scripts/lazyVideo.js';
+
+      initRise(document);
       initCountUp(document);
       initMagnetic(document);
       initScrollProgress(document);
+      initScrollDrift(document);
+      initPanelGlow(document);
+      initRafLoop();
+      initDepthField(document);
+      initMeridianRail(document);
+      initPointerLight();
+      initLazyVideo(document);
+
+      if (new URLSearchParams(location.search).has('sun-dev')) {
+        import('../scripts/sunDevOverlay.js').then(({ initSunDevOverlay }) =>
+          initSunDevOverlay(document)
+        );
+      }
     </script>
   </body>
 </html>
