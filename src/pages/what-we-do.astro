@@ -39,31 +39,37 @@ const matrixCopy: Record<string, { oneLiner: string; wrongChoice: string }> = {
   },
 };
 
-const matrixRowLabels = ['What it does', 'Setup', 'Monthly', 'Best for', 'Wrong choice if'] as const;
+// The monthly figure is the one huge element in each agent row, so it's
+// split for typesetting only — the amount set at monument scale, the "/mo"
+// as a small suffix. Concatenated back it is byte-identical to
+// agentTiers[n].monthly; no number is altered, rounded, or reworded.
+const splitMonthly = (monthly: string) => {
+  const i = monthly.indexOf('/');
+  return i === -1
+    ? { amount: monthly, unit: '' }
+    : { amount: monthly.slice(0, i), unit: monthly.slice(i) };
+};
 
 const matrixAgents = agentTiers.map((agent) => ({
   id: agent.id,
   name: agent.name,
   featured: agent.id === 'voice-receptionist',
-  rows: {
-    'What it does': matrixCopy[agent.id].oneLiner,
-    Setup: agent.setup,
-    Monthly: agent.monthly,
-    'Best for': agent.bestFor,
-    'Wrong choice if': matrixCopy[agent.id].wrongChoice,
-  },
+  monthly: splitMonthly(agent.monthly),
+  setup: agent.setup,
+  oneLiner: matrixCopy[agent.id].oneLiner,
+  bestFor: agent.bestFor,
+  wrongChoice: matrixCopy[agent.id].wrongChoice,
 }));
 
-// Build-time comparison — bar lengths are an illustrative ratio (8:1) for
+// Build-time comparison — bar heights are an illustrative ratio (8:1) for
 // "weeks to months" vs "within a week", not a claimed precise day count.
 // Displayed labels are the dollar ranges and time descriptions already
 // published elsewhere on the site, unchanged.
-const buildCompareRaw = [
+const buildCompare = [
   { name: 'Traditional agency', cost: '$2,000–$9,000+', time: 'Weeks to months to launch', weight: 8, highlighted: false },
   { name: 'Aex Meridian', cost: `${websitePlan.setup} flat`, time: 'Live in days — often within a week', weight: 1, highlighted: true },
 ];
-const totalWeight = buildCompareRaw.reduce((sum, r) => sum + r.weight, 0);
-const buildCompare = buildCompareRaw.map((r) => ({ ...r, percent: Math.round((r.weight / totalWeight) * 100) }));
+const maxWeight = Math.max(...buildCompare.map((r) => r.weight));
 
 // No real client sites exist yet — these are concept builds, not a
 // portfolio. Each is a from-scratch design pass for a fictional business
@@ -122,43 +128,102 @@ const concepts = [
 >
   <Header contactHref="#contact" />
   <main id="main-content" class="wwd-page">
+    <!--
+      OPENING — "the convergence." The reference photograph is not a
+      centered composition: a vast empty dark field occupies the upper
+      left, the subject cuts across on a hard diagonal and bleeds off the
+      top and right edges, and a single blazing horizon line splits the
+      frame asymmetrically with a mirrored floor beneath it. This hero is
+      that frame, translated to type: the headline cascades down and to
+      the right in three steps of decreasing scale (the diagonal), the
+      Meridian Blade bleeds off the top-right behind it, and a full-bleed
+      horizon line divides the hero at roughly two-thirds height — with
+      the supporting material (subhead, actions, page index) living below
+      it, in the reflective floor.
+    -->
     <div class="wwd-open">
-      <MeridianRule dot="none" align="full" />
-      <div class="container">
-        <div class="wwd-open-inner" data-reveal>
-          <p class="eyebrow">What we do</p>
-          <h1 class="wwd-title">The agent that answers, and the website it lives on</h1>
-          <p class="wwd-subhead">
-            An AI agent that catches the calls and leads you're missing — plus the site
-            it runs from. This page is the spec sheet: what each agent does, what it
-            costs, and when it isn't the right call.
-          </p>
+      <!-- The Meridian Blade — the one sculptural risk on this page, standing
+           in for the reference photo's subject directly instead of using the
+           photo itself as a background image. A pair of open curves with a
+           raking-light gradient stroke (dark, then hot silver, then dark
+           again along the path, echoing a single light source catching a
+           brushed edge), bleeding off the top-right corner behind the
+           opening copy. Used exactly once on the site. -->
+      <svg class="meridian-blade" viewBox="0 0 800 520" preserveAspectRatio="xMaxYMin slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="blade-gradient" x1="10%" y1="0%" x2="95%" y2="100%">
+            <stop offset="0%" stop-color="#050505" stop-opacity="0" />
+            <stop offset="18%" stop-color="#3A3A3A" />
+            <stop offset="46%" stop-color="#FFFFFF" />
+            <stop offset="72%" stop-color="#8C8C8C" />
+            <stop offset="100%" stop-color="#050505" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M 790 15 C 630 35, 525 155, 465 315 C 432 402, 380 462, 296 486"
+          fill="none"
+          stroke="url(#blade-gradient)"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        />
+        <path
+          d="M 810 58 C 665 90, 562 202, 500 352 C 468 428, 415 472, 332 498"
+          fill="none"
+          stroke="url(#blade-gradient)"
+          stroke-width="1.25"
+          stroke-linecap="round"
+          opacity="0.55"
+        />
+      </svg>
 
-          <div class="wwd-actions">
-            <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
-              <span>Book a free consultation</span>
-              <span class="btn-arrow">&rarr;</span>
-            </a>
-            <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
-              <span>See who we work with</span>
-            </a>
+      <div class="wwd-open-upper">
+        <div class="container wwd-open-stack">
+          <p class="eyebrow wwd-eyebrow" data-reveal>What we do</p>
+          <h1 class="wwd-title" data-reveal>
+            <span class="wwd-title-a">The agent</span>
+            <span class="wwd-title-b">that answers,</span>
+            <span class="wwd-title-c">and the website it lives on</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="wwd-horizon" aria-hidden="true"></div>
+
+      <div class="wwd-open-lower">
+        <div class="container wwd-lower-grid" data-reveal>
+          <div class="wwd-lower-lede">
+            <p class="wwd-subhead">
+              An AI agent that catches the calls and leads you're missing — plus the site
+              it runs from. This page is the spec sheet: what each agent does, what it
+              costs, and when it isn't the right call.
+            </p>
+
+            <div class="wwd-actions">
+              <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+                <span>Get your free demo</span>
+                <span class="btn-arrow">&rarr;</span>
+              </a>
+              <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
+                <span>See who we work with</span>
+              </a>
+            </div>
           </div>
 
-          <nav class="wwd-index-nav" aria-label="On this page">
+          <nav class="wwd-index" aria-label="On this page">
             <a href="#wwd-agents" class="wwd-index-row">
               <span class="wwd-index-number">01</span>
               <span class="wwd-index-label">AI agents</span>
-              <span class="wwd-index-arrow" aria-hidden="true">&rarr;</span>
+              <span class="wwd-index-arrow" aria-hidden="true">&darr;</span>
             </a>
             <a href="#wwd-website" class="wwd-index-row">
               <span class="wwd-index-number">02</span>
               <span class="wwd-index-label">The website</span>
-              <span class="wwd-index-arrow" aria-hidden="true">&rarr;</span>
+              <span class="wwd-index-arrow" aria-hidden="true">&darr;</span>
             </a>
             <a href="#wwd-concepts" class="wwd-index-row">
               <span class="wwd-index-number">03</span>
               <span class="wwd-index-label">Concept builds</span>
-              <span class="wwd-index-arrow" aria-hidden="true">&rarr;</span>
+              <span class="wwd-index-arrow" aria-hidden="true">&darr;</span>
             </a>
           </nav>
         </div>
@@ -196,43 +261,50 @@ const concepts = [
           <p class="section-source">Source: ServiceTitan; 411 Locals, 2016.</p>
         </div>
 
-        <!-- A dossier per agent, stacked and hairline-separated, not a
-             scrolling table — the site's own rule against generic grids
-             applied to the one section most tempted to become a
-             spreadsheet. Reads top to bottom like a spec sheet you'd
-             actually read, not a table you have to scroll sideways to
-             finish. -->
-        <div class="agent-dossier-list" data-reveal-stagger>
+        <!--
+          AGENT LEDGER — the price is the monument. Each agent's monthly
+          figure is set at a scale that tracks the figure itself: the
+          flagship's $300–$450 is a full-width headline in its own right,
+          Speed-to-Lead's $200–$350 is smaller, Website Chat's $150–$250
+          smaller still. The typography literally charts the cost, so the
+          three rows can never read as three equal cards, and every row has
+          exactly one thing the eye lands on. Each row also steps further
+          right than the one above it — the receding diagonal the reference
+          photograph runs on — so the section drifts toward a vanishing
+          point as it descends instead of stacking on a safe left rail.
+        -->
+        <div class="agent-ledger" data-reveal-stagger>
           {matrixAgents.map((agent, i) => (
-            <article class:list={['agent-dossier', agent.featured && 'is-featured']} data-reveal>
-              <header class="agent-dossier-head">
-                <span class="agent-dossier-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-                <h3 class="agent-dossier-name">{agent.name}</h3>
-                {agent.featured && <span class="agent-dossier-badge">Flagship</span>}
-              </header>
+            <article class:list={['agent-row', `agent-row--${i + 1}`, agent.featured && 'is-featured']} data-reveal>
+              <p class="agent-fig">
+                <span class="agent-fig-amount">{agent.monthly.amount}</span><span class="agent-fig-unit">{agent.monthly.unit}</span>
+              </p>
+              <p class="agent-fig-label">Monthly, scoped to volume</p>
 
-              <p class="agent-dossier-does">{agent.rows['What it does']}</p>
+              <div class="agent-detail">
+                <header class="agent-head">
+                  <span class="agent-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 class="agent-name">{agent.name}</h3>
+                  {agent.featured && <span class="agent-flag">Flagship</span>}
+                </header>
 
-              <div class="agent-dossier-figures">
-                <div class="agent-dossier-figure">
-                  <span class="agent-dossier-figure-value">{agent.rows['Setup']}</span>
-                  <span class="agent-dossier-figure-label">Setup</span>
-                </div>
-                <div class="agent-dossier-figure">
-                  <span class="agent-dossier-figure-value agent-dossier-figure-value--accent">{agent.rows['Monthly']}</span>
-                  <span class="agent-dossier-figure-label">Monthly</span>
-                </div>
-              </div>
+                <p class="agent-does">{agent.oneLiner}</p>
 
-              <div class="agent-dossier-notes">
-                <p>
-                  <span class="agent-dossier-note-label">Best for</span>
-                  {agent.rows['Best for']}
+                <p class="agent-setup">
+                  <span class="agent-setup-label">Setup</span>
+                  <span class="agent-setup-value">{agent.setup}</span>
                 </p>
-                <p class="agent-dossier-note--caveat">
-                  <span class="agent-dossier-note-label">Wrong choice if</span>
-                  {agent.rows['Wrong choice if']}
-                </p>
+
+                <div class="agent-notes">
+                  <p>
+                    <span class="agent-note-label">Best for</span>
+                    {agent.bestFor}
+                  </p>
+                  <p class="agent-note--caveat">
+                    <span class="agent-note-label">Wrong choice if</span>
+                    {agent.wrongChoice}
+                  </p>
+                </div>
               </div>
             </article>
           ))}
@@ -250,7 +322,7 @@ const concepts = [
               ))}
             </ul>
           </div>
-          <div class="price-card">
+          <div class="price-card brushed-panel">
             <p class="price-label">Setup, every time</p>
             <p class="price-line">{agentTiers[0].setup} <span>per agent, flat</span></p>
             <p class="bundle-note-text">{bundleNote}</p>
@@ -273,23 +345,45 @@ const concepts = [
           </p>
         </div>
 
-        <div class="build-compare" data-reveal>
-          {buildCompare.map((row) => (
-            <div class:list={['build-compare-row', row.highlighted && 'build-compare-row--us']}>
-              <p class="build-compare-name">{row.name}</p>
-              <div class="build-compare-track">
-                <div class="build-compare-bar" style={`width: ${row.percent}%`}></div>
+        <!--
+          THE RATIO — the build-time comparison as a to-scale monolith
+          instead of a progress bar. One towering, dull graphite slab and
+          one short, blazing silver one, 8:1, standing on the page's own
+          horizon line (the chart's baseline IS the horizon motif, with the
+          mirror-floor reflection beneath it). Extreme scale contrast doing
+          the arguing, the way the reference photo's single lit edge does
+          against a vast dark field. The bars are aria-hidden; every fact
+          is carried by the visible text labels underneath.
+        -->
+        <div class="ratio" data-reveal>
+          <div class="ratio-stage" aria-hidden="true">
+            {buildCompare.map((row) => (
+              <div class="ratio-col">
+                <span
+                  class:list={['ratio-bar', row.highlighted && 'ratio-bar--us']}
+                  style={`height: ${(row.weight / maxWeight) * 100}%`}
+                ></span>
               </div>
-              <p class="build-compare-labels">
-                <span class="build-compare-cost">{row.cost}</span>
-                <span class="build-compare-time">{row.time}</span>
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div class="ratio-horizon" aria-hidden="true"></div>
+          <div class="ratio-labels">
+            {buildCompare.map((row) => (
+              <div class:list={['ratio-label', row.highlighted && 'ratio-label--us']}>
+                <p class="ratio-name">{row.name}</p>
+                <p class="ratio-cost">{row.cost}</p>
+                <p class="ratio-time">{row.time}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div class="handled-row" data-reveal>
-          <div class="handled-card">
+        <!-- One wide band here rather than the two-card pair used in the
+             agents section above — the ratio graphic already carries the
+             price argument, so this section closes on a single quiet
+             ledger instead of repeating the section rhythm verbatim. -->
+        <div class="site-band" data-reveal>
+          <div class="site-band-list">
             <p class="handled-heading">Handled for you</p>
             <ul class="handled-list">
               {handled.map((item) => (
@@ -300,10 +394,10 @@ const concepts = [
               ))}
             </ul>
           </div>
-          <div class="price-card">
-            <p class="price-label">One plan, no tiers</p>
-            <p class="price-line">{websitePlan.setup} <span>one-time setup</span></p>
-            <p class="price-line">{websitePlan.monthly} <span>hosting, security &amp; edits</span></p>
+          <div class="site-band-price">
+            <p class="site-price-label">One plan, no tiers</p>
+            <p class="site-price-line">{websitePlan.setup} <span>one-time setup</span></p>
+            <p class="site-price-line">{websitePlan.monthly} <span>hosting, security &amp; edits</span></p>
           </div>
         </div>
       </div>
@@ -311,7 +405,7 @@ const concepts = [
 
     <section class="section wwd-concepts seam mode-glow" id="wwd-concepts">
       <div class="container">
-        <div class="section-head" data-reveal>
+        <div class="section-head section-head--offset" data-reveal>
           <p class="eyebrow">Not real clients</p>
           <h2 class="section-title">Three businesses, three different builds</h2>
           <p class="section-subtext">
@@ -321,9 +415,21 @@ const concepts = [
           </p>
         </div>
 
+        <!--
+          CONCEPT BUILDS — three compositions, not three rows of the same
+          composition. Cascade is shot close: an oversized frame bleeding
+          off the right edge with the copy squeezed into a narrow column
+          beside it. Stonewell is shot far: a small frame stranded at the
+          right of a wide empty field, its name set large in the space
+          that opens up. Marrow sits between the two and bleeds off the
+          left edge instead. The mockups' internal type scales with
+          --mock-base, so "closer" genuinely means closer rather than just
+          wider. The frames are aria-hidden; the "not a real client"
+          disclosure lives in the visible .concept-tag text.
+        -->
         <div class="concept-list" data-reveal-stagger>
           {concepts.map((c, i) => (
-            <article class:list={['concept-row', i % 2 === 1 && 'concept-row--reverse']} data-reveal>
+            <article class:list={['concept-row', `concept-row--${i + 1}`]} data-reveal>
               <div class="concept-visual">
                 <div class:list={['concept-frame', `concept-frame--${c.id}`]} aria-hidden="true">
                   <div class="concept-chrome">
@@ -349,7 +455,7 @@ const concepts = [
               </div>
 
               <div class="concept-copy">
-                <span class="concept-tag">Concept &mdash; not a real client</span>
+                <p class="concept-tag">Concept &mdash; not a real client</p>
                 <p class="concept-category">{c.category}</p>
                 <h3 class="concept-name">{c.name}</h3>
                 <p class="concept-note">{c.note}</p>
@@ -369,7 +475,7 @@ const concepts = [
         <p class="cta-sub">No pressure, no jargon — just a conversation about what you need.</p>
         <p class="cta-guarantee">You see it work before you pay a dollar.</p>
         <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
-          <span>Book a free consultation</span>
+          <span>Get your free demo</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
       </div>
@@ -380,43 +486,160 @@ const concepts = [
 </Layout>
 
 <style>
+  /* overflow-x: clip (not hidden) lets the concept frames bleed past the
+     viewport edge without creating a scroll container — so position:sticky
+     elsewhere and the shared header (which lives outside <main>) are both
+     unaffected, and no horizontal scrollbar appears. */
   .wwd-page {
     background-color: var(--color-navy);
     color: var(--color-ivory);
+    overflow-x: clip;
   }
 
   .wwd-page .eyebrow {
     color: var(--color-steel);
   }
 
-  /* Opening — replaces the full-bleed video hero. Same navy/ivory register
-     as every other section on this now-photo-less page, so the nav sits
-     directly on page background from the very first pixel; the hairline
-     rule (not a photo) is the page's first visual statement. */
+  /* ------------------------------------------------------------------
+     OPENING — the convergence
+     ------------------------------------------------------------------ */
+
   .wwd-open {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: clamp(560px, 86vh, 880px);
+  }
+
+  .meridian-blade {
+    position: absolute;
+    /* Bleeds off the top and right edges of the frame, the way the subject
+       does in the reference photograph — not contained inside a margin —
+       and dissolves into haze before it reaches the horizon, so the seam
+       stays the only thing crossing the lower half of the frame. */
+    top: -10%;
+    right: -11%;
+    z-index: 0;
+    width: min(76%, 900px);
+    height: 112%;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 46%, transparent 74%);
+    mask-image: linear-gradient(to bottom, #000 46%, transparent 74%);
+  }
+
+  @media (max-width: 860px) {
+    /* The blade needs width to read as a sweeping curve, not a scribble —
+       under that width it's quieter to drop it than to cram it in. */
+    .meridian-blade {
+      display: none;
+    }
+  }
+
+  .wwd-open-upper {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
     padding: var(--space-6) 0 var(--space-5);
   }
 
-  .wwd-open-inner {
-    max-width: 640px;
+  .wwd-open-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    gap: var(--space-6);
   }
 
+  .wwd-eyebrow {
+    align-self: flex-start;
+  }
+
+  /* The diagonal. Three steps, each further right and (after the second)
+     sharply smaller — the headline cuts across the frame instead of
+     stacking in a centered text column. */
   .wwd-title {
-    margin-top: var(--space-2);
+    display: block;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.9rem, 3.4vw, 2.75rem);
-    line-height: 1.18;
-    letter-spacing: -0.02em;
     color: var(--color-ivory);
+    letter-spacing: -0.035em;
+    line-height: 0.9;
+  }
+
+  .wwd-title-a,
+  .wwd-title-b {
+    display: block;
+    font-size: clamp(2.6rem, 9vw, 7.6rem);
+  }
+
+  .wwd-title-b {
+    margin-left: clamp(16px, 9vw, 132px);
+  }
+
+  .wwd-title-c {
+    display: block;
+    margin-top: clamp(14px, 1.6vw, 24px);
+    margin-left: clamp(32px, 31vw, 430px);
+    max-width: 20ch;
+    font-size: clamp(1.05rem, 2.3vw, 2rem);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    color: var(--color-amber);
+  }
+
+  /* The horizon — a full-bleed hot hairline with the photo's atmospheric
+     haze sitting on it, splitting the hero asymmetrically (roughly two
+     thirds above, one third below). Brightest at ~60% across, where the
+     reference photo's vanishing point sits. */
+  .wwd-horizon {
+    position: relative;
+    z-index: 1;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 14%,
+      rgba(255, 255, 255, 0.92) 60%,
+      rgba(255, 255, 255, 0.22) 88%,
+      transparent 100%
+    );
+  }
+
+  .wwd-horizon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -44px;
+    height: 88px;
+    pointer-events: none;
+    background: radial-gradient(ellipse 46% 100% at 60% 50%, rgba(255, 255, 255, 0.15), transparent 72%);
+    filter: blur(10px);
+  }
+
+  /* Below the horizon: the mirror floor. A faint sheen falling away from
+     the seam, carrying the supporting material. */
+  .wwd-open-lower {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-5) 0 var(--space-6);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0) 72%);
+  }
+
+  .wwd-lower-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
+    gap: var(--space-6);
+    align-items: start;
   }
 
   .wwd-subhead {
-    margin-top: var(--space-3);
     font-size: 17px;
     line-height: 1.7;
     color: var(--color-muted);
-    max-width: 560px;
+    max-width: 46ch;
   }
 
   .wwd-actions {
@@ -428,64 +651,70 @@ const concepts = [
   }
 
   .wwd-actions .btn-ghost {
-    border-color: rgba(247, 245, 240, 0.45);
+    border-color: rgba(242, 242, 242, 0.45);
   }
 
   .wwd-actions .btn-ghost:hover,
   .wwd-actions .btn-ghost:focus-visible {
     border-color: var(--color-ivory);
-    background: rgba(247, 245, 240, 0.08);
+    background: rgba(242, 242, 242, 0.08);
   }
 
-  .wwd-index-nav {
+  /* Page index — a ruled contents list, not a row of pills. Numbers are a
+     real index here (three named destinations on this page), set small in
+     mono so they read as reference marks rather than as "steps." */
+  .wwd-index {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-4);
+    flex-direction: column;
   }
 
   .wwd-index-row {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border: 1px solid rgba(247, 245, 240, 0.2);
-    border-radius: var(--radius-full);
-    background: rgba(10, 14, 20, 0.35);
+    align-items: baseline;
+    gap: var(--space-3);
+    padding: 13px 0;
+    border-top: 1px solid rgba(242, 242, 242, 0.16);
     text-decoration: none;
-    transition: var(--transition-fast);
+    transition: border-color var(--transition-fast);
+  }
+
+  .wwd-index-row:last-child {
+    border-bottom: 1px solid rgba(242, 242, 242, 0.16);
   }
 
   .wwd-index-row:hover,
   .wwd-index-row:focus-visible {
-    border-color: var(--color-steel);
-    background: rgba(107, 135, 168, 0.16);
+    border-top-color: var(--color-amber);
   }
 
   .wwd-index-number {
-    font-family: var(--font-display);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
     color: var(--color-steel);
   }
 
   .wwd-index-label {
-    font-size: 14px;
+    font-family: var(--font-display);
+    font-size: clamp(16px, 1.5vw, 20px);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     color: var(--color-ivory);
+    transition: transform var(--transition-fast);
   }
 
   .wwd-index-arrow {
-    color: rgba(247, 245, 240, 0.5);
+    margin-left: auto;
+    font-size: 14px;
+    color: rgba(242, 242, 242, 0.5);
     transition: transform var(--transition-fast), color var(--transition-fast);
   }
 
   .wwd-index-row:hover .wwd-index-arrow,
   .wwd-index-row:focus-visible .wwd-index-arrow {
-    transform: translateX(2px);
-    color: var(--color-steel);
+    transform: translateY(3px);
+    color: var(--color-amber);
   }
 
   /* Chat placeholder — dashed border deliberately reads as "not finished"
@@ -497,7 +726,7 @@ const concepts = [
   .chat-placeholder {
     max-width: 640px;
     padding: var(--space-4);
-    border: 1px dashed rgba(247, 245, 240, 0.28);
+    border: 1px dashed rgba(242, 242, 242, 0.28);
     border-radius: var(--radius-md);
   }
 
@@ -525,13 +754,6 @@ const concepts = [
     color: var(--color-ivory);
   }
 
-  .section-subtext {
-    margin-top: var(--space-2);
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--color-muted);
-  }
-
   .section-source {
     margin-top: var(--space-2);
     font-size: 12px;
@@ -539,135 +761,230 @@ const concepts = [
     opacity: 0.8;
   }
 
-  /* Agent dossier — three stacked spec sheets instead of a scrolling
-     comparison table. Each agent reads top to bottom (name, what it does,
-     the two figures, then the two judgment calls) rather than left to
-     right across columns, so nothing needs a horizontal scroll container
-     on any screen width. The flagship gets a struck-through amber rule
-     instead of a badge-in-a-box. */
-  .agent-dossier-list {
+  /* One section head offset right instead of every head starting on the
+     same left rail — small, but it's what keeps the page from having one
+     rhythm from top to bottom. */
+  .section-head--offset {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  /* ------------------------------------------------------------------
+     AGENT LEDGER — the price is the monument
+     ------------------------------------------------------------------ */
+
+  .agent-ledger {
     display: flex;
     flex-direction: column;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-7);
   }
 
-  .agent-dossier {
-    padding: var(--space-5) 0;
-    border-top: 1px solid rgba(247, 245, 240, 0.14);
+  .agent-row {
+    display: grid;
+    grid-template-areas:
+      'fig detail'
+      'meta detail';
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(24px, 4vw, 56px);
+    padding: var(--space-5) 0 var(--space-5) var(--indent, 0);
+    border-top: 1px solid rgba(242, 242, 242, 0.14);
   }
 
-  .agent-dossier:last-child {
-    border-bottom: 1px solid rgba(247, 245, 240, 0.14);
+  .agent-row:last-child {
+    border-bottom: 1px solid rgba(242, 242, 242, 0.14);
   }
 
-  .agent-dossier.is-featured {
-    border-top-color: var(--color-amber);
+  .agent-row.is-featured {
+    border-top-color: rgba(216, 216, 216, 0.75);
   }
 
-  .agent-dossier-head {
+  /* The flagship gets its own shape, not just a bigger number: the figure
+     spans the full width as a headline in its own right, with the detail
+     tucked under its right shoulder. */
+  .agent-row--1 {
+    grid-template-areas:
+      'fig fig'
+      'meta detail';
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+    --fig-size: clamp(2.9rem, 10.5vw, 8.6rem);
+    --indent: 0;
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .agent-row--2 {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+    --fig-size: clamp(1.9rem, 4.6vw, 3.9rem);
+    --indent: clamp(16px, 6vw, 100px);
+  }
+
+  .agent-row--3 {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    --fig-size: clamp(2.2rem, 5.6vw, 4.9rem);
+    --indent: clamp(32px, 11vw, 184px);
+  }
+
+  .agent-fig {
+    grid-area: fig;
     display: flex;
     align-items: baseline;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-bottom: var(--space-3);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+    white-space: nowrap;
+    color: var(--color-ivory);
   }
 
-  .agent-dossier-index {
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
+  .agent-fig-amount {
+    font-size: var(--fig-size);
+    font-weight: 500;
+  }
+
+  .agent-fig-unit {
+    font-size: max(0.9rem, calc(var(--fig-size) * 0.2));
+    font-weight: 400;
+    letter-spacing: 0;
     color: var(--color-steel);
   }
 
-  .agent-dossier-name {
+  .agent-row--1 .agent-fig-amount {
+    /* The one hot highlight in the section — the raking light catching the
+       flagship's figure, the same direction every other highlight on these
+       pages uses. */
+    background: linear-gradient(100deg, #FFFFFF 8%, #D8D8D8 38%, #8C8C8C 74%, #5A5A5A 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .agent-fig-label {
+    grid-area: meta;
+    margin-top: var(--space-2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-caption);
+  }
+
+  .agent-detail {
+    grid-area: detail;
+    align-self: start;
+  }
+
+  .agent-row--1 .agent-detail {
+    margin-top: var(--space-2);
+  }
+
+  .agent-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .agent-index {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: var(--color-steel);
+  }
+
+  .agent-name {
     font-family: var(--font-display);
-    font-size: clamp(22px, 2.6vw, 27px);
+    font-size: clamp(19px, 2vw, 25px);
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--color-ivory);
   }
 
-  .agent-dossier-badge {
-    padding: 3px 8px;
+  /* A ruled label, not a badge in a box. */
+  .agent-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-navy);
-    background: var(--color-amber);
-    border-radius: var(--radius-sm);
+    color: var(--color-amber);
   }
 
-  .agent-dossier-does {
-    max-width: 64ch;
-    font-size: 16px;
+  .agent-flag::before {
+    content: '';
+    width: 22px;
+    height: 1px;
+    background: var(--color-amber);
+  }
+
+  .agent-does {
+    margin-top: var(--space-2);
+    max-width: 52ch;
+    font-size: 15px;
     line-height: 1.65;
     color: var(--color-muted);
-    margin-bottom: var(--space-4);
   }
 
-  .agent-dossier-figures {
+  .agent-setup {
     display: flex;
-    gap: var(--space-6);
-    margin-bottom: var(--space-4);
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
   }
 
-  .agent-dossier-figure {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .agent-dossier-figure-value {
-    font-family: var(--font-display);
-    font-size: 21px;
+  .agent-setup-label {
+    font-size: 11px;
     font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  .agent-setup-value {
+    font-family: var(--font-mono);
+    font-size: 17px;
     font-variant-numeric: tabular-nums;
     color: var(--color-ivory);
   }
 
-  .agent-dossier-figure-value--accent {
-    color: var(--color-steel);
-  }
-
-  .agent-dossier-figure-label {
-    margin-top: 2px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
-
-  .agent-dossier-notes {
+  .agent-notes {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-    max-width: 62ch;
+    gap: 10px;
+    margin-top: var(--space-3);
+    max-width: 56ch;
+    padding-top: var(--space-3);
+    border-top: 1px solid rgba(242, 242, 242, 0.1);
   }
 
-  .agent-dossier-notes p {
-    font-size: 14px;
+  .agent-notes p {
+    font-size: 13.5px;
     line-height: 1.6;
     color: var(--color-muted);
   }
 
-  .agent-dossier-note--caveat {
+  .agent-note--caveat {
     font-style: italic;
-    color: rgba(247, 245, 240, 0.55);
+    color: var(--color-caption);
   }
 
-  .agent-dossier-note-label {
+  .agent-note-label {
     display: inline;
     margin-right: 6px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     font-style: normal;
     color: var(--color-steel);
   }
+
+  /* ------------------------------------------------------------------
+     Cards shared by the agents section
+     ------------------------------------------------------------------ */
 
   .handled-row {
     display: grid;
@@ -693,7 +1010,11 @@ const concepts = [
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--color-steel);
+    /* .handled-card sits on --color-ivory — the plain --color-steel token
+       is ~3.7:1 there and fails AA for small text (see global.css), so this
+       opts into the darker on-light variant the rest of the site already
+       uses for text on light backgrounds. */
+    color: var(--color-steel-on-light);
     margin-bottom: var(--space-3);
   }
 
@@ -720,13 +1041,19 @@ const concepts = [
     color: var(--color-teal);
   }
 
+  /* .brushed-panel (global.css) supplies the surface itself — gradient,
+     hairline border, top highlight, grain. Re-asserted here (not just
+     relying on the shared class) because the earlier `.handled-card,
+     .price-card { background: var(--color-ivory) }` rule above shares
+     .brushed-panel's specificity and comes later in this same file, so it
+     would otherwise win. */
   .price-card {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: var(--color-navy);
-    border: none;
-    box-shadow: var(--shadow-tinted-dark);
+    background: linear-gradient(165deg, #161616 0%, #0a0a0a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), var(--shadow-tinted-dark);
   }
 
   .price-label {
@@ -739,9 +1066,9 @@ const concepts = [
   }
 
   .price-line {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-ivory);
     line-height: 1.5;
     font-variant-numeric: tabular-nums;
@@ -753,14 +1080,14 @@ const concepts = [
     font-size: 13px;
     font-weight: 400;
     font-variant-numeric: normal;
-    color: rgba(247, 245, 240, 0.6);
+    color: var(--color-caption);
   }
 
   .bundle-note-text {
     margin-top: var(--space-2);
     font-size: 13px;
     line-height: 1.5;
-    color: rgba(247, 245, 240, 0.7);
+    color: var(--color-muted);
   }
 
   .bundle-link {
@@ -768,7 +1095,7 @@ const concepts = [
     margin-top: var(--space-2);
     font-size: 13px;
     font-weight: 600;
-    color: var(--color-steel);
+    color: var(--color-amber);
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color var(--transition-fast);
@@ -779,97 +1106,270 @@ const concepts = [
     color: var(--color-ivory);
   }
 
-  /* Build-time comparison — a to-scale bar replaces the old two-card
-     layout. Same axis, same track width; the numbers are text labels,
-     never printed on the bar itself. */
-  .build-compare {
+  /* ------------------------------------------------------------------
+     THE RATIO — build-time comparison
+     ------------------------------------------------------------------ */
+
+  .ratio {
+    margin: var(--space-6) 0 var(--space-7);
+  }
+
+  .ratio-stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 9vw, 140px);
+    align-items: end;
+    height: clamp(240px, 36vw, 420px);
+  }
+
+  .ratio-col {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    max-width: 720px;
-    margin-bottom: var(--space-4);
-  }
-
-  .build-compare-row {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .build-compare-name {
-    font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-muted);
-  }
-
-  .build-compare-row--us .build-compare-name {
-    color: var(--color-ivory);
-  }
-
-  .build-compare-track {
-    position: relative;
-    width: 100%;
-    height: 10px;
-    background: rgba(247, 245, 240, 0.07);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .build-compare-bar {
+    align-items: flex-end;
     height: 100%;
-    border-radius: 2px;
-    background: rgba(247, 245, 240, 0.24);
   }
 
-  .build-compare-row--us .build-compare-bar {
-    background: linear-gradient(90deg, var(--color-teal), var(--color-steel));
-    box-shadow: 0 0 12px rgba(61, 107, 107, 0.5);
+  .ratio-bar {
+    position: relative;
+    display: block;
+    width: min(100%, 210px);
+    /* The dull monolith: a lot of mass, almost no light on it. */
+    background: linear-gradient(175deg, #2E2E2E 0%, #131313 62%, #0B0B0B 100%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  .build-compare-labels {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    font-size: 13px;
+  /* The brushed grain, only on the tall slab — the same whisper of
+     material the rest of the system uses. */
+  .ratio-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: repeating-linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 3px
+    );
   }
 
-  .build-compare-cost {
-    font-weight: 600;
+  /* The mirror floor: each slab's reflection falling away below the
+     horizon line, the gradient inverted so it reads as a true mirror. */
+  .ratio-bar::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    right: -1px;
+    height: min(100%, 74px);
+    pointer-events: none;
+    opacity: 0.3;
+    background: linear-gradient(175deg, #0B0B0B 0%, #131313 38%, #2E2E2E 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+    mask-image: linear-gradient(to bottom, #000, transparent);
+  }
+
+  /* The lit sliver. Tiny, and the only bright object in the frame. */
+  .ratio-bar--us {
+    background: linear-gradient(175deg, #FFFFFF 0%, #D8D8D8 46%, #8C8C8C 100%);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 34px rgba(216, 216, 216, 0.3), 0 0 90px rgba(216, 216, 216, 0.14);
+  }
+
+  .ratio-bar--us::before {
+    display: none;
+  }
+
+  .ratio-bar--us::after {
+    opacity: 0.42;
+    background: linear-gradient(175deg, #8C8C8C 0%, #D8D8D8 54%, #FFFFFF 100%);
+  }
+
+  /* The chart's baseline is the page's own horizon motif — same hairline,
+     same haze, standing the two slabs on the mirror floor. */
+  .ratio-horizon {
+    position: relative;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.28) 12%,
+      rgba(255, 255, 255, 0.85) 72%,
+      rgba(255, 255, 255, 0.28) 92%,
+      transparent
+    );
+  }
+
+  .ratio-horizon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -32px;
+    height: 64px;
+    pointer-events: none;
+    background: radial-gradient(ellipse 40% 100% at 72% 50%, rgba(255, 255, 255, 0.16), transparent 72%);
+    filter: blur(9px);
+  }
+
+  .ratio-labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 9vw, 140px);
+    margin-top: var(--space-5);
+  }
+
+  .ratio-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  .ratio-cost {
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
-    color: var(--color-ivory);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: rgba(242, 242, 242, 0.62);
   }
 
-  .build-compare-time {
+  .ratio-time {
+    margin-top: var(--space-1);
+    font-size: 13.5px;
+    line-height: 1.55;
     color: var(--color-muted);
   }
 
-  /* Concept builds — three from-scratch design passes standing in for a
-     portfolio that doesn't exist yet. Alternating rows, same idiom as How
-     It Works' client profiles, not three tiles in a grid. The
-     browser-chrome mockup is illustrative only (aria-hidden); the real,
-     accessible "not a real client" disclosure lives in the visible
-     .concept-tag text beside it. */
+  .ratio-label--us .ratio-name,
+  .ratio-label--us .ratio-cost {
+    color: var(--color-ivory);
+  }
+
+  .ratio-label--us .ratio-time {
+    color: rgba(242, 242, 242, 0.8);
+  }
+
+  /* ------------------------------------------------------------------
+     Website section closing band
+     ------------------------------------------------------------------ */
+
+  .site-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: center;
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-ivory);
+    border: 1px solid var(--color-line-on-light);
+    border-radius: var(--radius-md);
+  }
+
+  .site-band-price {
+    padding-left: var(--space-5);
+    border-left: 1px solid var(--color-line-on-light);
+  }
+
+  .site-price-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-steel-on-light);
+    margin-bottom: var(--space-2);
+  }
+
+  .site-price-line {
+    font-family: var(--font-mono);
+    font-size: 21px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+
+  .site-price-line + .site-price-line {
+    margin-top: var(--space-2);
+  }
+
+  .site-price-line span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    font-variant-numeric: normal;
+    color: var(--color-ink-muted);
+  }
+
+  /* ------------------------------------------------------------------
+     CONCEPT BUILDS — three compositions, not three rows
+     ------------------------------------------------------------------ */
+
   .concept-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-7);
-    margin-top: var(--space-6);
+    gap: clamp(64px, 10vw, 150px);
+    margin-top: var(--space-7);
   }
 
   .concept-row {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: var(--space-6);
+    gap: clamp(24px, 4vw, 64px);
+  }
+
+  /* 01 — shot close. Oversized frame bleeding off the right edge, copy in
+     a narrow column beside it. */
+  .concept-row--1 {
+    grid-template-columns: minmax(0, 0.58fr) minmax(0, 1.42fr);
     align-items: center;
   }
 
-  .concept-row--reverse {
-    grid-template-columns: 1fr 1.3fr;
+  .concept-row--1 .concept-visual {
+    --mock-base: 16.5;
+    margin-right: calc(-1 * (clamp(24px, 5vw, 64px) + 5vw));
   }
 
-  .concept-row--reverse .concept-visual {
-    order: 2;
+  /* 02 — shot far. A small frame stranded at the right of a wide empty
+     field, its name set large in the space that opens up. */
+  .concept-row--2 {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.52fr);
+    align-items: start;
+  }
+
+  .concept-row--2 .concept-visual {
+    --mock-base: 10.5;
+    margin-top: var(--space-5);
+  }
+
+  .concept-row--2 .concept-name {
+    font-size: clamp(30px, 4.4vw, 54px);
+  }
+
+  .concept-row--2 .concept-note {
+    max-width: 44ch;
+  }
+
+  /* 03 — the middle distance, bleeding off the left edge instead. */
+  .concept-row--3 {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.72fr);
+    align-items: end;
+  }
+
+  .concept-row--3 .concept-visual {
+    --mock-base: 13;
+    margin-left: calc(-1 * (clamp(24px, 5vw, 64px) + 4vw));
+  }
+
+  .concept-row--3 .concept-copy {
+    padding-bottom: var(--space-4);
   }
 
   .concept-visual {
@@ -877,9 +1377,10 @@ const concepts = [
   }
 
   .concept-frame {
+    font-size: calc(1px * var(--mock-base, 13));
     border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid rgba(247, 245, 240, 0.12);
+    border: 1px solid rgba(242, 242, 242, 0.12);
     box-shadow: var(--shadow-tinted-dark);
     transition: transform 0.4s var(--ease-out);
   }
@@ -891,66 +1392,69 @@ const concepts = [
   .concept-chrome {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: 10px 14px;
-    background: #14181f;
-    border-bottom: 1px solid rgba(247, 245, 240, 0.08);
+    gap: 1.6em;
+    padding: 0.8em 1.1em;
+    background: #141414;
+    border-bottom: 1px solid rgba(242, 242, 242, 0.08);
   }
 
   .concept-chrome-dots {
     display: flex;
-    gap: 5px;
+    gap: 0.38em;
     flex-shrink: 0;
   }
 
   .concept-chrome-dots i {
     display: block;
-    width: 7px;
-    height: 7px;
+    width: 0.54em;
+    height: 0.54em;
     border-radius: 50%;
-    background: rgba(247, 245, 240, 0.22);
+    background: rgba(242, 242, 242, 0.22);
   }
 
   .concept-chrome-url {
-    font-family: var(--font-body);
-    font-size: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.88em;
     font-variant-numeric: tabular-nums;
-    color: rgba(247, 245, 240, 0.4);
-    padding: 3px 10px;
-    background: rgba(247, 245, 240, 0.04);
+    color: rgba(242, 242, 242, 0.45);
+    padding: 0.22em 0.8em;
+    background: rgba(242, 242, 242, 0.04);
     border-radius: var(--radius-full);
   }
 
+  /* Every dimension inside the mockup is em-relative to --mock-base, so a
+     row can genuinely be "closer" or "further away" rather than just
+     wider or narrower. */
   .concept-screen {
     background: var(--cb);
     color: var(--cf);
-    padding: 22px 24px 30px;
+    padding: 1.7em 1.85em 2.3em;
   }
 
   .concept-mock-nav {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    margin-bottom: 28px;
+    gap: 1.4em;
+    margin-bottom: 2.15em;
   }
 
   .concept-mock-logo {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 2em;
+    height: 2em;
     margin-right: auto;
     font-family: var(--font-display);
-    font-size: 12px;
+    font-size: 0.92em;
     font-weight: 600;
     color: var(--cb);
     background: var(--ca);
-    border-radius: 6px;
+    border-radius: 0.46em;
   }
 
   .concept-mock-navitem {
-    font-size: 11px;
+    font-size: 0.85em;
     font-weight: 500;
     color: var(--cf);
     opacity: 0.65;
@@ -959,45 +1463,45 @@ const concepts = [
   .concept-mock-hero {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: var(--space-4);
+    gap: 2.4em;
     align-items: center;
   }
 
   .concept-mock-eyebrow {
-    font-size: 10px;
+    font-size: 0.77em;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ca);
-    margin-bottom: 8px;
+    margin-bottom: 0.62em;
   }
 
   .concept-mock-headline {
     font-family: var(--font-display);
-    font-size: 21px;
+    font-size: 1.62em;
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: var(--cf);
-    margin-bottom: 8px;
+    margin-bottom: 0.38em;
   }
 
   .concept-mock-sub {
-    font-size: 12px;
+    font-size: 0.92em;
     line-height: 1.55;
     color: var(--cf);
     opacity: 0.7;
     max-width: 32ch;
-    margin-bottom: 14px;
+    margin-bottom: 1.1em;
   }
 
   .concept-mock-cta {
     display: inline-block;
-    font-size: 11px;
+    font-size: 0.85em;
     font-weight: 600;
     color: var(--cb);
     background: var(--ca);
-    padding: 8px 14px;
+    padding: 0.62em 1.1em;
     border-radius: var(--radius-sm);
   }
 
@@ -1007,21 +1511,24 @@ const concepts = [
     background: var(--cp);
   }
 
-  /* Three concrete palettes, not one template with the accent swapped —
-     dark and functional for trades, light and unhurried for wellness,
-     warm and tactile for retail. */
+  /* Three concrete moods, not one template with the accent swapped — but
+     with no hue left to differentiate them, the job falls to contrast and
+     surface instead: darkest and highest-contrast for trades (utilitarian,
+     no-nonsense), lightest and softest for wellness (airy, unhurried), and
+     a mid-tone with a visible brushed-grain surface for retail (tactile —
+     texture standing in for the warmth color used to carry). */
   .concept-frame--trades {
-    --cb: #12181f;
-    --cf: #f2efe9;
-    --ca: #c9a46b;
-    --cp: linear-gradient(155deg, #1c2733 0%, #3a4756 100%);
+    --cb: #0A0A0A;
+    --cf: #F0F0F0;
+    --ca: #E0E0E0;
+    --cp: linear-gradient(155deg, #1A1A1A 0%, #3A3A3A 100%);
   }
 
   .concept-frame--wellness {
-    --cb: #f7f3ec;
-    --cf: #2b2621;
-    --ca: #6b8776;
-    --cp: linear-gradient(155deg, #d8cdb8 0%, #a8b8a0 100%);
+    --cb: #ECECEC;
+    --cf: #262626;
+    --ca: #8C8C8C;
+    --cp: linear-gradient(155deg, #D9D9D9 0%, #A8A8A8 100%);
   }
 
   .concept-frame--wellness .concept-mock-headline {
@@ -1029,10 +1536,28 @@ const concepts = [
   }
 
   .concept-frame--retail {
-    --cb: #231a14;
-    --cf: #f5eee3;
-    --ca: #d98e4a;
-    --cp: linear-gradient(155deg, #7a4a2c 0%, #c98a4a 100%);
+    --cb: #1C1C1C;
+    --cf: #F0F0F0;
+    --ca: #C4C4C4;
+    --cp: linear-gradient(155deg, #4A4A4A 0%, #8A8A8A 100%);
+  }
+
+  /* The one mockup that gets a visible grain overlay — same brushed-metal
+     whisper the rest of the redesign uses, but strong enough here to be
+     the differentiator hue would otherwise have carried. */
+  .concept-frame--retail .concept-screen {
+    position: relative;
+  }
+
+  .concept-frame--retail .concept-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1041,16 +1566,27 @@ const concepts = [
     }
   }
 
+  /* A ruled label rather than a pill — the disclosure still reads first,
+     it just isn't wearing a box. */
   .concept-tag {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: var(--space-3);
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--color-amber);
-    border: 1px solid rgba(var(--color-amber-rgb), 0.4);
-    border-radius: var(--radius-full);
+  }
+
+  .concept-tag::before {
+    content: '';
+    width: 26px;
+    height: 1px;
+    flex-shrink: 0;
+    background: var(--color-amber);
   }
 
   .concept-category {
@@ -1064,9 +1600,10 @@ const concepts = [
 
   .concept-name {
     font-family: var(--font-display);
-    font-size: clamp(24px, 2.8vw, 30px);
+    font-size: clamp(23px, 2.6vw, 32px);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    line-height: 1.06;
     color: var(--color-ivory);
     margin-bottom: var(--space-3);
   }
@@ -1085,27 +1622,143 @@ const concepts = [
     color: var(--color-ivory);
   }
 
-  /* Closing CTA */
+  /* Closing CTA — same graphite-to-black gradient every closing band on
+     the site now shares. */
   .wwd-cta {
-    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+    background:
+      radial-gradient(ellipse 60% 80% at 85% 0%, rgba(216, 216, 216, 0.08), transparent 60%),
+      linear-gradient(135deg, #3A3A3A 0%, #050505 100%);
   }
 
   .wwd-cta .btn {
     margin-top: var(--space-4);
   }
 
+  /* ------------------------------------------------------------------
+     Responsive — the geometry simplifies, it doesn't just shrink
+     ------------------------------------------------------------------ */
+
+  @media (max-width: 1040px) {
+    .agent-row--1 {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    }
+
+    .concept-row--1 {
+      grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+    }
+  }
+
   @media (max-width: 860px) {
-    .concept-row,
-    .concept-row--reverse {
+    /* Hero: the diagonal collapses to a single left rail — still oversized
+       and still split by the horizon, just no longer stepping right. */
+    .wwd-open {
+      min-height: 0;
+    }
+
+    .wwd-title-b {
+      margin-left: 0;
+    }
+
+    .wwd-title-c {
+      margin-left: 0;
+      margin-top: var(--space-3);
+      max-width: 26ch;
+    }
+
+    .wwd-open-stack {
+      gap: var(--space-5);
+    }
+
+    .wwd-lower-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    /* Agent rows: the stepped indents and the split figure/detail columns
+       both go — one column, figure over detail, the price still the
+       largest thing in each row. */
+    .agent-row,
+    .agent-row--1,
+    .agent-row--2,
+    .agent-row--3 {
+      grid-template-areas:
+        'fig'
+        'meta'
+        'detail';
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto auto;
+      padding-left: 0;
+      --indent: 0;
+    }
+
+    .agent-row--1 {
+      --fig-size: clamp(2.6rem, 13vw, 5rem);
+    }
+
+    .agent-row--2 {
+      --fig-size: clamp(1.8rem, 8vw, 3rem);
+    }
+
+    .agent-row--3 {
+      --fig-size: clamp(2.1rem, 10vw, 3.8rem);
+    }
+
+    .agent-detail,
+    .agent-row--1 .agent-detail {
+      margin-top: var(--space-4);
+    }
+
+    .handled-row {
       grid-template-columns: 1fr;
     }
 
-    .concept-row--reverse .concept-visual {
-      order: 0;
+    /* Concepts: every bleed and every uneven split resolves to one clean
+       stacked column, mockup above copy, at a single readable mock scale. */
+    .concept-row,
+    .concept-row--1,
+    .concept-row--2,
+    .concept-row--3 {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .concept-row--1 .concept-visual,
+    .concept-row--2 .concept-visual,
+    .concept-row--3 .concept-visual {
+      --mock-base: 12.5;
+      margin: 0;
+    }
+
+    .concept-row--2 .concept-name {
+      font-size: clamp(23px, 6vw, 32px);
+    }
+
+    .concept-row--3 .concept-copy {
+      padding-bottom: 0;
+    }
+
+    .section-head--offset {
+      margin-left: 0;
+    }
+
+    .site-band {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .site-band-price {
+      padding-left: 0;
+      padding-top: var(--space-4);
+      border-left: none;
+      border-top: 1px solid var(--color-line-on-light);
     }
   }
 
   @media (max-width: 640px) {
+    .wwd-open-upper {
+      padding: var(--space-5) 0 var(--space-4);
+    }
+
     .wwd-actions {
       flex-direction: column;
       align-items: stretch;
@@ -1116,8 +1769,29 @@ const concepts = [
       width: 100%;
     }
 
-    .handled-row {
-      grid-template-columns: 1fr;
+    .wwd-subhead {
+      max-width: none;
+    }
+
+    /* The ratio keeps its vertical 8:1 drama on mobile — that contrast is
+       the whole point of the section — on a shorter stage with the columns
+       pulled together. */
+    .ratio-stage {
+      height: clamp(200px, 52vw, 260px);
+      gap: var(--space-3);
+    }
+
+    .ratio-bar {
+      width: min(100%, 120px);
+    }
+
+    .ratio-labels {
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+
+    .ratio-cost {
+      font-size: clamp(1.05rem, 5.4vw, 1.5rem);
     }
 
     .concept-mock-hero {

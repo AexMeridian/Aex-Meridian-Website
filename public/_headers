@@ -11,3 +11,21 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+
+# Astro's own build output — every file under /_astro/ has its content hash
+# baked into the filename (e.g. Footer.BEJljECZ.css), so a changed file is a
+# new URL, never a stale cache. Safe to cache for a full year as immutable.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images and video in /public keep a fixed filename even when the file
+# behind them is swapped out later, so these get a long-but-revalidating
+# cache instead of the hashed assets' immutable one — a returning visitor
+# gets the cached copy without a re-download, but a browser that still has
+# it past max-age checks back with the origin rather than trusting a
+# filename that could now point at different content.
+/images/*
+  Cache-Control: public, max-age=604800, must-revalidate
+
+/videos/*
+  Cache-Control: public, max-age=604800, must-revalidate

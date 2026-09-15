@@ -91,10 +91,13 @@ const founderPhotoExists = fs.existsSync(path.join(process.cwd(), 'public/images
     margin-bottom: 2px;
   }
 
+  /* Brighter than --color-muted's usual body-copy role — this is the site's
+     highest-trust moment (a named person's direct quote), not a paragraph
+     to skim past. */
   .founder-note-body {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--color-muted);
+    color: rgba(242, 242, 242, 0.85);
   }
 
   .founder-note-body a {

@@ -21,8 +21,8 @@
     background: linear-gradient(
       to bottom,
       transparent,
-      rgba(247, 245, 240, 0.14) 8%,
-      rgba(247, 245, 240, 0.14) 92%,
+      rgba(242, 242, 242, 0.14) 8%,
+      rgba(242, 242, 242, 0.14) 92%,
       transparent
     );
     pointer-events: none;
@@ -36,8 +36,8 @@
     height: 7px;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    background: hsl(var(--accent-hue, 205) 55% 62%);
-    box-shadow: 0 0 8px 1px hsl(var(--accent-hue, 205) 55% 62% / 0.55);
+    background: var(--color-steel);
+    box-shadow: 0 0 8px 1px rgba(var(--color-steel-rgb), 0.55);
   }
 
   .meridian-rail :global(.meridian-rail-knot) {
@@ -58,7 +58,7 @@
   .meridian-rail :global(.meridian-rail-knot-tick) {
     width: 12px;
     height: 1px;
-    background: hsl(var(--accent-hue, 205) 55% 62%);
+    background: var(--color-steel);
   }
 
   .meridian-rail :global(.meridian-rail-knot-label) {

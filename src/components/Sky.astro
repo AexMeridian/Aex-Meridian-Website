@@ -16,13 +16,20 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(to bottom, var(--sky-top, #050810), var(--sky-horizon, #0b111c));
+    background: linear-gradient(to bottom, var(--sky-top, #050505), var(--sky-horizon, #050505));
   }
 
   #sky-canvas {
     width: 100%;
     height: 100%;
     display: block;
+    /* Belt-and-suspenders: whatever the WebGL draw outputs, this guarantees
+       zero hue makes it to the screen. Safe on this element specifically —
+       a filter on .sky-field itself would still leave .sky-field's own
+       `position: fixed` resolved against the viewport as normal; the only
+       thing filter changes is the containing block for ITS descendants
+       with fixed/absolute position, and the canvas has neither. */
+    filter: grayscale(1);
   }
 
   /* The horizon brightens locally under the cursor — the sky's own box IS

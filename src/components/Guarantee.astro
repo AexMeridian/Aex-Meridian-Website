@@ -33,6 +33,10 @@ const points = [
         </div>
       ))}
     </div>
+
+    <p class="guarantee-cta" data-reveal>
+      <a href="/#contact">Request your free demo &rarr;</a>
+    </p>
   </div>
 </section>
 
@@ -68,6 +72,30 @@ const points = [
     font-size: 15px;
     line-height: 1.7;
     color: var(--color-muted);
+  }
+
+  /* Turns the guarantee from reassurance into an ask — the "see it first"
+     point above is a promise a visitor can act on right now, not just a
+     trust signal to read past. */
+  .guarantee-cta {
+    margin-top: var(--space-6);
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .guarantee-cta a {
+    color: var(--color-amber);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: var(--transition-fast);
+  }
+
+  .guarantee-cta a:hover,
+  .guarantee-cta a:focus-visible {
+    color: var(--color-ivory);
   }
 
   @media (max-width: 640px) {

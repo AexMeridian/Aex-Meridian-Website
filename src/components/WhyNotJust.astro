@@ -105,7 +105,7 @@ const rows = [
   }
 
   .compare-head {
-    border-bottom: 1px solid rgba(247, 245, 240, 0.16);
+    border-bottom: 1px solid rgba(242, 242, 242, 0.16);
   }
 
   .compare-cell {
@@ -132,8 +132,12 @@ const rows = [
     color: var(--color-ivory);
   }
 
+  /* The reader's own column — was --color-teal, a near-black shade tone
+     that computed to ~1.8:1 on this section's dark background (nearly
+     invisible). --color-amber is the site's one accent color, reserved for
+     exactly this "the right choice" role. */
   .compare-head .compare-col-head.is-us {
-    color: var(--color-teal);
+    color: var(--color-amber);
   }
 
   /* Card fallback — hidden on desktop, where the table reads fine. */
@@ -158,7 +162,7 @@ const rows = [
     }
 
     .compare-card.is-us {
-      border-top-color: var(--color-teal);
+      border-top-color: var(--color-amber);
     }
 
     .compare-card-name {
@@ -170,7 +174,7 @@ const rows = [
     }
 
     .compare-card.is-us .compare-card-name {
-      color: var(--color-teal);
+      color: var(--color-amber);
     }
 
     .compare-card-list {

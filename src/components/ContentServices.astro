@@ -34,9 +34,9 @@ const offerings = [
         <p class="eyebrow">AI agents</p>
         <h2 class="section-title">The agent that catches what you'd otherwise miss</h2>
         <p class="section-subtext">
-          Calls, messages, and leads — an AI agent answers, texts back, and follows
-          up so your business stays responsive around the clock, without you
-          touching anything.
+          About 62% of small-business calls go unanswered. An AI agent answers,
+          texts back a missed one, and follows up on a lead so your business
+          stays responsive around the clock, without you touching anything.
         </p>
       </div>
 
@@ -54,6 +54,9 @@ const offerings = [
         ))}
       </ul>
 
+      <p class="content-cta">
+        <a href="/#contact">See what an agent would catch for you &rarr;</a>
+      </p>
       <p class="content-closing">
         <a href="/what-we-do">See the full comparison &rarr;</a>
       </p>
@@ -70,8 +73,9 @@ const offerings = [
     <div class="content-proof" data-reveal data-magnetic="card">
       <p class="content-proof-number">85<span>%</span></p>
       <p class="content-proof-body">
-        of people whose call goes unanswered never call back — most call a
-        competitor instead.
+        of callers whose call goes unanswered never call back — worth an
+        estimated $126,000 a year in lost business for the average service
+        company.
       </p>
       <p class="content-proof-source">Source: ServiceTitan; 411 Locals, 2016.</p>
     </div>
@@ -101,13 +105,6 @@ const offerings = [
     color: var(--color-ivory);
   }
 
-  .section-subtext {
-    margin-top: var(--space-2);
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--color-muted);
-  }
-
   /* Stacked, not a 2-up grid — three agent lines now, each a full
      sentence, inside a column that's already just over half the section
      width (see .content-split). */
@@ -134,7 +131,7 @@ const offerings = [
     width: 40px;
     height: 40px;
     border-radius: var(--radius-sm);
-    background: rgba(107, 135, 168, 0.16);
+    background: rgba(140, 140, 140, 0.16);
     color: var(--color-steel);
   }
 
@@ -158,17 +155,48 @@ const offerings = [
     color: var(--color-muted);
   }
 
-  .content-closing {
+  /* The contextual ask right where the ROI stat lands — a step lighter than
+     the site's primary "Get your free demo" CTA (same idea, phrased as what
+     the visitor gets rather than what they have to book), and visually the
+     stronger of the two links in this closing block since it's the one
+     actually worth acting on here. */
+  .content-cta {
     margin-top: var(--space-5);
+  }
+
+  .content-cta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-navy);
+    background: var(--color-ivory);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .content-cta a:hover,
+  .content-cta a:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .content-closing {
+    margin-top: var(--space-3);
     font-family: var(--font-display);
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.02em;
   }
 
   .content-closing a {
-    color: var(--color-steel);
-    text-decoration: none;
+    color: var(--color-amber);
+    text-decoration: underline;
+    text-underline-offset: 3px;
     transition: var(--transition-fast);
   }
 
@@ -202,7 +230,7 @@ const offerings = [
   .content-proof:focus-within {
     transform: translateY(-6px);
     box-shadow: var(--shadow-glow-steel);
-    border-color: rgba(107, 135, 168, 0.4);
+    border-color: rgba(140, 140, 140, 0.4);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -236,13 +264,13 @@ const offerings = [
     line-height: 1.6;
     max-width: 32ch;
     margin-inline: auto;
-    color: rgba(247, 245, 240, 0.85);
+    color: rgba(242, 242, 242, 0.85);
   }
 
   .content-proof-source {
     margin-top: var(--space-4);
     font-size: 12px;
-    color: rgba(247, 245, 240, 0.5);
+    color: var(--color-caption);
   }
 
   @media (max-width: 860px) {

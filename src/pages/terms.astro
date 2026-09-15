@@ -182,7 +182,10 @@ const lastUpdated = 'July 8, 2026';
   }
 
   .legal-container :global(a) {
-    color: var(--color-steel);
+    /* .legal-body is --color-white — plain --color-steel is ~3.7:1 there and
+       fails AA for this body-text link size; on-light variant matches the
+       rest of the site's light-background convention. */
+    color: var(--color-steel-on-light);
     text-decoration: underline;
   }
 </style>

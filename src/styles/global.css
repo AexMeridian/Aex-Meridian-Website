@@ -1,25 +1,44 @@
 :root {
-  /* Brand */
-  --color-navy: #0A0E14;
-  --color-navy-surface: #10151D;
-  --color-steel: #6B87A8;
-  /* --color-steel is ~3.7:1 on white/ivory — fails WCAG AA for small text
-     (it's fine on the dark hero sections, ~5.2:1). This darker variant is
-     what .eyebrow uses by default, since most eyebrows sit on light
-     section backgrounds; the hero-specific eyebrow classes explicitly
-     opt back into --color-steel where the background is dark. */
-  --color-steel-on-light: #4A617A;
-  --color-teal: #3D6B6B;
-  --color-ivory: #F7F5F0;
+  /* Brand — monochrome system, pulled directly from the brushed-chrome
+     reference photo's own tonal range (near-black field, graphite shade,
+     brushed mid-gray, hot silver highlight) rather than a hue dial turned
+     to zero on the old navy/teal/steel palette. See
+     C:\Users\caleb\.claude\plans\here-is-the-reference-agile-rivest.md. */
+  --color-navy: #050505;
+  --color-navy-surface: #111111;
+  --color-steel: #8C8C8C;
+  /* Darker variant for .eyebrow's default (most eyebrows sit on light
+     section backgrounds); hero-specific eyebrow classes opt back into
+     --color-steel where the background is dark. */
+  --color-steel-on-light: #4D4D4D;
+  --color-teal: #3A3A3A;
+  --color-ivory: #F2F2F2;
   --color-white: #FFFFFF;
-  --color-line: rgba(247, 245, 240, 0.1);
-  --color-muted: rgba(247, 245, 240, 0.62);
+  --color-line: rgba(242, 242, 242, 0.1);
+  /* Body-copy tier — a real sentence a visitor is meant to read (ledes, FAQ
+     answers, benefit lists), not a footnote. Warmed slightly off neutral
+     (a taupe, not a hue) and brightened from the original 0.62 alpha, which
+     read as washed-out rather than restrained — ~8.5:1 on --color-navy. */
+  --color-muted: rgba(238, 231, 219, 0.72);
+  /* Caption/meta tier — genuinely incidental text (source citations, unit
+     labels, caveats) that should read visibly quieter than --color-muted,
+     not identical to it. ~5.4:1 on --color-navy. */
+  --color-caption: #8F8878;
+  /* RGB triples of the tokens above, for the many translucency overlays
+     across the site that need an alpha channel var() can't add to a hex
+     token directly — mirrors the --color-amber-rgb pattern below. */
+  --color-ivory-rgb: 242, 242, 242;
+  --color-steel-rgb: 140, 140, 140;
+  --color-teal-rgb: 58, 58, 58;
+  --color-navy-rgb: 5, 5, 5;
 
-  /* Third accent — used only for the pricing page's per-plan hover glow,
-     so each plan card has a genuinely distinct color to shift toward.
-     Keeps the site at three brand accents total (teal, steel, amber). */
-  --color-amber: #C9A46B;
-  --color-amber-rgb: 201, 164, 107;
+  /* Third accent — the site's one real color, reserved for anything
+     actionable or meant to read as the winning choice (price-monument
+     figures, the pricing-table's own highlighted column, secondary CTA
+     links). A warm brass/champagne gold, not a saturated "AI gold" —
+     ~9:1 on --color-navy, so it holds up even at body-text sizes. */
+  --color-amber: #C9A876;
+  --color-amber-rgb: 201, 168, 118;
 
   /* Named moments along the sun's arc (see --sun-elevation/state/sun.js) —
      "meridian" is literally the sun crossing its highest point, so these
@@ -34,12 +53,14 @@
   --color-dusk: #8B6F7A;
 
   /* Text/lines for light-background sections (ivory/white) */
-  --color-ink: #14181F;
-  --color-ink-muted: rgba(20, 24, 31, 0.64);
-  --color-line-on-light: rgba(20, 24, 31, 0.12);
+  --color-ink: #111111;
+  /* Warmed to match --color-muted's role on dark sections — ~7.8:1 on
+     --color-ivory. */
+  --color-ink-muted: rgba(30, 26, 20, 0.72);
+  --color-line-on-light: rgba(17, 17, 17, 0.12);
 
   /* Typography */
-  --font-display: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   /* Reserved for numerals and data specifically — prices, stats, technical
      labels — so figures read as engineered/precise rather than borrowing
@@ -83,41 +104,46 @@
   --star-opacity: 1;
   --text-warmth: 0;
   --accent-hue: 205;
-  --sky-top: #050810;
-  --sky-horizon: #0b111c;
+  /* Flattened to solid near-black — raf-loop.js still writes --sky-top/
+     --sky-horizon every frame (harmless now, nothing renders a hue from
+     them), and the sky's own canvas gets a belt-and-suspenders grayscale
+     filter in Sky.astro in case its WebGL draw ever outputs color. */
+  --sky-top: #050505;
+  --sky-horizon: #050505;
   --shadow-x: 18px;
   --shadow-y: 20px;
   --shadow-blur: 10px;
   --shadow-alpha: 0.34;
-  --color-accent: hsl(var(--accent-hue) 42% 58%);
+  /* No longer hsl(accent-hue) — the accent system is fully desaturated. */
+  --color-accent: #9A9A9A;
 
   /* Shadows — always layered: a tight contact shadow plus a soft ambient
      falloff, never a single flat blur. Geometry (direction + length) comes
      from the sun primitives above; only the layer weighting is static. */
-  --shadow-sm: calc(var(--shadow-x) * 0.3) calc(var(--shadow-y) * 0.3) calc(var(--shadow-blur) * 0.4) rgba(10, 14, 20, var(--shadow-alpha)),
-    calc(var(--shadow-x) * 0.6) calc(var(--shadow-y) * 0.6) calc(var(--shadow-blur) * 0.8) rgba(10, 14, 20, calc(var(--shadow-alpha) * 0.65));
-  --shadow-md: var(--shadow-x) var(--shadow-y) var(--shadow-blur) rgba(10, 14, 20, var(--shadow-alpha)),
-    calc(var(--shadow-x) * 1.8) calc(var(--shadow-y) * 1.8) calc(var(--shadow-blur) * 2.2) rgba(10, 14, 20, calc(var(--shadow-alpha) * 0.55)),
-    calc(var(--shadow-x) * 3.2) calc(var(--shadow-y) * 3.2) calc(var(--shadow-blur) * 3.6) rgba(10, 14, 20, calc(var(--shadow-alpha) * 0.4));
-  --shadow-lg: calc(var(--shadow-x) * 1.4) calc(var(--shadow-y) * 1.4) calc(var(--shadow-blur) * 1.3) rgba(10, 14, 20, var(--shadow-alpha)),
-    calc(var(--shadow-x) * 3.4) calc(var(--shadow-y) * 3.4) calc(var(--shadow-blur) * 3.2) rgba(10, 14, 20, calc(var(--shadow-alpha) * 0.6)),
-    calc(var(--shadow-x) * 6) calc(var(--shadow-y) * 6) calc(var(--shadow-blur) * 5.6) rgba(10, 14, 20, calc(var(--shadow-alpha) * 0.45));
+  --shadow-sm: calc(var(--shadow-x) * 0.3) calc(var(--shadow-y) * 0.3) calc(var(--shadow-blur) * 0.4) rgba(0, 0, 0, var(--shadow-alpha)),
+    calc(var(--shadow-x) * 0.6) calc(var(--shadow-y) * 0.6) calc(var(--shadow-blur) * 0.8) rgba(0, 0, 0, calc(var(--shadow-alpha) * 0.65));
+  --shadow-md: var(--shadow-x) var(--shadow-y) var(--shadow-blur) rgba(0, 0, 0, var(--shadow-alpha)),
+    calc(var(--shadow-x) * 1.8) calc(var(--shadow-y) * 1.8) calc(var(--shadow-blur) * 2.2) rgba(0, 0, 0, calc(var(--shadow-alpha) * 0.55)),
+    calc(var(--shadow-x) * 3.2) calc(var(--shadow-y) * 3.2) calc(var(--shadow-blur) * 3.6) rgba(0, 0, 0, calc(var(--shadow-alpha) * 0.4));
+  --shadow-lg: calc(var(--shadow-x) * 1.4) calc(var(--shadow-y) * 1.4) calc(var(--shadow-blur) * 1.3) rgba(0, 0, 0, var(--shadow-alpha)),
+    calc(var(--shadow-x) * 3.4) calc(var(--shadow-y) * 3.4) calc(var(--shadow-blur) * 3.2) rgba(0, 0, 0, calc(var(--shadow-alpha) * 0.6)),
+    calc(var(--shadow-x) * 6) calc(var(--shadow-y) * 6) calc(var(--shadow-blur) * 5.6) rgba(0, 0, 0, calc(var(--shadow-alpha) * 0.45));
 
   /* Tinted variants — used deliberately in place of the neutral shadows
-     above where a card/element sits directly on brand-colored ground
-     (teal-tinted on light ivory sections, steel glow on dark-bleed
-     sections), not a blanket replacement. */
-  --shadow-tinted-light: 0 2px 4px rgba(61, 107, 107, 0.05), 0 8px 24px rgba(61, 107, 107, 0.1),
-    0 20px 40px rgba(61, 107, 107, 0.08);
-  --shadow-tinted-dark: 0 2px 4px rgba(107, 135, 168, 0.08), 0 8px 28px rgba(107, 135, 168, 0.16),
-    0 24px 48px rgba(107, 135, 168, 0.12);
+     above where a card/element sits directly on brand-colored ground.
+     Now graphite-tinted (teal's role) and brushed-gray-tinted (steel's
+     role) instead of hue-tinted, not a blanket replacement. */
+  --shadow-tinted-light: 0 2px 4px rgba(58, 58, 58, 0.05), 0 8px 24px rgba(58, 58, 58, 0.1),
+    0 20px 40px rgba(58, 58, 58, 0.08);
+  --shadow-tinted-dark: 0 2px 4px rgba(140, 140, 140, 0.08), 0 8px 28px rgba(140, 140, 140, 0.16),
+    0 24px 48px rgba(140, 140, 140, 0.12);
 
   /* Glow variants — hover-only, deliberately brighter and wider than the
      resting tinted shadows above. Used by .hover-glow/.hover-glow--steel. */
-  --shadow-glow-teal: 0 4px 10px rgba(61, 107, 107, 0.16), 0 16px 40px rgba(61, 107, 107, 0.26),
-    0 32px 72px rgba(61, 107, 107, 0.18);
-  --shadow-glow-steel: 0 4px 10px rgba(107, 135, 168, 0.2), 0 16px 44px rgba(107, 135, 168, 0.32),
-    0 32px 76px rgba(107, 135, 168, 0.22);
+  --shadow-glow-teal: 0 4px 10px rgba(58, 58, 58, 0.16), 0 16px 40px rgba(58, 58, 58, 0.26),
+    0 32px 72px rgba(58, 58, 58, 0.18);
+  --shadow-glow-steel: 0 4px 10px rgba(140, 140, 140, 0.2), 0 16px 44px rgba(140, 140, 140, 0.32),
+    0 32px 76px rgba(140, 140, 140, 0.22);
 
   /* Transitions */
   --transition-fast: all 0.15s ease;
@@ -143,10 +169,11 @@ body {
   margin: 0;
   padding: 0;
   background: var(--color-navy);
-  /* Drifts from near-white toward warm off-white as the sun rises —
-     text-warmth is written by raf-loop.js; the color-mix keeps the default
-     (0%) identical to the plain --color-ivory this replaced. */
-  color: color-mix(in srgb, var(--color-ivory), #ffedd2 calc(var(--text-warmth, 0) * 100%));
+  /* raf-loop.js still writes --text-warmth every frame (harmless — the
+     mix target is --color-ivory itself now, so blending toward it at any
+     ratio still resolves to plain --color-ivory). The old warm off-white
+     drift was a color, and this system no longer has any. */
+  color: color-mix(in srgb, var(--color-ivory), var(--color-ivory) calc(var(--text-warmth, 0) * 100%));
 }
 
 body {
@@ -301,14 +328,6 @@ html {
   color: var(--color-ivory);
 }
 
-/* editorial — plain white, asymmetric split; the alternating side is set
-   per-usage with a modifier class (.mode-editorial--reverse) rather than
-   baked in here, so a row of these can flip left/right. */
-.mode-editorial {
-  background: var(--color-white);
-  color: var(--color-ink);
-}
-
 /* glow — the site never leaves navy again. Two earlier attempts represented
    "light content" as an opaque white/ivory shape sitting on the dark canvas
    (a flat rectangle, then a rounded panel, then a ridge-silhouette panel) —
@@ -348,12 +367,12 @@ html {
   pointer-events: none;
   background: radial-gradient(
       ellipse 70% 55% at 20% 0%,
-      rgba(107, 135, 168, calc(var(--wash-glow) * 0.22)),
+      rgba(140, 140, 140, calc(var(--wash-glow) * 0.22)),
       transparent 65%
     ),
     radial-gradient(
       ellipse 60% 45% at 85% 100%,
-      rgba(61, 107, 107, calc(var(--wash-glow) * 0.18)),
+      rgba(58, 58, 58, calc(var(--wash-glow) * 0.18)),
       transparent 70%
     );
   transition: opacity 0.6s ease;
@@ -370,6 +389,43 @@ html {
   }
 }
 
+/* Brushed panel — the monochrome material system's card surface,
+   translating the reference photo's brushed metal into CSS: a near-black-
+   to-charcoal gradient, a hairline border, a soft inset top highlight (a
+   beveled edge catching light from the same upper-right direction every
+   other highlight on these pages uses), and a whisper of diagonal grain —
+   never strong enough to read as "texture" at a glance. Used wherever a
+   dark card-like surface appears, so materials read as one system across
+   pages instead of a different treatment per component. */
+.brushed-panel {
+  position: relative;
+  background: linear-gradient(165deg, #161616 0%, #0a0a0a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.brushed-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: repeating-linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.brushed-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Scroll-progress meridian — a slim line tracking read position, fixed to
    the viewport top. Purely decorative/orientational, so it's invisible
    under reduced motion rather than jumping in increments. */
@@ -382,13 +438,8 @@ html {
   z-index: 1000;
   transform-origin: left;
   transform: scaleX(0);
-  /* Cold slate-blue to warm gold as the sun rises — the one accent hue,
-     see --accent-hue in :root. */
-  background: linear-gradient(
-    90deg,
-    hsl(calc(var(--accent-hue) - 15) 40% 45%),
-    hsl(var(--accent-hue) 58% 62%)
-  );
+  /* Flat graphite-to-silver — no accent hue left to track the sun with. */
+  background: linear-gradient(90deg, #6E6E6E, #B0B0B0);
   pointer-events: none;
 }
 
@@ -447,7 +498,7 @@ html {
 }
 
 .page-hero-actions .btn-ghost {
-  border-color: rgba(247, 245, 240, 0.35);
+  border-color: rgba(242, 242, 242, 0.35);
 }
 
 .page-hero-actions .btn-ghost:hover {
@@ -524,7 +575,7 @@ html {
 .cta-sub {
   margin-top: var(--space-2);
   font-size: 15px;
-  color: rgba(247, 245, 240, 0.7);
+  color: rgba(242, 242, 242, 0.7);
 }
 
 .cta-guarantee {
@@ -536,7 +587,7 @@ html {
   color: var(--color-ivory);
   border: 1px solid var(--color-steel);
   border-radius: var(--radius-full, 999px);
-  background: rgba(107, 135, 168, 0.12);
+  background: rgba(140, 140, 140, 0.12);
 }
 
 /* Section heading — one shared definition sized from the type scale
@@ -563,6 +614,18 @@ html {
   width: 56px;
   height: 1px;
   background: linear-gradient(90deg, var(--color-teal), var(--color-steel), transparent);
+}
+
+/* Was redeclared per-page with drift (16px on one page, 17px elsewhere) —
+   consolidated here as the one shared rule. font-weight: 500 (Inter is
+   already loaded at that weight) gives the page's most load-bearing
+   secondary sentence more built substance than default-400 gray. */
+.section-subtext {
+  margin-top: var(--space-2);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--color-muted);
 }
 
 /* The meridian line — a short gradient rule under every eyebrow. The name
@@ -603,11 +666,14 @@ html {
   }
 }
 
-/* Section seams — a thin glowing meridian line at the boundary between
-   sections, standing in for a hard color cut or an <hr>. Draws in from the
-   center as the section scrolls into view (same IntersectionObserver in
-   rise.js that drives [data-reveal], toggling .in-view on the .seam
-   element itself) rather than sitting fully visible from first paint. */
+/* Section seams — "the horizon," the recurring system element the whole
+   monochrome redesign hangs on: a thin line where the reference photo's
+   mirror floor meets the dark field, plus the soft atmospheric haze that
+   sits on that line, standing in for a hard color cut or an <hr>. Draws in
+   from the center as the section scrolls into view (same
+   IntersectionObserver in rise.js that drives [data-reveal], toggling
+   .in-view on the .seam element itself) rather than sitting fully visible
+   from first paint. */
 .seam {
   position: relative;
 }
@@ -625,22 +691,45 @@ html {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-teal) 25%,
-    var(--color-steel) 50%,
-    var(--color-teal) 75%,
+    rgba(255, 255, 255, 0.55) 50%,
     transparent
   );
-  opacity: 0.55;
-  filter: drop-shadow(0 0 6px rgba(61, 107, 107, 0.4));
+  opacity: 0.7;
+}
+
+/* The haze — a wide, soft, low-opacity glow straddling the horizon line,
+   the one atmospheric touch translated from the photo's fog. Fades in
+   rather than drawing in, so it reads as ambient light, not a shape. */
+.seam::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(640px, 92%);
+  height: 60px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse 50% 100% at 50% 50%, rgba(255, 255, 255, 0.12), transparent 75%);
+  filter: blur(6px);
+  opacity: 0;
+  transition: opacity 1s var(--ease-out) 0.15s;
+  pointer-events: none;
 }
 
 .seam.in-view::before {
   transform: translateX(-50%) scaleX(1);
 }
 
+.seam.in-view::after {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .seam::before {
     transform: translateX(-50%) scaleX(1);
+  }
+
+  .seam::after {
+    opacity: 1;
   }
 }
 
@@ -773,64 +862,5 @@ html {
 @media (prefers-reduced-motion: reduce) {
   [data-magnetic] {
     transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  }
-}
-
-/* Cinematic hover glow — lifts a card and brightens its border/shadow into
-   the matching glow token on hover/focus. Teal is the default (used on
-   ivory/editorial sections); .hover-glow--steel is for cards that sit on
-   dark-bleed backgrounds, matching the same light/dark tinted-shadow split
-   already established above. */
-.hover-glow {
-  position: relative;
-  transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out),
-    border-color 0.35s var(--ease-out);
-}
-
-/* Cursor as a second light source — see src/scripts/pointerLight.js.
-   background-attachment: fixed makes the gradient's coordinates track the
-   viewport rather than this card's own box, so the same light source
-   appears to pass consistently across every card on the page instead of
-   each one computing its own local highlight. */
-.hover-glow::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: inherit;
-  opacity: calc(var(--pointer-active, 0) * 0.5);
-  background: radial-gradient(
-    circle 260px at var(--pointer-x, 50vw) var(--pointer-y, 50vh),
-    rgba(255, 255, 255, 0.16),
-    transparent 70%
-  );
-  background-attachment: fixed;
-}
-
-.hover-glow:hover,
-.hover-glow:focus-within {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-glow-teal);
-  border-color: rgba(61, 107, 107, 0.4);
-}
-
-.hover-glow--steel:hover,
-.hover-glow--steel:focus-within {
-  box-shadow: var(--shadow-glow-steel);
-  border-color: rgba(107, 135, 168, 0.45);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hover-glow,
-  .hover-glow--steel {
-    transition: box-shadow 0.35s ease, border-color 0.35s ease;
-  }
-
-  .hover-glow:hover,
-  .hover-glow:focus-within,
-  .hover-glow--steel:hover,
-  .hover-glow--steel:focus-within {
-    transform: none;
   }
 }

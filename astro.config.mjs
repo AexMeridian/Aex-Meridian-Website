@@ -13,6 +13,18 @@ export default defineConfig({
   // 'ignore' closes off a duplicate-content path (/pricing vs /pricing/)
   // that the canonical tag would otherwise have to paper over.
   trailingSlash: 'never',
+  // Every internal link prefetches its target page's HTML on hover/focus
+  // (a <link rel="prefetch">, not a fetch of the full asset graph) — by the
+  // time PageTransition.astro's click handler finishes its wipe animation
+  // and hands off to a real navigation, the next page is often already in
+  // the browser's cache. Astro's own prefetch script backs off automatically
+  // on Save-Data / slow connections, and this needs no per-link markup
+  // (prefetchAll applies it site-wide) since none of the nav/footer/in-body
+  // links opted in individually.
+  prefetch: {
+    defaultStrategy: 'hover',
+    prefetchAll: true,
+  },
   // Off by default — the toolbar's fixed-position overlay was repeatedly
   // mistaken for a real site element during local review. It never ships
   // (dev/preview-only), but disabling it here keeps local screenshots

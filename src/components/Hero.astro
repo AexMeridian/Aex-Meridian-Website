@@ -40,7 +40,7 @@
       </p>
       <div class="hero-actions">
         <a href="/#contact" class="btn btn-primary btn-shimmer" data-magnetic>
-          <span>Book a free consultation</span>
+          <span>Get your free demo</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
         <a href="/how-it-works" class="btn btn-ghost btn-shimmer" data-magnetic>
@@ -315,11 +315,23 @@
       // clip's own duration rather than polling every frame, so this stays
       // idle between swaps instead of adding another always-on loop.
       const CROSSFADE_SECONDS = 1;
-      videoB.preload = 'auto';
 
       const cycle = (current: HTMLVideoElement, next: HTMLVideoElement) => {
         const arm = () => {
           const delay = Math.max(0, (current.duration - CROSSFADE_SECONDS) * 1000);
+
+          // next shares its src with current (same clip, offset for the
+          // crossfade) — starting its own fetch immediately at page load
+          // would double the hero's initial bandwidth draw for no visible
+          // benefit that early. Waiting a couple seconds into playback
+          // instead lets that first fetch (and whatever else is loading
+          // above the fold) go first, while still starting early enough —
+          // capped well before the swap itself — to be fully buffered by
+          // the time it's actually needed.
+          const preloadDelay = Math.min(2500, Math.max(0, delay - 1000));
+          window.setTimeout(() => {
+            next.preload = 'auto';
+          }, preloadDelay);
           window.setTimeout(() => {
             next.currentTime = 0;
             next.play().catch(() => {});

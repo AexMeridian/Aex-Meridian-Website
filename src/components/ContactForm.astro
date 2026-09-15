@@ -12,11 +12,12 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
 <section class="section contact seam" id="contact">
   <div class="container contact-grid">
     <div class="contact-intro" data-reveal>
-      <p class="eyebrow">Get in Touch</p>
-      <h2 class="section-title">Let's talk about your business.</h2>
+      <p class="eyebrow">Request your free demo</p>
+      <h2 class="section-title">See what an agent would catch for you.</h2>
       <p class="contact-copy">
-        Reach out directly, or send a few details below and we'll get back to you within
-        one business day.
+        Tell us about your business and we'll show you what an AI agent looks like
+        for it — reach out directly, or send a few details below and we'll get
+        back to you within one business day.
       </p>
 
       <div class="contact-direct">
@@ -69,8 +70,8 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
 
         <div class="form-row-split">
           <div class="form-row">
-            <label for="phone">Phone <span class="optional">(optional)</span></label>
-            <input type="tel" id="phone" name="phone" autocomplete="tel" />
+            <label for="phone">Business phone <span class="optional">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="So we can show you what a call would sound like" />
           </div>
 
           <div class="form-row">
@@ -80,12 +81,12 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
         </div>
 
         <div class="form-row">
-          <label for="message">What would you like us to know?</label>
-          <textarea id="message" name="message" rows="4" placeholder="Tell us a bit about your business and what you're hoping for"></textarea>
+          <label for="message">Tell us about your business</label>
+          <textarea id="message" name="message" rows="4" placeholder="What you do, and what a missed call or lead usually costs you"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary btn-shimmer form-submit" data-magnetic>
-          <span class="form-submit-label">Send message</span>
+          <span class="form-submit-label">Request my demo</span>
           <span class="btn-arrow">&rarr;</span>
         </button>
 
@@ -232,7 +233,7 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
     font-family: var(--font-body);
     font-size: 15px;
     color: var(--color-ivory);
-    background: rgba(247, 245, 240, 0.05);
+    background: rgba(242, 242, 242, 0.05);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
     transition: var(--transition-fast);
@@ -250,7 +251,7 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
 
   .contact-form input:hover,
   .contact-form textarea:hover {
-    border-color: rgba(247, 245, 240, 0.24);
+    border-color: rgba(242, 242, 242, 0.24);
   }
 
   .contact-form input:focus-visible,
@@ -260,17 +261,25 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
     border-color: var(--color-steel);
   }
 
+  /* No color left to signal "invalid" with — a heavier solid border plus
+     the glyph on .field-error below carry that job instead. */
   .contact-form input[aria-invalid='true'],
   .contact-form textarea[aria-invalid='true'] {
-    border-color: #d97757;
+    border-width: 2px;
+    border-color: var(--color-ivory);
   }
 
   .field-error {
     min-height: 16px;
     margin: 0;
     font-size: 12px;
+    font-weight: 600;
     line-height: 1.4;
-    color: #e29b7d;
+    color: var(--color-ivory);
+  }
+
+  .field-error:not(:empty)::before {
+    content: '✕ ';
   }
 
   .form-submit {
@@ -285,19 +294,28 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
     transform: none !important;
   }
 
+  /* Success/error no longer differ by hue — a glyph plus a weight shift
+     carry the distinction instead, so the state still reads at a glance
+     (and doesn't rely on color alone for anyone who can't perceive it). */
   .form-status {
     min-height: 20px;
     margin: 0;
     font-size: 14px;
+    font-weight: 500;
     line-height: 1.6;
+    color: var(--color-ivory);
   }
 
-  .form-status[data-state='success'] {
-    color: #7fb88a;
+  .form-status[data-state='success']::before {
+    content: '✓ ';
   }
 
   .form-status[data-state='error'] {
-    color: #e29b7d;
+    font-weight: 700;
+  }
+
+  .form-status[data-state='error']::before {
+    content: '✕ ';
   }
 
   .form-status a {
@@ -326,7 +344,7 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
     const submitBtn = form.querySelector('.form-submit');
     const submitLabel = form.querySelector('.form-submit-label');
 
-    const setFieldError = (name, message) => {
+    const setFieldError = (name: string, message: string) => {
       const field = form.querySelector(`[data-error-for="${name}"]`);
       const input = form.elements.namedItem(name);
       if (field) field.textContent = message;
@@ -349,7 +367,7 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
       const data = new FormData(form);
       const payload = Object.fromEntries(data.entries());
 
-      if (submitBtn) submitBtn.disabled = true;
+      if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = true;
       if (submitLabel) submitLabel.textContent = 'Sending…';
 
       try {
@@ -363,11 +381,11 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
 
         if (response.ok && result.ok) {
           form.reset();
-          status.textContent = "Thanks — we'll get back to you within one business day.";
+          status.textContent = "Thanks — we'll follow up with your demo within one business day.";
           status.setAttribute('data-state', 'success');
         } else if (response.status === 422 && result.fields) {
           Object.entries(result.fields).forEach(([field, message]) => {
-            setFieldError(field, message);
+            setFieldError(field, String(message));
           });
           status.textContent = result.error ?? 'Please fix the highlighted fields.';
           status.setAttribute('data-state', 'error');
@@ -379,8 +397,8 @@ import { contactEmail, contactPhoneDisplay, contactPhoneHref, contactPhoneSmsHre
         status.innerHTML = `Something went wrong. Email us directly at <a href="mailto:CEO@AexMeridian.com">CEO@AexMeridian.com</a>.`;
         status.setAttribute('data-state', 'error');
       } finally {
-        if (submitBtn) submitBtn.disabled = false;
-        if (submitLabel) submitLabel.textContent = 'Send message';
+        if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = false;
+        if (submitLabel) submitLabel.textContent = 'Request my demo';
       }
     });
   }

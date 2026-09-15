@@ -95,196 +95,257 @@ const faqSchema = {
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
   <Header forceSolid contactHref="#contact" />
   <main id="main-content" class="pricing-page">
+    <!--
+      OPENING — "the drop." The reference photograph has one enormous form
+      catching the light on the right of the frame, a much smaller element
+      stranded low and left of it, a single blazing horizon splitting the
+      frame well below centre, and a mirror floor under everything. This
+      opening is that composition, not two price figures paired like a
+      matched set: the agent figure is the monument — set at roughly three
+      times the website figure, pushed past the right edge of the page's
+      own margin, with the mirror reflection under it — and the website
+      figure is the small object sitting low and left of it. The horizon
+      runs full-bleed beneath both, and everything supporting (the lede and
+      the full price ledger) lives below it, on the floor.
+    -->
     <div class="pricing-open">
       <video class="pricing-open-video" src="/videos/dawn-horizon.mp4" muted autoplay playsinline loop preload="auto" aria-hidden="true"></video>
       <MeridianRule dot="none" align="full" />
-      <div class="container">
-        <div class="pricing-open-inner" data-reveal>
+
+      <div class="container po-upper" data-reveal>
+        <div class="po-head">
           <p class="eyebrow">Pricing</p>
           <h1 class="pricing-title">Every price, one page.</h1>
+        </div>
 
-          <div class="price-giant-row">
-            <div class="price-giant-item">
-              <p class="price-giant-value">{startingAgentPrice.replace('/mo', '')}<span>+/mo</span></p>
-              <p class="price-giant-label">AI agents</p>
-            </div>
-            <div class="price-giant-item">
-              <p class="price-giant-value">{startingWebsiteSetup}<span>+</span></p>
-              <p class="price-giant-label">Website</p>
-            </div>
+        <!-- The satellite. Small, low, left — and captioned underneath,
+             where the monument is captioned above, so the two figures are
+             never legible as a pair. -->
+        <figure class="po-satellite">
+          <p class="po-sat-value">{startingWebsiteSetup}<span>+</span></p>
+          <figcaption class="po-cap po-cap--under">Website</figcaption>
+        </figure>
+
+        <!-- The monument. The one raking-light gradient this page spends,
+             and the one mirrored reflection on the site. -->
+        <figure class="po-monument">
+          <figcaption class="po-cap">AI agents</figcaption>
+          <p class="po-mon-value" data-reflect={startingAgentPrice.replace('/mo', '')}>{startingAgentPrice.replace('/mo', '')}<span>+/mo</span></p>
+        </figure>
+      </div>
+
+      <!-- The horizon: full-bleed, brightest under the monument rather
+           than at centre, with the photo's haze sitting on it. -->
+      <div class="po-horizon" aria-hidden="true"></div>
+
+      <div class="po-floor">
+        <div class="container po-floor-grid" data-reveal>
+          <div class="po-lede">
+            <p class="pricing-open-sub">
+              A flat $500 to set up any agent or the website. Monthly is a range for
+              agents, scoped to your volume; one flat plan for the site. Both broken
+              down below.
+            </p>
+
+            <!-- The core "why a real number, not a quote call" pitch — condensed
+                 from what used to be its own page. Deliberately one paragraph,
+                 not a 3-card "here's why agencies hide pricing" grid; that
+                 device is exactly the kind of thing that reads the same on
+                 every studio's site. -->
+            <p class="pricing-open-note">
+              Search "how much does a website cost" and most answers are "it
+              depends," followed by a request to book a call — so you can't compare
+              it to anything until you've already given someone 30 minutes. This is
+              the real number, not a lead-gen quote form.
+            </p>
           </div>
 
-          <p class="pricing-open-sub">
-            A flat $500 to set up any agent or the website. Monthly is a range for
-            agents, scoped to your volume; one flat plan for the site. Both broken
-            down below.
-          </p>
-
-          <!-- The core "why a real number, not a quote call" pitch — condensed
-               from what used to be its own page. Deliberately one paragraph,
-               not a 3-card "here's why agencies hide pricing" grid; that
-               device is exactly the kind of thing that reads the same on
-               every studio's site. -->
-          <p class="pricing-open-note">
-            Search "how much does a website cost" and most answers are "it
-            depends," followed by a request to book a call — so you can't compare
-            it to anything until you've already given someone 30 minutes. This is
-            the real number, not a lead-gen quote form.
-          </p>
-
-          <!-- Everything the two giant numbers are starting-from figures
-               for, at a glance — so the opening states the actual menu,
-               not just its floor. -->
-          <div class="pricing-glance" data-reveal-stagger>
+          <!-- Everything the two figures above are starting-from numbers
+               for — a real price list with the figures set in a ruled
+               right column, not four evenly-spaced cards. -->
+          <dl class="po-ledger" data-reveal-stagger>
             {agentTiers.map((agent) => (
-              <div class="pricing-glance-item" data-reveal>
-                <p class="pricing-glance-name">{agent.name}</p>
-                <p class="pricing-glance-figures">
+              <div class="po-ledger-row" data-reveal>
+                <dt>{agent.name}</dt>
+                <dd>
                   <span>{agent.setup} setup</span>
-                  <span class="pricing-glance-dot" aria-hidden="true">&middot;</span>
+                  <span class="po-ledger-dot" aria-hidden="true">&middot;</span>
                   <span>{agent.monthly}</span>
-                </p>
+                </dd>
               </div>
             ))}
-            <div class="pricing-glance-item pricing-glance-item--website" data-reveal>
-              <p class="pricing-glance-name">Website</p>
-              <p class="pricing-glance-figures">
+            <div class="po-ledger-row" data-reveal>
+              <dt>Website</dt>
+              <dd>
                 <span>{websitePlan.setup} setup</span>
-                <span class="pricing-glance-dot" aria-hidden="true">&middot;</span>
+                <span class="po-ledger-dot" aria-hidden="true">&middot;</span>
                 <span>{websitePlan.monthly}</span>
-              </p>
+              </dd>
             </div>
-          </div>
+          </dl>
         </div>
       </div>
     </div>
 
-    <section class="section agents-pricing seam" id="agents">
-      <div class="container">
-        <div class="section-head" data-reveal>
+    <!--
+      AI AGENTS — "one constant, three variables." Every agent's setup fee
+      is the same $500, so repeating it down three rows was three copies of
+      one fact. It's hoisted out instead: the constant stands alone at
+      monument scale on the left rail and stays put while the three
+      variable monthlies scroll past it in a fine ruled ledger. One thing
+      to look at, three things to read.
+    -->
+    <section class="section agents-pricing" id="agents">
+      <div class="container agents-grid">
+        <div class="agents-anchor" data-reveal>
           <p class="eyebrow">AI agents</p>
-          <h2 class="section-title">One setup fee, priced by what the agent does</h2>
+          <h2 class="section-title agents-title">One setup fee, priced by what the agent does</h2>
+
+          <p class="agents-constant">
+            <span class="agents-constant-fig">{agentTiers[0].setup}</span>
+            <span class="agents-constant-unit">Setup &mdash; per agent, flat</span>
+          </p>
         </div>
 
-        <div class="price-rows" data-reveal-stagger>
-          {agentTiers.map((agent) => (
-            <div class="price-row" data-reveal>
-              <div class="price-row-name">
-                <h3>{agent.name}</h3>
-                <p>{agent.tagline}</p>
-              </div>
-              <div class="price-row-figures">
-                <p class="price-row-figure">
-                  <span class="price-row-value">{agent.setup}</span>
-                  <span class="price-row-unit">setup</span>
+        <div class="agents-ledger">
+          <div class="agent-lines" data-reveal-stagger>
+            {agentTiers.map((agent) => (
+              <article class="agent-line" data-reveal>
+                <div class="agent-line-name">
+                  <h3>{agent.name}</h3>
+                  <p>{agent.tagline}</p>
+                </div>
+                <p class="agent-line-figure">
+                  <span class="agent-line-value">{agent.monthly}</span>
+                  <span class="agent-line-unit">scoped to your volume</span>
                 </p>
-                <p class="price-row-figure">
-                  <span class="price-row-value price-row-value--accent">{agent.monthly}</span>
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p class="pricing-note">
-          What each agent does, who it's for, and when it's the wrong choice — the
-          full comparison lives on <a href="/what-we-do">What We Do</a>.
-        </p>
-        <p class="pricing-note">
-          Every agent discloses it's AI, on every channel, and always has a human
-          escalation path. Inbound only — no outbound calling or texting, ever.
-        </p>
-      </div>
-    </section>
-
-    <section class="section website-pricing seam" id="website">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">Website</p>
-          <h2 class="section-title">One flat plan for the site</h2>
-        </div>
-
-        <div class="price-block" data-reveal>
-          <p class="price-block-tagline">{websitePlan.tagline}</p>
-
-          <div class="price-block-figures">
-            <p class="price-row-figure">
-              <span class="price-row-value">{websitePlan.setup}</span>
-              <span class="price-row-unit">one-time setup</span>
-            </p>
-            <p class="price-row-figure">
-              <span class="price-row-value price-row-value--accent">{websitePlan.monthly}</span>
-              <span class="price-row-unit">ongoing hosting &amp; care</span>
-            </p>
+              </article>
+            ))}
           </div>
 
-          <ul class="price-block-scope">
-            {websitePlan.scope.map((item) => <li>{item}</li>)}
-          </ul>
-
-          <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
-            <span>Book a free consultation</span>
-            <span class="btn-arrow">&rarr;</span>
-          </a>
+          <p class="pricing-note">
+            What each agent does, who it's for, and when it's the wrong choice — the
+            full comparison lives on <a href="/what-we-do">What We Do</a>.
+          </p>
+          <p class="pricing-note">
+            Every agent discloses it's AI, on every channel, and always has a human
+            escalation path. Inbound only — no outbound calling or texting, ever.
+          </p>
         </div>
       </div>
     </section>
 
-    <section class="section care-plans seam" id="care">
+    <!-- THE CUT. The break between agent pricing and website pricing is a
+         real diagonal across the full frame, not another identical section
+         boundary: a hot hairline running corner to corner with the lit
+         plane beginning underneath it. Everything above the cut sits on
+         the dark field; the website plan and the care it comes with sit
+         together on the floor below. -->
+    <div class="cut" aria-hidden="true">
+      <span class="cut-plane"></span>
+      <span class="cut-line"></span>
+      <span class="cut-haze"></span>
+    </div>
+
+    <section class="section website-pricing" id="website">
       <div class="container">
-        <div class="section-head" data-reveal>
+        <div class="website-rail">
+          <div class="section-head website-head" data-reveal>
+            <p class="eyebrow">Website</p>
+            <h2 class="section-title">One flat plan for the site</h2>
+          </div>
+
+          <div class="price-block" data-reveal>
+            <p class="price-block-tagline">{websitePlan.tagline}</p>
+
+            <div class="price-block-figures">
+              <p class="price-figure price-figure--lead">
+                <span class="price-figure-value">{websitePlan.setup}</span>
+                <span class="price-figure-unit">one-time setup</span>
+              </p>
+              <p class="price-figure">
+                <span class="price-figure-value">{websitePlan.monthly}</span>
+                <span class="price-figure-unit">ongoing hosting &amp; care</span>
+              </p>
+            </div>
+
+            <ul class="price-block-scope">
+              {websitePlan.scope.map((item) => <li>{item}</li>)}
+            </ul>
+
+            <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
+              <span>Get your free demo</span>
+              <span class="btn-arrow">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Care is the underside of the plan above it, not a fresh section:
+         same lit plane, no divider between them, and weighted left where
+         the plan is weighted right. -->
+    <section class="section care-plans" id="care">
+      <div class="container care-grid">
+        <div class="care-head" data-reveal>
           <p class="eyebrow">What's covered</p>
           <h2 class="section-title">Every site gets the same care</h2>
+        </div>
+
+        <div class="care-body" data-reveal>
           <p class="section-subtext">
             The setup fee is a one-time build cost — the {websitePlan.monthly} figure
             below is hosting, uptime, security, and small routine edits, so there's no
             separate hosting bill showing up later, and no charge for asking us to
             update a phone number or swap a photo.
           </p>
-        </div>
 
-        <ul class="care-list" data-reveal>
-          {websitePlan.careFeatures.map((item) => <li>{item}</li>)}
-        </ul>
-        <p class="care-overflow">{overflowRate}</p>
+          <ul class="care-list">
+            {websitePlan.careFeatures.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="care-overflow">{overflowRate}</p>
+        </div>
       </div>
     </section>
 
-    <section class="section price-breakdown seam" id="breakdown">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">Where the money goes</p>
-          <h2 class="section-title">Where the $500 goes</h2>
+    <!-- Marginalia. The setup-fee breakdown isn't built yet and the
+         content note is a footnote by nature — neither earns a full-width
+         section of its own, so both run small, together, offset right,
+         under a rule weighted the opposite way from the hero's horizon. -->
+    <section class="section pricing-margin">
+      <div class="container margin-grid">
+        <div class="margin-note" id="breakdown" data-reveal>
+          <p class="margin-label">Where the money goes</p>
+          <h2 class="margin-title">Where the $500 goes</h2>
+          <div class="breakdown-placeholder">
+            <p>
+              A real, itemized breakdown of the setup fee — build hours, hosting
+              setup, domain/SSL, margin, whatever the actual split is — belongs here.
+              It isn't built yet because it needs real figures, not estimates.
+            </p>
+            <p class="breakdown-flag"><!-- PLACEHOLDER: real $500 setup-fee breakdown, needs figures from Caleb --></p>
+          </div>
         </div>
 
-        <div class="breakdown-placeholder" data-reveal>
-          <p>
-            A real, itemized breakdown of the setup fee — build hours, hosting
-            setup, domain/SSL, margin, whatever the actual split is — belongs here.
-            It isn't built yet because it needs real figures, not estimates.
+        <div class="margin-aside" data-reveal>
+          <p class="content-footnote-text">
+            Walkthrough video and social content are available occasionally, by
+            request — not a standing service with a published rate card. Ask if it's
+            something you need.
           </p>
-          <p class="breakdown-flag"><!-- PLACEHOLDER: real $500 setup-fee breakdown, needs figures from Caleb --></p>
         </div>
-      </div>
-    </section>
-
-    <section class="section content-footnote seam">
-      <div class="container">
-        <p class="content-footnote-text">
-          Walkthrough video and social content are available occasionally, by
-          request — not a standing service with a published rate card. Ask if it's
-          something you need.
-        </p>
       </div>
     </section>
 
     <section class="section pricing-faq seam" id="faq">
-      <div class="container">
-        <div class="section-head" data-reveal>
+      <div class="container faq-grid">
+        <div class="faq-head" data-reveal>
           <p class="eyebrow">Common questions</p>
           <h2 class="section-title">Before you reach out</h2>
         </div>
 
+        <!-- Offset right against a single vertical spine that brightens as
+             it falls, rather than a dead-centre column. -->
         <div class="faq-list" data-reveal>
           {faqs.map((faq, i) => (
             <>
@@ -314,7 +375,7 @@ const faqSchema = {
         <p class="cta-sub">Tell us about your business — we'll tell you honestly what makes sense.</p>
         <p class="cta-guarantee">You see it work before you pay a dollar.</p>
         <a href="#contact" class="btn btn-primary btn-shimmer" data-magnetic>
-          <span>Book a free consultation</span>
+          <span>Get your free demo</span>
           <span class="btn-arrow">&rarr;</span>
         </a>
       </div>
@@ -325,34 +386,45 @@ const faqSchema = {
 </Layout>
 
 <style>
+  /* overflow-x: clip (not hidden) lets the opening's monument run past the
+     page's own margin without creating a scroll container — so the sticky
+     agent anchor below and the shared header both still work, and no
+     horizontal scrollbar appears. --bleed is the distance from the
+     container's content edge out to the viewport edge. */
   .pricing-page {
     background-color: var(--color-navy);
     color: var(--color-ivory);
+    overflow-x: clip;
+
+    --gutter: clamp(24px, 5vw, 64px);
+    --bleed: calc(-1 * (var(--gutter) + max(0px, (100vw - var(--max-width)) / 2)));
   }
 
   .pricing-page .eyebrow {
     color: var(--color-steel);
   }
 
+  /* The headline is deliberately the quiet part of the opening — it names
+     the page, the monument makes the argument. */
   .pricing-title {
     margin-top: var(--space-2);
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.9rem, 3.4vw, 2.75rem);
-    line-height: 1.18;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
     color: var(--color-ivory);
   }
 
   .pricing-open {
     position: relative;
     overflow: hidden;
-    padding: var(--space-6) 0 var(--space-5);
+    padding-top: var(--space-6);
   }
 
-  /* A dawn breaking on the horizon, low enough to read as light in the
-     room rather than a photo — the same "one continuous dawn" idea the
-     giant numbers already lean on, made literal behind them. */
+  /* A horizon breaking low in the frame, low enough to read as light in
+     the room rather than a photo — grayscale like everything else on this
+     page now, the color budget spent entirely on the homepage hero. */
   .pricing-open-video {
     position: absolute;
     inset: 0;
@@ -362,13 +434,8 @@ const faqSchema = {
     object-fit: cover;
     object-position: center 65%;
     opacity: 0.16;
-    filter: saturate(0.65) brightness(0.8);
+    filter: grayscale(1) saturate(0.65) brightness(0.8);
     pointer-events: none;
-  }
-
-  .pricing-open > .container {
-    position: relative;
-    z-index: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -377,55 +444,199 @@ const faqSchema = {
     }
   }
 
-  .pricing-open-inner {
-    max-width: 760px;
+  /* ------------------------------------------------------------------
+     OPENING — the drop
+     ------------------------------------------------------------------ */
+
+  /* Two rows: the headline across the top, then the satellite and the
+     monument sharing one row at opposite ends and opposite scales. They
+     are separate grid columns, so the diagonal never becomes a collision
+     no matter how the figure reflows. */
+  .po-upper {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+    grid-template-areas:
+      'head head'
+      'sat  monument';
+    column-gap: clamp(20px, 4vw, 64px);
+    row-gap: clamp(28px, 4vw, 64px);
+    align-items: end;
+    padding-bottom: clamp(44px, 5vw, 82px);
   }
 
-  /* The two opening numbers — deliberately larger than any headline
-     anywhere else on the site, including Home's hero. Set directly as
-     page content, not inside a card. */
-  .price-giant-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-    margin-top: var(--space-3);
+  .po-head {
+    grid-area: head;
+  }
+
+  .po-head .pricing-title {
+    max-width: 24ch;
+  }
+
+  .po-monument {
+    grid-area: monument;
+    /* <figure> carries a 1em 40px UA margin by default — cleared so the
+       figures sit on the same rails as everything else on the page. */
+    margin: 0;
+    justify-self: end;
+    /* Runs past the page's own margin into the gutter rather than stopping
+       politely at the content edge — the subject is not contained in the
+       frame. Stops short of the viewport edge so no glyph is ever lost. */
+    margin-right: calc(var(--bleed) * 0.78);
+    text-align: right;
+  }
+
+  /* A machined plate above the figure, not a caption under it — which
+     leaves the mirror below the monument completely clear. */
+  .po-cap {
+    display: block;
+    margin-bottom: clamp(10px, 1.2vw, 18px);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-amber);
+  }
+
+  .po-cap--under {
+    margin: var(--space-2) 0 0;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
   }
 
   /* The mono face, not the display serif — reserved sitewide for numerals
      and data specifically (see --font-mono in global.css), so the site's
-     single biggest figures read as a real number, not an editorial
-     flourish. The meridian gold ties these to the sun system's peak
-     moment: this page opens with the boldest color statement on the site
-     the same way it already opens with the boldest type statement. */
-  .price-giant-value {
+     single biggest figure reads as a real number, not an editorial
+     flourish. The raking-light gradient (reserved for exactly one element
+     per page) bypasses the shared --color-meridian token directly rather
+     than overriding it, since raf-loop.js still reads that token live for
+     the sitewide sun system. Its darkest stop is held at #6E6E6E — ~4:1
+     on this background — so even the tail of the gradient clears AA for
+     large text. */
+  .po-mon-value {
+    position: relative;
     font-family: var(--font-mono);
     font-weight: 600;
-    font-size: clamp(4.2rem, 11vw, 8rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
+    font-size: clamp(4.2rem, 14vw, 12.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    color: var(--color-meridian);
+    background: linear-gradient(100deg, #FFFFFF 6%, #E4E4E4 34%, #A8A8A8 68%, #6E6E6E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
-  .price-giant-value span {
-    font-size: 0.28em;
+  .po-mon-value span {
+    font-size: 0.24em;
     font-weight: 600;
     color: var(--color-steel);
-    margin-left: 4px;
+    margin-left: 6px;
+    /* Not part of the gradient-text clip above — a plain flat gray reads
+       more like a unit label than a second sculptural surface. */
+    -webkit-background-clip: initial;
+    background-clip: initial;
   }
 
-  .price-giant-label {
-    margin-top: var(--space-1);
-    font-size: 13px;
+  /* The one literal echo of the reference photo's mirror floor — a faint,
+     fading reflection under the site's single largest figure. Duplicates
+     the visible text via the data-reflect attribute (set in the markup)
+     since a gradient-clipped ::after can't read its sibling <span>. */
+  .po-mon-value::after {
+    content: attr(data-reflect);
+    position: absolute;
+    left: 0;
+    /* Inset by exactly the suffix's own advance width (4 monospace
+       characters at 0.24em, plus its left margin) so the mirrored amount
+       lands directly under the real one rather than under the unit. */
+    right: calc(0.576em + 6px);
+    top: calc(100% + 4px);
+    height: 0.3em;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.15);
+    transform: scaleY(-1);
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent 78%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent 78%);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* The small object across the frame from the monument: flat silver, no
+     gradient, no reflection. One thing catches the light. */
+  .po-satellite {
+    grid-area: sat;
+    margin: 0;
+    align-self: end;
+    padding-bottom: clamp(4px, 1.6vw, 26px);
+  }
+
+  .po-sat-value {
+    font-family: var(--font-mono);
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-muted);
+    font-size: clamp(1.9rem, 4.2vw, 3.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-amber);
+  }
+
+  .po-sat-value span {
+    font-size: 0.34em;
+    color: var(--color-steel);
+    margin-left: 3px;
+  }
+
+  /* The horizon — full-bleed, brightest at ~74% across where the monument
+     lands, not at centre, with the photo's haze sitting on it. */
+  .po-horizon {
+    position: relative;
+    z-index: 1;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.22) 12%,
+      rgba(255, 255, 255, 0.95) 74%,
+      rgba(255, 255, 255, 0.28) 93%,
+      transparent 100%
+    );
+  }
+
+  .po-horizon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -46px;
+    height: 92px;
+    pointer-events: none;
+    background: radial-gradient(ellipse 42% 100% at 74% 50%, rgba(255, 255, 255, 0.16), transparent 72%);
+    filter: blur(11px);
+  }
+
+  /* Below the horizon: the floor. A faint sheen falling away from the seam,
+     carrying everything that supports the two figures above it. */
+  .po-floor {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-5) 0 var(--space-6);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0) 74%);
+  }
+
+  .po-floor-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+    column-gap: clamp(32px, 6vw, 96px);
+    row-gap: var(--space-5);
+    align-items: start;
   }
 
   .pricing-open-sub {
-    margin-top: var(--space-4);
-    max-width: 520px;
+    max-width: 46ch;
     font-size: 16px;
     line-height: 1.7;
     color: var(--color-muted);
@@ -433,124 +644,158 @@ const faqSchema = {
 
   .pricing-open-note {
     margin-top: var(--space-3);
-    max-width: 520px;
+    max-width: 46ch;
     font-size: 15px;
     line-height: 1.7;
     color: var(--color-muted);
     opacity: 0.85;
   }
 
-  /* The full menu, not just its two starting figures — a compact strip
-     of every price on the page, so the opening states the whole offer
-     before anyone has to scroll to find it. */
-  .pricing-glance {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-5);
-    margin-top: var(--space-5);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-line);
+  /* The full menu, not just its two starting figures — a real price list
+     with names on the left rail and figures ruled off on the right, so the
+     opening states the whole offer before anyone has to scroll. */
+  .po-ledger {
+    margin: 0;
+    border-top: 1px solid rgba(242, 242, 242, 0.22);
   }
 
-  .pricing-glance-item {
-    min-width: 150px;
+  .po-ledger-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 6px var(--space-3);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-line);
   }
 
-  .pricing-glance-name {
-    font-size: 12px;
+  .po-ledger dt {
+    font-size: 13.5px;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-steel);
-    margin-bottom: 4px;
-  }
-
-  .pricing-glance-figures {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.005em;
     color: var(--color-ivory);
   }
 
-  .pricing-glance-dot {
-    font-weight: 400;
+  .po-ledger dd {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
     color: var(--color-muted);
+  }
+
+  .po-ledger-dot {
+    color: rgba(242, 242, 242, 0.4);
   }
 
   .section-title {
     color: var(--color-ivory);
   }
 
-  .section-subtext {
+  /* ------------------------------------------------------------------
+     AI AGENTS — one constant, three variables
+     ------------------------------------------------------------------ */
+
+  .agents-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.66fr) minmax(0, 1fr);
+    column-gap: clamp(32px, 6vw, 104px);
+    align-items: start;
+  }
+
+  /* Deliberately not sticky: the ledger is only ~200px taller than this
+     column, so pinning it would hold for a fraction of a scroll and then
+     duck under the header — a half-committed gesture. The scale contrast
+     between the constant and the three variables carries the idea on its
+     own. */
+
+  /* Undersized on purpose: this heading introduces the figure, it doesn't
+     compete with it. */
+  .agents-title {
+    font-size: clamp(1.45rem, 2.3vw, 2.05rem);
+    line-height: 1.14;
+  }
+
+  .agents-constant {
+    margin-top: clamp(28px, 3.4vw, 52px);
+    padding-bottom: clamp(14px, 1.6vw, 22px);
+    border-bottom: 1px solid rgba(242, 242, 242, 0.3);
+  }
+
+  .agents-constant-fig {
+    display: block;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: clamp(3rem, 7vw, 6.2rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-amber);
+  }
+
+  .agents-constant-unit {
+    display: block;
     margin-top: var(--space-2);
-    font-size: 16px;
-    line-height: 1.7;
-    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-steel);
   }
 
-  /* Price rows — hairline rules instead of cards, tabular figures, no
-     background fill shift between rows. */
-  .price-rows {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .price-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  .agent-line {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
-    gap: var(--space-4);
-    padding: var(--space-4) 0;
+    gap: var(--space-2) var(--space-4);
+    padding: clamp(20px, 2.4vw, 30px) 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .agent-line:last-child {
     border-bottom: 1px solid var(--color-line);
   }
 
-  .price-row-name h3 {
+  .agent-line-name h3 {
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: clamp(18px, 1.7vw, 22px);
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--color-ivory);
   }
 
-  .price-row-name p {
-    margin-top: 2px;
+  .agent-line-name p {
+    margin-top: 3px;
     font-size: 14px;
+    line-height: 1.55;
     color: var(--color-muted);
   }
 
-  .price-row-figures {
-    display: flex;
-    gap: var(--space-5);
-    flex-shrink: 0;
-  }
-
-  .price-row-figure {
+  .agent-line-figure {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
   }
 
-  .price-row-value {
+  .agent-line-value {
     font-family: var(--font-mono);
-    font-size: 21px;
+    font-size: clamp(18px, 1.85vw, 25px);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
     color: var(--color-ivory);
   }
 
-  .price-row-value--accent {
-    color: var(--color-steel);
-  }
-
-  .price-row-unit {
-    font-size: 12px;
+  .agent-line-unit {
+    margin-top: 3px;
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
     color: var(--color-muted);
   }
 
@@ -559,11 +804,11 @@ const faqSchema = {
     font-size: 14px;
     line-height: 1.6;
     color: var(--color-muted);
-    max-width: 640px;
+    max-width: 56ch;
   }
 
   .pricing-note a {
-    color: var(--color-steel);
+    color: var(--color-amber);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -574,12 +819,88 @@ const faqSchema = {
     color: var(--color-ivory);
   }
 
+  /* ------------------------------------------------------------------
+     THE CUT — the diagonal break between the two halves of the page
+     ------------------------------------------------------------------ */
+
+  /* The wedge and the hairline are drawn from the same corner-to-corner
+     geometry — polygon(0 100%, 100% 0, 100% 100%) and the 50% stop of a
+     `to bottom right` gradient are the same line at every viewport width,
+     so the lit plane's leading edge and the light on it stay collinear
+     without a hardcoded angle that would drift as the frame changes. */
+  .cut {
+    position: relative;
+    height: clamp(76px, 8.5vw, 140px);
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .cut-plane,
+  .cut-line,
+  .cut-haze {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .cut-plane {
+    background: rgba(255, 255, 255, 0.055);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  }
+
+  .cut-line {
+    background: linear-gradient(
+      to bottom right,
+      transparent calc(50% - 0.5px),
+      rgba(255, 255, 255, 0.95) calc(50% - 0.5px),
+      rgba(255, 255, 255, 0.95) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    );
+    -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.3) 10%, #000 62%, rgba(0, 0, 0, 0.35) 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.3) 10%, #000 62%, rgba(0, 0, 0, 0.35) 90%, transparent);
+  }
+
+  .cut-haze {
+    background: radial-gradient(ellipse 22% 62% at 62% 38%, rgba(255, 255, 255, 0.22), transparent 72%);
+    filter: blur(9px);
+  }
+
+  /* ------------------------------------------------------------------
+     WEBSITE — the right rail, on the lit plane
+     ------------------------------------------------------------------ */
+
+  /* The plan and the care beneath it share one continuous surface — the
+     floor the cut above opened onto — with no divider between them. */
+  .website-pricing {
+    padding-top: var(--space-6);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018) 72%, rgba(255, 255, 255, 0.012));
+  }
+
+  .care-plans {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), rgba(255, 255, 255, 0) 68%);
+  }
+
+  /* Pushed hard right, so the empty half of the frame is as much a part of
+     the composition as the block is. */
+  .website-rail {
+    width: min(100%, 760px);
+    margin-left: auto;
+  }
+
+  .website-head {
+    max-width: none;
+    margin-bottom: var(--space-5);
+  }
+
+  .website-head .section-title {
+    font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  }
+
   /* Website — one plain block, not a card: tagline, figures, scope list,
-     one CTA. Same hairline-rule language as the agent rows above it. */
+     one CTA. Same hairline-rule language as the agent ledger above it. */
   .price-block {
-    max-width: 640px;
     padding-top: var(--space-4);
-    border-top: 1px solid var(--color-line);
+    border-top: 1px solid rgba(242, 242, 242, 0.22);
   }
 
   .price-block-tagline {
@@ -588,35 +909,74 @@ const faqSchema = {
     color: var(--color-muted);
   }
 
+  /* Not a matched pair either: the one-time figure leads at nearly twice
+     the monthly's scale, in the order someone actually pays them. */
   .price-block-figures {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-6);
+    align-items: baseline;
+    gap: var(--space-3) clamp(32px, 5vw, 72px);
     margin-top: var(--space-4);
     padding: var(--space-4) 0;
     border-top: 1px solid var(--color-line);
     border-bottom: 1px solid var(--color-line);
   }
 
-  .price-block-figures .price-row-figure {
+  .price-figure {
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    text-align: left;
   }
 
+  .price-figure-value {
+    font-family: var(--font-mono);
+    font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-steel);
+  }
+
+  .price-figure--lead .price-figure-value {
+    font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+    letter-spacing: -0.035em;
+    color: var(--color-ivory);
+  }
+
+  .price-figure-unit {
+    margin-top: var(--space-1);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--color-muted);
+  }
+
+  .price-figure--lead .price-figure-unit {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  /* A ruled spec column, not a two-up checklist — it gives the rail the
+     vertical mass it needs to hold its own against the empty field beside
+     it. */
   .price-block-scope {
     list-style: none;
     margin: var(--space-4) 0 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-2) var(--space-4);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .price-block-scope li {
     position: relative;
-    padding-left: 20px;
+    padding: 11px 0 11px 22px;
+    border-bottom: 1px solid var(--color-line);
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.55;
     color: var(--color-muted);
   }
 
@@ -624,22 +984,41 @@ const faqSchema = {
     content: '';
     position: absolute;
     left: 0;
-    top: 9px;
-    width: 8px;
+    top: 20px;
+    width: 10px;
     height: 1px;
-    background: var(--color-teal);
+    background: var(--color-steel);
   }
 
   .price-block .btn {
     margin-top: var(--space-5);
   }
 
+  /* ------------------------------------------------------------------
+     WHAT'S COVERED — the underside, weighted left
+     ------------------------------------------------------------------ */
+
+  .care-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+    column-gap: clamp(32px, 5vw, 88px);
+    row-gap: var(--space-4);
+    align-items: start;
+  }
+
+  .care-head {
+    max-width: 400px;
+  }
+
+  .care-head .section-title {
+    font-size: clamp(1.75rem, 3.2vw, 2.8rem);
+  }
+
   /* Care list — same plain, unboxed treatment. */
   .care-list {
     list-style: none;
-    margin: 0;
+    margin: var(--space-4) 0 0;
     padding: 0;
-    max-width: 640px;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -660,30 +1039,75 @@ const faqSchema = {
     top: 9px;
     width: 8px;
     height: 1px;
-    background: var(--color-teal);
+    background: var(--color-steel);
   }
 
   .care-overflow {
     margin-top: var(--space-4);
     padding-top: var(--space-4);
     border-top: 1px solid var(--color-line);
-    max-width: 640px;
     font-size: 14px;
+    line-height: 1.6;
     color: var(--color-muted);
+  }
+
+  /* ------------------------------------------------------------------
+     MARGINALIA — the two small-print items, offset right
+     ------------------------------------------------------------------ */
+
+  /* The one rule on the page weighted to the left, against the hero
+     horizon's right-weighted one — no two boundaries on this page are
+     the same shape. */
+  .pricing-margin::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: min(54%, 640px);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.5), transparent);
+  }
+
+  .margin-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.68fr);
+    column-gap: clamp(32px, 5vw, 80px);
+    row-gap: var(--space-4);
+    align-items: start;
+    width: min(100%, 980px);
+    margin-left: auto;
+  }
+
+  .margin-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+
+  .margin-title {
+    margin-top: var(--space-2);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
   }
 
   /* Breakdown placeholder — same dashed-border "flagged, not faked"
      language as What We Do's chat placeholder. Real figures needed before
      this becomes a real itemized table. */
   .breakdown-placeholder {
-    max-width: 640px;
-    padding: var(--space-4);
-    border: 1px dashed rgba(247, 245, 240, 0.24);
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    border: 1px dashed rgba(242, 242, 242, 0.24);
     border-radius: var(--radius-md);
   }
 
   .breakdown-placeholder p {
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.65;
     color: var(--color-muted);
   }
@@ -693,21 +1117,58 @@ const faqSchema = {
   }
 
   .content-footnote-text {
-    max-width: 640px;
-    margin: 0 auto;
-    text-align: center;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.65;
     color: var(--color-muted);
   }
 
-  /* FAQ — already unboxed (native <details>, MeridianRule dividers); only
-     the color tokens change for the dark page. */
+  /* ------------------------------------------------------------------
+     FAQ — an offset column against a single falling spine
+     ------------------------------------------------------------------ */
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
+    column-gap: clamp(32px, 6vw, 104px);
+    row-gap: var(--space-4);
+    align-items: start;
+  }
+
+  .faq-head {
+    max-width: none;
+  }
+
+  .faq-head .section-title {
+    font-size: clamp(1.6rem, 2.6vw, 2.35rem);
+  }
+
+  /* FAQ — already unboxed (native <details>, MeridianRule dividers); the
+     list is narrower than its column and pushed to the right edge of it,
+     against a vertical hairline that brightens as it falls. */
   .faq-list {
-    max-width: 720px;
+    position: relative;
+    max-width: 660px;
+    margin-left: auto;
+    padding-left: clamp(20px, 3vw, 46px);
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+  }
+
+  .faq-list::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.3) 62%,
+      rgba(255, 255, 255, 0.85)
+    );
+    pointer-events: none;
   }
 
   .faq-item {
@@ -801,11 +1262,12 @@ const faqSchema = {
     color: var(--color-muted);
   }
 
-  /* Closing CTA — a more saturated version of the same navy, so it still
-     reads as the page's final beat even though the rest of the page is
-     dark now too. */
+  /* Closing CTA — same graphite-to-black gradient every closing band on
+     the site now shares. */
   .pricing-cta {
-    background: linear-gradient(135deg, #3D6B6B 0%, #16232B 100%);
+    background:
+      radial-gradient(ellipse 60% 80% at 85% 0%, rgba(216, 216, 216, 0.08), transparent 60%),
+      linear-gradient(135deg, #3A3A3A 0%, #050505 100%);
   }
 
   .pricing-cta .btn {
@@ -818,29 +1280,131 @@ const faqSchema = {
     }
   }
 
+  /* ------------------------------------------------------------------
+     Responsive — the geometry simplifies, it doesn't just shrink
+     ------------------------------------------------------------------ */
+
+  @media (max-width: 1040px) {
+    .po-upper {
+      grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
+    }
+
+    .agents-grid {
+      grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    /* The opening collapses to a single left rail — the monument is still
+       three times the satellite and still the only lit thing, it just no
+       longer sits across the frame from it. */
+    .po-upper {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'head'
+        'monument'
+        'sat';
+      row-gap: var(--space-5);
+      align-items: start;
+    }
+
+    .po-monument {
+      justify-self: start;
+      margin-right: 0;
+      text-align: left;
+    }
+
+    .po-satellite {
+      align-self: start;
+      padding-bottom: 0;
+      padding-top: clamp(20px, 5vw, 36px);
+      border-top: 1px solid var(--color-line);
+    }
+
+    .po-floor-grid,
+    .care-grid,
+    .margin-grid,
+    .faq-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .care-head {
+      max-width: none;
+    }
+
+    .margin-grid {
+      width: 100%;
+    }
+
+    /* The anchor simply sits above its ledger — the constant still reads
+       first, and still at figure scale. */
+    .agents-grid {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-5);
+    }
+
+    .agents-title {
+      max-width: 20ch;
+    }
+
+    .website-rail {
+      width: 100%;
+    }
+
+    .faq-list {
+      max-width: none;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .faq-list::before {
+      display: none;
+    }
+  }
+
   @media (max-width: 640px) {
-    .price-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-2);
+    .pricing-open {
+      padding-top: var(--space-5);
     }
 
-    .price-row-figures {
-      gap: var(--space-4);
+    .po-upper {
+      padding-bottom: clamp(36px, 11vw, 56px);
     }
 
-    .price-row-figure {
+    .po-mon-value {
+      font-size: clamp(3.4rem, 21vw, 6rem);
+    }
+
+    .po-sat-value {
+      font-size: clamp(1.7rem, 8.5vw, 2.4rem);
+    }
+
+    .agents-constant-fig {
+      font-size: clamp(2.6rem, 17vw, 4.4rem);
+    }
+
+    /* Name over figure, the monthly still the largest thing in the row. */
+    .agent-line {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .agent-line-figure {
       align-items: flex-start;
       text-align: left;
     }
 
     .price-block-figures {
       flex-direction: column;
+      align-items: flex-start;
       gap: var(--space-3);
     }
 
-    .price-block-scope {
-      grid-template-columns: 1fr;
+    .po-ledger-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .po-ledger dd {
+      font-size: 12.5px;
     }
   }
 </style>
