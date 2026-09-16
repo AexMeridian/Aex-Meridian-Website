@@ -1,0 +1,113 @@
+---
+// A live, working Chatbase agent embedded directly in the page — the most
+// direct possible proof of "you see it work before you pay a dollar"
+// (Guarantee.astro), placed right after ContentServices' agent pitch so the
+// "here's what an agent does" claim is immediately followed by a real one
+// to try. Centered and narrower than the site's usual asymmetric sections —
+// a deliberate change in composition for a deliberately different kind of
+// content: a tool to use, not a claim to read.
+---
+
+<section class="section live-demo seam mode-dark-bleed mode-glow" id="live-demo">
+  <div class="container">
+    <div class="section-head live-demo-head" data-reveal>
+      <p class="eyebrow">Try it yourself</p>
+      <h2 class="section-title">Ask it something.</h2>
+      <p class="section-subtext">
+        This is a live, working example of the kind of Website Chat Agent we
+        build for clients &mdash; not a recording, not a mockup. Go ahead and
+        ask it something.
+      </p>
+    </div>
+
+    <div class="demo-panel brushed-panel" data-reveal>
+      <div class="demo-panel-bar">
+        <span class="demo-live-dot" aria-hidden="true"></span>
+        <span class="demo-panel-label">AI Website Chat Agent</span>
+      </div>
+      <iframe
+        class="demo-frame"
+        src="https://www.chatbase.co/chatbot-iframe/o2UIJwyc9WxEUr4icSOgw"
+        title="Live demo of the Aex Meridian Website Chat Agent"
+        allow="microphone"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<style>
+  .live-demo-head {
+    text-align: center;
+    margin-inline: auto;
+    max-width: 640px;
+  }
+
+  .live-demo-head .eyebrow {
+    margin-inline: auto;
+  }
+
+  .live-demo-head .section-title::after {
+    margin-inline: auto;
+  }
+
+  .demo-panel {
+    margin: var(--space-6) auto 0;
+    max-width: 760px;
+  }
+
+  .demo-panel-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .demo-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-amber);
+    box-shadow: 0 0 0 0 rgba(var(--color-amber-rgb), 0.5);
+    animation: demo-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes demo-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(var(--color-amber-rgb), 0.45);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(var(--color-amber-rgb), 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(var(--color-amber-rgb), 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .demo-live-dot {
+      animation: none;
+    }
+  }
+
+  .demo-panel-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--color-caption);
+  }
+
+  .demo-frame {
+    display: block;
+    width: 100%;
+    min-height: 700px;
+    border: 0;
+  }
+
+  @media (max-width: 560px) {
+    .demo-frame {
+      min-height: 560px;
+    }
+  }
+</style>
